@@ -1,0 +1,37 @@
+{
+  "name": "source-of-truth",
+  "version": "1.0.0",
+  "description": "A self-maintaining Spec-Driven Development (SDD) catalog skill that keeps a docs/ folder as the project's source of truth — read before touching code, sync after a feature ships.",
+  "author": {
+    "name": "QuangDN",
+    "email": "ngocquangbb@gmail.com"
+  },
+  "homepage": "https://github.com/ngocquang/source-of-truth",
+  "repository": "https://github.com/ngocquang/source-of-truth",
+  "license": "MIT",
+  "keywords": [
+    "spec-driven-development",
+    "documentation",
+    "spec-catalog",
+    "roadmap",
+    "changelog"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Source of Truth",
+    "shortDescription": "Spec-catalog discipline: read before you code, sync after you ship",
+    "longDescription": "Source of Truth keeps a docs/ spec catalog as the project's source of truth for what exists, why it exists, and what rules apply. The skill reads the catalog before any code change and syncs it after a feature ships.",
+    "developerName": "QuangDN",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Set up the source-of-truth catalog for this project.",
+      "What does the catalog say about this feature before I change it?"
+    ],
+    "websiteURL": "https://github.com/ngocquang/source-of-truth"
+  }
+}

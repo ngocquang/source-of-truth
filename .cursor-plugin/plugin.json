@@ -1,0 +1,21 @@
+{
+  "name": "source-of-truth",
+  "displayName": "Source of Truth",
+  "description": "Spec-catalog discipline for coding agents: read the docs/ catalog before touching code, sync it after a feature ships.",
+  "version": "1.0.0",
+  "author": {
+    "name": "QuangDN",
+    "email": "ngocquangbb@gmail.com"
+  },
+  "homepage": "https://github.com/ngocquang/source-of-truth",
+  "repository": "https://github.com/ngocquang/source-of-truth",
+  "license": "MIT",
+  "keywords": [
+    "spec-driven-development",
+    "documentation",
+    "spec-catalog",
+    "roadmap",
+    "changelog"
+  ],
+  "skills": "./skills/"
+}

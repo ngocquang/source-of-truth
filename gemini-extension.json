@@ -1,0 +1,6 @@
+{
+  "name": "source-of-truth",
+  "description": "A self-maintaining Spec-Driven Development (SDD) catalog skill — read the docs/ catalog before touching code, sync it after a feature ships.",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md"
+}

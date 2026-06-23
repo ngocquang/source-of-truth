@@ -1,0 +1,22 @@
+{
+  "name": "source-of-truth-dev",
+  "owner": {
+    "name": "QuangDN",
+    "email": "ngocquangbb@gmail.com"
+  },
+  "metadata": {
+    "description": "Development marketplace for the Source-of-Truth spec-catalog skill"
+  },
+  "plugins": [
+    {
+      "name": "source-of-truth",
+      "source": "./",
+      "description": "A self-maintaining Spec-Driven Development (SDD) catalog skill that keeps a docs/ folder as the project's source of truth — read before touching code, sync after a feature ships.",
+      "version": "1.0.0",
+      "owner": {
+        "name": "QuangDN",
+        "email": "ngocquangbb@gmail.com"
+      }
+    }
+  ]
+}

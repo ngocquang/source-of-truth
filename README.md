@@ -1,11 +1,33 @@
 # source-of-truth
 
-A self-maintaining **Spec-Driven Development (SDD)** catalog skill. It keeps a `docs/` folder that acts as the project's source of truth for *what exists, why it exists, and what rules apply* — so an AI (or a human) reads it **before** touching production code and syncs it **after** a feature ships.
+[![License: MIT](https://img.shields.io/badge/License-MIT-0f6e5e.svg)](./LICENSE)
+![Version](https://img.shields.io/badge/version-1.0.0-0f6e5e.svg)
+![Spec-Driven Development](https://img.shields.io/badge/method-Spec--Driven%20Development-0c3a33.svg)
+![Platforms](https://img.shields.io/badge/works%20with-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20OpenCode%20·%20Pi-444.svg)
+
+### Stop your AI from silently deleting features it doesn't know exist.
+
+source-of-truth gives your coding agent a persistent memory: it reads what already exists **before** writing code, and updates the record **after** a feature ships — so it stops rebuilding, deleting, and breaking things it never knew were there.
+
+**One skill, every coding agent** — Claude · Codex · Cursor · Gemini · Copilot · Kimi · OpenCode · Pi.
+
+```bash
+# Claude Code — try it in one paste
+/plugin marketplace add ngocquang/source-of-truth && /plugin install source-of-truth@source-of-truth-dev
+```
+
+<sub>Other agents (Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, Pi)? See [Installation](#installation) — same skill, per-platform steps.</sub>
+
+Under the hood it's a self-maintaining **Spec-Driven Development (SDD)** catalog skill: a `docs/` folder that acts as the project's source of truth for *what exists, why it exists, and what rules apply*.
 
 > The **catalog** is the source of truth for "what exists, why, and what rules apply".
 > The **code** is the source of truth for "how it works".
 
-See [`explainer.html`](./explainer.html) for a visual walkthrough of the workflow.
+<p align="center">
+  <img src="./assets/gate-chain.svg" alt="Gate chain: constitution → mission → roadmap → specs → code. Each layer gates the one below — read top-down for why a line of code exists, bottom-up for how far a change can reach." width="720">
+</p>
+
+See [`explainer.html`](./explainer.html) for the full visual walkthrough of the workflow.
 
 ---
 
@@ -20,7 +42,9 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 ---
 
-## Quickstart
+## Quickstart (Claude Code)
+
+> Using Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, or Pi instead? Skip to [Installation](#installation) for the per-platform steps — the skill itself is identical everywhere.
 
 Install the plugin, then let the skill run itself:
 

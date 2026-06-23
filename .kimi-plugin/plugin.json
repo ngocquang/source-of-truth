@@ -7,6 +7,7 @@
     "email": "ngocquangbb@gmail.com"
   },
   "homepage": "https://github.com/ngocquang/source-of-truth",
+  "repository": "https://github.com/ngocquang/source-of-truth",
   "license": "MIT",
   "keywords": [
     "spec-driven-development",

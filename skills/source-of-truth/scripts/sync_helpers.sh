@@ -45,17 +45,23 @@ case "$cmd" in
     for spec in docs/specs/spec-*.md; do
       [ -f "$spec" ] || continue
       # Extract paths from "- **Source files**:" line. Files are comma-separated, possibly backtick-quoted.
-      grep -E '^\s*-\s*\*\*Source files\*\*:' "$spec" | \
-        sed 's/^[^:]*://' | \
-        tr ',`' '\n\n' | \
-        sed 's/^\s*//;s/\s*$//' | \
-        grep -vE '^\s*$' | \
-        while IFS= read -r path; do
-          if [ -n "$path" ] && [ ! -e "$path" ]; then
-            echo "STALE: $spec references missing $path"
-            found_stale=1
-          fi
-        done
+      # POSIX [[:space:]] (not \s) so it works on BSD sed/grep (macOS) too.
+      # '|| true' keeps a no-match grep from aborting under 'set -e'.
+      paths=$(grep -E '^[[:space:]]*-[[:space:]]*\*\*Source files\*\*:' "$spec" \
+        | sed 's/^[^:]*://' \
+        | tr ',`' '\n\n' \
+        | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+        | grep -vE '^$' || true)
+      # Here-doc (not a pipe) so found_stale is set in this shell, not a subshell.
+      while IFS= read -r path; do
+        [ -n "$path" ] || continue
+        if [ ! -e "$path" ]; then
+          echo "STALE: $spec references missing $path"
+          found_stale=1
+        fi
+      done <<EOF
+$paths
+EOF
     done
     [ "$found_stale" -eq 0 ] && echo "All Source files paths exist."
     ;;

@@ -65,17 +65,8 @@
   .step b{display:block;margin-bottom:2px} .step span{color:var(--muted);font-size:14px}
   .step code{font-family:var(--mono);font-size:12.5px;background:var(--paper-2);padding:1px 5px;border-radius:4px}
 
-  /* gate chain */
-  .chain{display:flex;align-items:stretch;min-width:620px}
-  .gate{flex:1;background:var(--paper);border:1px solid var(--line);padding:14px 12px;text-align:center;position:relative}
-  .gate:first-child{border-radius:10px 0 0 10px}
-  .gate:last-child{border-radius:0 10px 10px 0;background:var(--teal-soft);border-color:var(--teal)}
-  .gate + .gate{border-left:none}
-  .gate .g-name{font-weight:600;font-size:14px;margin:0 0 3px}
-  .gate .g-file{font-family:var(--mono);font-size:11px;color:var(--teal)}
-  .gate .g-sub{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}
-  .gate .arrow{position:absolute;right:-9px;top:50%;transform:translateY(-50%);z-index:2;width:16px;height:16px;background:var(--paper);border-right:2px solid var(--teal);border-bottom:2px solid var(--teal);rotate:-45deg;border-radius:0 0 3px 0}
-  section.alt .gate{background:var(--ground)} section.alt .gate:last-child{background:var(--teal-soft)}
+  /* gate chain figure */
+  .gatefig{display:block;margin:10px auto 0;width:100%;max-width:760px;height:auto}
   .chain-note{font-size:13px;color:var(--muted);margin-top:12px}
 
   /* modes */
@@ -215,15 +206,63 @@
     <p class="eyebrow">Mechanism</p>
     <h2>Gate chain: each layer guards the layer below</h2>
     <p class="lede">No layer can be crossed before the one above permits it. Read top-down to understand why a line of code exists; read bottom-up to understand how far a change can propagate.</p>
-    <div class="scroll-x">
-      <div class="chain">
-        <div class="gate"><div class="g-name">Constitution</div><div class="g-file">constitution.md</div><div class="g-sub">principles, stack, testing, performance</div><span class="arrow"></span></div>
-        <div class="gate"><div class="g-name">Mission</div><div class="g-file">mission.md</div><div class="g-sub">problem, users, value</div><span class="arrow"></span></div>
-        <div class="gate"><div class="g-name">Roadmap</div><div class="g-file">roadmap.md</div><div class="g-sub">Now / Next / Later</div><span class="arrow"></span></div>
-        <div class="gate"><div class="g-name">Specs</div><div class="g-file">spec-&lt;feature&gt;.md</div><div class="g-sub">Plan · Requirement · Validation</div><span class="arrow"></span></div>
-        <div class="gate"><div class="g-name">Code</div><div class="g-file">src/…</div><div class="g-sub">the only place that says "how"</div></div>
-      </div>
-    </div>
+    <svg class="gatefig" viewBox="0 0 760 464" role="img" aria-labelledby="gateTitle gateDesc" xmlns="http://www.w3.org/2000/svg">
+      <title id="gateTitle">Gate chain</title>
+      <desc id="gateDesc">Five stacked layers — constitution, mission, roadmap, specs, code — where each layer gates the one below. Read top-down to learn why a line of code exists; read bottom-up to see how far a change can propagate.</desc>
+      <defs>
+        <marker id="ahT" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#0f6e5e"/></marker>
+        <marker id="ahR" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#b4541f"/></marker>
+      </defs>
+
+      <!-- side reading: right = top-down (why), left = bottom-up (how far) -->
+      <line x1="646" y1="30" x2="646" y2="432" stroke="#0f6e5e" stroke-width="1.4" marker-end="url(#ahT)"/>
+      <text x="666" y="231" transform="rotate(90 666 231)" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0f6e5e">READ TOP-DOWN · WHY a line of code exists</text>
+      <line x1="114" y1="432" x2="114" y2="30" stroke="#b4541f" stroke-width="1.4" marker-end="url(#ahR)"/>
+      <text x="94" y="231" transform="rotate(-90 94 231)" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#b4541f">READ BOTTOM-UP · HOW FAR a change reaches</text>
+
+      <!-- connectors with "gates" pills -->
+      <g stroke="#0f6e5e" stroke-width="1.4">
+        <line x1="380" y1="80" x2="380" y2="87"/><line x1="380" y1="107" x2="380" y2="113" marker-end="url(#ahT)"/>
+        <line x1="380" y1="170" x2="380" y2="177"/><line x1="380" y1="197" x2="380" y2="203" marker-end="url(#ahT)"/>
+        <line x1="380" y1="260" x2="380" y2="267"/><line x1="380" y1="287" x2="380" y2="293" marker-end="url(#ahT)"/>
+        <line x1="380" y1="350" x2="380" y2="357"/><line x1="380" y1="377" x2="380" y2="383" marker-end="url(#ahT)"/>
+      </g>
+      <g font-family="ui-monospace,Menlo,monospace" font-size="10.5" text-anchor="middle">
+        <rect x="350" y="87" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="101" fill="#0f6e5e">gates ↓</text>
+        <rect x="350" y="177" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="191" fill="#0f6e5e">gates ↓</text>
+        <rect x="350" y="267" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="281" fill="#0f6e5e">gates ↓</text>
+        <rect x="350" y="357" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="371" fill="#0f6e5e">gates ↓</text>
+      </g>
+
+      <!-- layers -->
+      <g font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+        <!-- 1 constitution -->
+        <rect x="150" y="24" width="460" height="56" rx="11" fill="#f0e9cf" stroke="#9a7b18" stroke-width="1.3"/>
+        <text x="172" y="46" font-size="15" font-weight="600" fill="#16201d">Constitution</text>
+        <text x="172" y="65" font-size="11.5" fill="#4c5a54">principles · stack · testing · performance</text>
+        <text x="588" y="57" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9a7b18">constitution.md</text>
+        <!-- 2 mission -->
+        <rect x="150" y="114" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+        <text x="172" y="136" font-size="15" font-weight="600" fill="#16201d">Mission</text>
+        <text x="172" y="155" font-size="11.5" fill="#4c5a54">problem · users · value</text>
+        <text x="588" y="147" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">mission.md</text>
+        <!-- 3 roadmap -->
+        <rect x="150" y="204" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+        <text x="172" y="226" font-size="15" font-weight="600" fill="#16201d">Roadmap</text>
+        <text x="172" y="245" font-size="11.5" fill="#4c5a54">Now / Next / Later</text>
+        <text x="588" y="237" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">roadmap.md</text>
+        <!-- 4 specs -->
+        <rect x="150" y="294" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+        <text x="172" y="316" font-size="15" font-weight="600" fill="#16201d">Specs</text>
+        <text x="172" y="335" font-size="11.5" fill="#4c5a54">Plan · Requirement · Validation</text>
+        <text x="588" y="327" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">spec-&lt;feature&gt;.md</text>
+        <!-- 5 code -->
+        <rect x="150" y="384" width="460" height="56" rx="11" fill="#dcebe5" stroke="#0f6e5e" stroke-width="1.6"/>
+        <text x="172" y="406" font-size="15" font-weight="600" fill="#0c3a33">Code</text>
+        <text x="172" y="425" font-size="11.5" fill="#4c5a54">the only place that says “how”</text>
+        <text x="588" y="417" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0c3a33">src/…</text>
+      </g>
+    </svg>
     <p class="chain-note">principles gate plans → mission gates roadmap → roadmap gates specs → specs gate code.</p>
   </div>
 </section>

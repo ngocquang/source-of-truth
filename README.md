@@ -3,20 +3,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-0f6e5e.svg)](./LICENSE)
 ![Version](https://img.shields.io/badge/version-1.0.0-0f6e5e.svg)
 ![Spec-Driven Development](https://img.shields.io/badge/method-Spec--Driven%20Development-0c3a33.svg)
-![Platforms](https://img.shields.io/badge/works%20with-Claude%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20OpenCode%20·%20Pi-444.svg)
+![Platforms](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20OpenCode%20·%20Pi-444.svg)
 
 ### Stop your AI from silently deleting features it doesn't know exist.
 
 source-of-truth gives your coding agent a persistent memory: it reads what already exists **before** writing code, and updates the record **after** a feature ships — so it stops rebuilding, deleting, and breaking things it never knew were there.
 
-**One skill, every coding agent** — Claude · Codex · Cursor · Gemini · Copilot · Kimi · OpenCode · Pi.
-
-```bash
-# Claude Code — try it in one paste
-/plugin marketplace add ngocquang/source-of-truth && /plugin install source-of-truth@source-of-truth-dev
-```
-
-<sub>Other agents (Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, Pi)? See [Installation](#installation) — same skill, per-platform steps.</sub>
+**One skill, every coding agent** — Claude Code · Codex · Cursor · Gemini · Copilot · Kimi · OpenCode · Pi. → [Install](#installation)
 
 Under the hood it's a self-maintaining **Spec-Driven Development (SDD)** catalog skill: a `docs/` folder that acts as the project's source of truth for *what exists, why it exists, and what rules apply*.
 
@@ -97,10 +90,15 @@ Installation differs by agent. If you use more than one, install source-of-truth
 
 ### Claude Code
 
-Register the marketplace shipped in this repo, then install the plugin:
+Register the marketplace shipped in this repo:
 
 ```bash
 /plugin marketplace add ngocquang/source-of-truth
+```
+
+Then install the plugin:
+
+```bash
 /plugin install source-of-truth@source-of-truth-dev
 ```
 
@@ -226,15 +224,9 @@ Catalog check:
 
 If the change collides with an existing feature, a documented invariant, a constitution principle, or the roadmap — the skill **stops and asks** instead of proceeding.
 
-### SYNC mode — quick helpers
+### SYNC mode — after shipping
 
-```bash
-bash scripts/sync_helpers.sh diff    # files changed + commit hash + today
-bash scripts/sync_helpers.sh stamp   # ready-to-paste "Last verified" line
-bash scripts/sync_helpers.sh stale   # find specs referencing missing files
-```
-
-Full procedure lives in the skill's `references/`.
+SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes in the CHANGELOG. Full procedure lives in the skill's `references/`.
 
 ### BOOTSTRAP mode — three phases
 
@@ -259,7 +251,7 @@ Source-of-Truth is **rigid, not advisory** — its value comes from being follow
 
 ## Contributing
 
-Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The skill itself lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / CHANGELOG procedures and `scripts/` for the SYNC helpers. Edit there and the change reaches every supported agent.
+Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The skill itself lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / CHANGELOG procedures. Edit there and the change reaches every supported agent.
 
 ---
 

@@ -34,7 +34,7 @@ The central index. Always overview/summary — never a dump of full feature deta
 
 ```markdown
 # Spec catalog — <project name>
-_Project docs live in this folder; per-feature specs in `specs/`. No date line — git records when this last changed (a single mutable date is a needless merge-conflict point)._
+_Project docs live in this folder; per-feature specs in `specs/`. No date line — git records when this last changed._
 
 ## Project docs
 - [Constitution](constitution.md) — principles, tech stack, quality bars
@@ -126,7 +126,7 @@ Later  →  Next  →  Now  →  ✓ shipped
 
 ```markdown
 # Roadmap
-_Forward plan only — shipped features leave the roadmap. No date line here: git already records when it last changed (a single mutable date is a needless merge-conflict point)._
+_Forward plan only — shipped features leave the roadmap. No date line — git records when it last changed._
 
 ## Now
 _In active development. Each item has a spec. Aim for ≤3 in flight._

@@ -273,7 +273,7 @@ Re-bootstrap blocks code changes until the catalog is complete. The "STOP, compl
 ## Common pitfalls
 
 - **Reading too many files.** The cap exists because spec quality drops when you skim too much. Stop at the cap and mark PARTIAL.
-- **Inventing invariants from imagination.** If the code doesn't show validation, don't claim it exists. Vague invariants are worse than none.
+- **Inventing invariants from imagination.** If code/tests don't show it, don't claim it.
 - **Fabricating constitution or mission content.** Phase B requires user input. `_TBD:` is acceptable; invented principles are not — they propagate to every future session as if they were truth.
 - **Writing constitution rules from "common sense".** "No `any` types" sounds reasonable but if the user actually allows `any` in their codebase, that rule will block legitimate work. Ask.
 - **Skipping Phase C confirmation.** The user must see constitution + mission before they're written.

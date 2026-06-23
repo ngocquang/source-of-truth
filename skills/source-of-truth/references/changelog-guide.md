@@ -181,111 +181,29 @@ When a PR touches the catalog, verify:
 6. **One date heading per day** — if today's heading exists, add to it; don't create a duplicate.
 7. **Subsection order within a day**: Removed → Renamed → Contract changed → Constitution change.
 
-The `scripts/sync_helpers.sh stale` command surfaces specs whose `Source files` paths no longer exist — useful to catch removals that need a CHANGELOG entry.
+Specs whose `Source files` paths no longer exist often signal a removal that needs a CHANGELOG entry — when reconciling, confirm each affected spec's `Source files` still resolve (see [`sync-guide.md`](sync-guide.md) → Stale spec exception).
 
 ## Archive policy (when CHANGELOG.md gets large)
 
 If `docs/CHANGELOG.md` grows beyond ~6 months of entries OR exceeds ~500 lines, split into monthly archive files. CHANGELOG.md becomes **index + current month inline**; past months move to `docs/changelog/YYYY-MM.md`.
 
-### Layout after split
+### Target shape
 
-```
-docs/
-├─ CHANGELOG.md            (index + current month inline)
-└─ changelog/
-    ├─ 2026-04.md          (archived)
-    ├─ 2026-03.md
-    └─ 2026-02.md
-```
+`CHANGELOG.md` keeps an intro + an `## Archives` index (relative links to each month, newest first, with entry counts) + the **current month inline**. Each archived month lives in `docs/changelog/YYYY-MM.md`, headed `# Changelog — YYYY-MM`, with date headings and subsection structure preserved.
 
-### CHANGELOG.md format after split
+### Trigger and procedure
 
-```markdown
-# Changelog
-
-Audit log of catalog changes. Past months archived under `changelog/`. Newest first.
-
-## Archives
-- [2026-05](changelog/2026-05.md) — current month, 4 entries
-- [2026-04](changelog/2026-04.md) — 12 entries
-- [2026-03](changelog/2026-03.md) — 8 entries
-- [2026-02](changelog/2026-02.md) — 5 entries
-
-## 2026-05 (current month)
-
-### 2026-05-09
-#### Removed
-- **xml-export** — Reason: ...
-```
-
-The `## Archives` index lists every month (newest first) with entry count. The current month appears in both the index AND inline below — the inline copy is what receives new entries.
-
-### Archived monthly file format (`docs/changelog/YYYY-MM.md`)
-
-Same format as before the split — date headings + subsection structure preserved:
-
-```markdown
-# Changelog — 2026-04
-
-## 2026-04-30
-### Removed
-- **legacy-session-auth** — Reason: ...
-
-### Renamed
-- **user-search** → **email-search**. Reason: ...
-
-## 2026-04-15
-### Removed
-- **xml-export** — Reason: ...
-```
-
-No top-level wrapper changes; only the `# Changelog — YYYY-MM` heading is added so the file is self-identifying when opened standalone.
-
-### When to trigger the split
-
-The skill does NOT auto-split — user confirms first (some teams prefer one big file for grep-ability). Surface the option when CHANGELOG.md hits either threshold:
+The skill does **NOT** auto-split. **First**, surface the option and let the user confirm (some teams prefer one grep-able file):
 
 > CHANGELOG.md is <N> lines spanning <M> months. Archive months older than the current to `docs/changelog/`?
 
-Thresholds (whichever first):
+Only after they confirm: group entries by month, write each non-current month to its archive file, rewrite `CHANGELOG.md` as intro + `## Archives` index + current month inline, and show the multi-file diff before writing.
 
-- **≥6 months** of entries (rolling — count distinct `## YYYY-MM-DD` headings grouped by month)
-- **>500 lines**
+### Ongoing, once split
 
-### Doing the split (procedure)
-
-1. Read all date headings in CHANGELOG.md, group entries by month (`YYYY-MM`).
-2. For each **non-current** month, create `docs/changelog/YYYY-MM.md`:
-   - Header: `# Changelog — YYYY-MM`
-   - Body: that month's entries, preserving date headings and subsection structure
-3. Rewrite CHANGELOG.md:
-   - Intro paragraph (note that past months are archived)
-   - `## Archives` index — relative links to every monthly file, newest first, with entry count
-   - `## YYYY-MM (current month)` — inline content of the current month only
-4. Show the diff to the user before writing (multi-file change).
-5. Optionally add a bookkeeping entry to today's CHANGELOG section under `### Bookkeeping` (not required — the index itself is the trail):
-   ```markdown
-   ### Bookkeeping
-   - Archived months 2025-11 through 2026-04 to `changelog/`. No content changed; structural split only.
-   ```
-
-### Adding entries after split
-
-- New entries always go to **`CHANGELOG.md`** (current month section) — same format, same rules. Nothing else changes day-to-day.
-- When the first entry of a **new month** arrives:
-  - Move the previous month's content from CHANGELOG.md → `changelog/YYYY-MM.md` (with the `# Changelog — YYYY-MM` header)
-  - Replace `## <prev-month> (current month)` heading with `## <new-month> (current month)` in CHANGELOG.md
-  - Update `## Archives` index: previous month gets a count + link, new month gets `current month` label
-
-### Reading archives
-
-In READ mode, only `docs/CHANGELOG.md` is loaded by default — index + current month is enough for most catalog checks. Open `docs/changelog/YYYY-MM.md` only when:
-
-- The user asks about a specific historical change
-- A spec references a CHANGELOG entry from an archived month
-- Auditing why an old feature was removed (back-compat investigation)
-
-Loading all archive files at once defeats the split — pull individual months on demand.
+- New entries always go to the current-month section of `CHANGELOG.md` — nothing else changes day-to-day.
+- When the first entry of a new month arrives, move the previous month's content into `changelog/YYYY-MM.md` and update the `## Archives` index (previous month gets a count + link; new month becomes "current month").
+- In READ mode only `CHANGELOG.md` (index + current month) loads; open an archived month on demand — a historical question, a spec cross-link, or a removal audit.
 
 ## Anti-patterns
 

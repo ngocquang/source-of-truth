@@ -16,16 +16,10 @@ If you're not sure whether SYNC has triggered, ask once: "Sync the catalog now, 
 
 ### 1. Identify what changed
 
-Run the helper to gather diff + commit hash + date in one shot:
+Gather the diff, current commit, and date:
 
-```bash
-bash scripts/sync_helpers.sh diff
-```
-
-Or manually:
-
-- `git diff --name-only HEAD~1 HEAD` for the last committed change
-- `git diff --name-only` + `git status` for uncommitted work
+- `git diff --name-only HEAD~1 HEAD` for the last committed change; `git diff --name-only` + `git status` for uncommitted work
+- `git rev-parse --short HEAD` for the `Last verified` hash; today's date completes the stamp
 
 Determine which features are affected. Also check if any of these changed (these can trigger constitution surfacing in step 5c):
 
@@ -116,7 +110,7 @@ For new or modified features:
 4. Translate each test case into a Given/When/Then or SHALL statement → these become `Validation` criteria
 5. **If you can't prove an invariant from code or tests, do not write it.** Vague invariants are worse than missing ones.
 
-**Traceability check**: each `Validation` criterion SHALL trace back to an `Invariants` bullet. If a validation criterion has no matching invariant, the invariant is missing — add it. If an invariant has no matching validation criterion, the criterion is missing — add it (or the invariant isn't actually verifiable, in which case rephrase the invariant).
+**Traceability**: every `Validation` criterion traces back to an `Invariants` bullet and vice-versa — a missing match means the other half is missing (or the invariant isn't verifiable, so rephrase it). Full rule → [`catalog-format.md`](catalog-format.md).
 
 ### 7. Show the diff to the user before writing
 
@@ -143,6 +137,8 @@ If during SYNC (or READ) you discover that a spec's `Source files` reference pat
 > Spec `<name>` references `<path>` but the file no longer exists. Update the spec to point to `<new-path>` (likely candidate based on git log)?
 
 This prevents AI from making cascading "corrections" based on stale data. The user confirms; then you update.
+
+To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from its `**Source files**:` line, and confirm each still exists (`test -e <path>`).
 
 ## Common pitfalls
 

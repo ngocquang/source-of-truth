@@ -74,7 +74,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    | Feature already exists | STOP. "Feature X already exists at `<path>`. Modify it instead, or is there a real difference?" |
    | Change would break a documented invariant | "This breaks invariant `<X>` on feature `<Y>`. Confirm (it'll go in CHANGELOG) or rethink." |
    | Change violates a constitution principle | "This conflicts with constitution: `<principle>`. Update the constitution first (with reason + CHANGELOG entry) or change the approach." |
-   | Work is not on the roadmap (any change — including a bug fix) | STOP and surface it: "This isn't on the roadmap yet — adding it to `roadmap.md` (`Now` or `Next`), then I'll code." Add it by default (urgency ≠ skip — the entry costs seconds). Don't skip on your own "too small" judgment. Only if the user, knowing the rule, explicitly says to proceed without it (e.g. a hotfix) do so — and recommend a retroactive entry. |
+   | Work is not on the roadmap (any change — including a bug fix) | STOP and surface it: "This isn't on the roadmap yet — adding it to `roadmap.md` (`Now` or `Next`), then I'll code." Add by default; only an explicit, rule-aware user override skips it (then recommend a retroactive entry). See non-negotiable rule 2. |
    | Spec's `Source files` reference paths that no longer exist | "Spec `<X>` references `<path>` which no longer exists — sync this spec first?" Don't silently fix. |
 
 8. Only after user confirms, write code.
@@ -84,14 +84,6 @@ Do NOT update catalog files in READ mode (except the stale-spec exception above,
 ## SYNC mode
 
 **Commit gate:** when a commit is imminent — the user asks to commit, or you're about to — SYNC runs and **completes before the commit** (sync the catalog, then commit code + catalog together). This is automatic, not a question. Self-gating: only when `docs/overview.md` exists. Skip only for a pure no-spec-impact refactor, or an explicit user override (then recommend a retroactive sync).
-
-Quick helpers (saves repeated git/date calls):
-
-```bash
-bash scripts/sync_helpers.sh diff   # files changed + commit hash + today
-bash scripts/sync_helpers.sh stamp  # ready-to-paste "Last verified" line
-bash scripts/sync_helpers.sh stale  # find specs referencing missing files
-```
 
 Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, CHANGELOG handling, tech stack updates) → [`references/sync-guide.md`](references/sync-guide.md).
 
@@ -109,12 +101,12 @@ Full procedure → [`references/bootstrap-guide.md`](references/bootstrap-guide.
 
 ## Red flags
 
-- **Reading the entire codebase.** READ reads catalog files; SYNC reads diff + relevant files; BOOTSTRAP caps at 15 files (or 15 per package in monorepos).
-- **Inventing invariants, principles, or mission content.** If you didn't see it in code/tests, or get it from the user, don't claim it. Vague entries are worse than none — tests are the best source of invariants and validation criteria; the user is the only source of mission/code-quality principles.
-- **Auto-filling constitution or mission from imagination.** Phase B requires real user input — `_TBD:` markers are acceptable, fabricated content is not (it propagates to every future session).
-- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed.
-- **Auto-updating constitution silently.** Tech stack changes need user confirmation; principle changes need explicit user request. Silent drift defeats the gate.
-- **Skipping user confirmation in SYNC.** Always show the diff first; batch multi-feature updates into one diff.
-- **Skipping READ for bug fixes or silently fixing stale specs.** Both are the exact failure modes this skill exists to prevent.
-- **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work and should shrink as you ship; leaving shipped entries in `Now` makes it drift from reality.
-- **Quietly building something not on the roadmap (iron-rule).** Every change — features, refactors, and bug fixes alike — gets a `roadmap.md` entry (`Now`/`Next`) before coding. The red flag is skipping on *your own* "too small" judgment, or skipping without surfacing it at all. Surfacing the gate and then honoring an explicit user override (with a recommended retroactive entry) is fine — silently shipping off-roadmap is the violation.
+- **Reading the entire codebase.** READ reads catalog files; SYNC reads diff + relevant files; BOOTSTRAP caps at 15 files (15 per package in monorepos).
+- **Inventing invariants, principles, or mission content.** If it's not in code/tests or from the user, don't claim it.
+- **Auto-filling constitution or mission from imagination.** Phase B needs real user input — `_TBD:` is acceptable, fabrication is not.
+- **Updating overview.md for every change.** It's an index — touch it only when features are added/removed/renamed.
+- **Auto-updating constitution silently.** Tech stack needs user confirmation; principle changes need an explicit request.
+- **Skipping user confirmation in SYNC.** Always show the diff first; batch multi-feature updates into one.
+- **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.
+- **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work — it should shrink as you ship.
+- **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).

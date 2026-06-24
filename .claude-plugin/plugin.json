@@ -1,7 +1,7 @@
 {
   "name": "source-of-truth",
   "description": "A self-maintaining Spec-Driven Development (SDD) catalog skill that keeps a docs/ folder as the project's source of truth — read before touching code, sync after a feature ships.",
-  "version": "1.0.0",
+  "version": “1.0.1”,
   "author": {
     "name": "QuangDN",
     "email": "ngocquangbb@gmail.com"

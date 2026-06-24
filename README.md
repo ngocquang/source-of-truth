@@ -39,14 +39,21 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 > Using Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, or Pi instead? Skip to [Installation](#installation) for the per-platform steps — the skill itself is identical everywhere.
 
-Install the plugin, then let the skill run itself:
+**1. Install the plugin:**
 
 ```bash
 /plugin marketplace add ngocquang/source-of-truth
+```
+
+```bash
 /plugin install source-of-truth@source-of-truth-dev
 ```
 
-Then ask Claude to *"set up the source-of-truth catalog"* and start working — the skill activates on its own from there. Using another agent (Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, Pi)? See [Installation](#installation) for per-platform steps.
+**2. Have a PRD or SDD ready first.** The catalog is built *from* your intent, not guessed from scratch — so before you run anything, have a Product Requirements Document (PRD) or Software Design Document (SDD) on hand, even a rough one. Already ran **[superpowers](https://github.com/obra/superpowers)** or **[spec-kit](https://github.com/github/spec-kit)** for the feature? Their specs and plans count too. Bootstrap pulls whatever you have in as the **primary source of feature intent and mission** (code shows *how*; the doc shows *why*).
+
+**3. Then just type `/source-of-truth`.** That's the whole trigger. It reads your PRD/SDD, bootstraps the `docs/` catalog, and from then on activates on its own — READ before each change, SYNC after each ship.
+
+Using another agent (Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, Pi)? See [Installation](#installation) for per-platform steps.
 
 ---
 

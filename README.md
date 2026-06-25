@@ -19,7 +19,7 @@ Under the hood it's a self-maintaining **Spec-Driven Development (SDD)** catalog
   <img src="./assets/gate-chain.svg" alt="Gate chain: constitution → mission → roadmap → specs → code. Each layer gates the one below — read top-down for why a line of code exists, bottom-up for how far a change can reach." width="720">
 </p>
 
-See the [live explainer](https://ngocquang.github.io/source-of-truth/explainer/) for the full visual walkthrough of the workflow.
+See the <a href="https://ngocquang.github.io/source-of-truth/explainer/index.html" target="_blank" rel="noopener noreferrer">live explainer</a> for the full visual walkthrough of the workflow.
 
 ---
 

@@ -1,7 +1,6 @@
 # source-of-truth
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-0f6e5e.svg)](./LICENSE)
-![Version](https://img.shields.io/badge/version-1.0.0-0f6e5e.svg)
 ![Spec-Driven Development](https://img.shields.io/badge/method-Spec--Driven%20Development-0c3a33.svg)
 ![Platforms](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20OpenCode%20·%20Pi-444.svg)
 

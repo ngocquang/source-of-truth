@@ -39,7 +39,7 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 > Using Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, or Pi instead? Skip to [Installation](#installation) for the per-platform steps — the skill itself is identical everywhere.
 
-**1. Install the plugin:**
+**1. Install the plugin, then reload so the skill activates:**
 
 ```bash
 /plugin marketplace add ngocquang/source-of-truth
@@ -47,6 +47,10 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 ```bash
 /plugin install source-of-truth@source-of-truth-dev
+```
+
+```bash
+/reload-plugins
 ```
 
 **2. Have a PRD or SDD ready first.** The catalog is built *from* your intent, not guessed from scratch — so before you run anything, have a Product Requirements Document (PRD) or Software Design Document (SDD) on hand, even a rough one. Already ran **[superpowers](https://github.com/obra/superpowers)** or **[spec-kit](https://github.com/github/spec-kit)** for the feature? Their specs and plans count too. Bootstrap pulls whatever you have in as the **primary source of feature intent and mission** (code shows *how*; the doc shows *why*).

@@ -126,7 +126,7 @@ Later  →  Next  →  Now  →  ✓ shipped
 
 ```markdown
 # Roadmap
-_Forward plan only — shipped features leave the roadmap. No date line — git records when it last changed._
+_Forward plan only — shipped features leave the roadmap. One line per entry: summary + spec link; detail lives in the spec. No date line — git records when it last changed._
 
 ## Now
 _In active development. Each item has a spec. Aim for ≤3 in flight._
@@ -140,6 +140,8 @@ _Spec'd and queued. Pull into Now when capacity opens._
 _Idea pool. No spec yet. Promote to Next by writing a spec._
 - [ ] **<feature-slug>** — <one-line summary>
 ```
+
+**One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Design detail, acceptance criteria, sub-tasks, and rationale live in the spec, not the roadmap — detail carried on the roadmap duplicates the spec, drifts from it, and bloats the file until nobody reads it. If an entry seems to need more than one line, that's the signal to write (or expand) its spec and link it; `Later` items have no spec yet, so their summary line is all there is — keep it to one line too.
 
 **No `Shipped` group.** A roadmap shows *unshipped* work; once a feature ships it leaves the roadmap. Its shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and CHANGELOG/git — not a list that grows forever and becomes a merge-conflict hotspot. (Optional: a team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10, archived like CHANGELOG — but overview already serves this.)
 

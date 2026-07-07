@@ -149,4 +149,5 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 - **Inventing invariants or validation criteria.** Same rule as Bootstrap — code/tests only. No imagination. If a test was deleted along with the feature it tested, that invariant goes too.
 - **Forgetting CHANGELOG.** Removals, renames, contract changes, and constitution changes must always go in CHANGELOG, otherwise future AI won't know if a change was deliberate or forgotten.
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work and should shrink as you ship; stale `Now` entries make it drift from reality and the "is it tracked?" gate noisy.
+- **Letting roadmap entries grow past one line.** An entry is summary + spec link only; when updating the roadmap, move any accumulated detail (acceptance criteria, sub-tasks, rationale) into the spec instead of preserving it.
 - **Mixing spec content and Validation criteria with implementation detail.** Validation = caller-visible acceptance criteria. "Uses Redis" is not a validation criterion (it's implementation). "Refresh token rejected on second use" is.

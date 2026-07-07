@@ -109,4 +109,5 @@ Full procedure → [`references/bootstrap-guide.md`](references/bootstrap-guide.
 - **Skipping user confirmation in SYNC.** Always show the diff first; batch multi-feature updates into one.
 - **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work — it should shrink as you ship.
+- **Multi-line roadmap entries.** One line per entry: slug + one-line summary + spec link. Detail belongs in the spec — a roadmap that carries detail bloats and drifts.
 - **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).

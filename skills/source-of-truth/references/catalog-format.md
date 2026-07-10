@@ -21,7 +21,7 @@ docs/
 - [Constitution: `docs/constitution.md`](#constitution-docsconstitutionmd)
 - [Mission: `docs/mission.md`](#mission-docsmissionmd)
 - [Roadmap: `docs/roadmap.md`](#roadmap-docsroadmapmd) — lifecycle rules, spec critique gate
-- [Per-feature spec: `docs/specs/spec-<feature_name>.md`](#per-feature-spec-docsspecsspec-feature_namemd) — status semantics, Plan / Requirement / Invariants (incl. structured WHEN/THEN format) / Validation / Notes / Open questions
+- [Per-feature spec: `docs/specs/spec-<feature_name>.md`](#per-feature-spec-docsspecsspec-feature_namemd) — status semantics, Plan / Requirement / Invariants (incl. structured WHEN/THEN format) / Implementation decisions / Validation (numbered) / Notes / Open questions
 - [Full example](#full-example)
 - [CHANGELOG: `docs/CHANGELOG.md`](#changelog-docschangelogmd)
 - [Progressive rigor — when to expand a spec entry](#progressive-rigor--when-to-expand-a-spec-entry)
@@ -190,8 +190,11 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 - **Invariants**:
   - <bullet list of contracts this feature MUST keep, written from the caller's perspective>
 
+## Implementation decisions (optional)
+<settled choices from the design conversation, so they aren't relitigated later. Lower-altitude than Plan — the concrete "we picked X, not Y" calls. One bullet each, with the reason. Implementation detail, NOT contract — keep it out of Invariants.>
+
 ## Validation
-<acceptance criteria — verifiable conditions a reviewer can check by reading alone, without running tests. Each criterion is a Given/When/Then or a SHALL statement. See "Validation section" below for format.>
+<numbered acceptance criteria — verifiable conditions a reviewer can check by reading alone, without running tests. Each criterion is a Given/When/Then or a SHALL statement, numbered so it can be referenced independently. See "Validation section" below for format.>
 
 ## Notes (optional)
 <gotchas, hidden coupling, anti-patterns, historical context, things future AI must NOT do>
@@ -269,21 +272,35 @@ Use SHALL / MUST for hard contracts (breaking them is a bug). Use SHOULD for str
 
 Mix freely with plain bullets in the same `Invariants` block; do not convert simple invariants into scenarios just for uniformity.
 
+### Implementation decisions section (optional)
+
+Records the concrete choices settled during the design conversation, so a later session doesn't reopen them. This is the "we chose X over Y, because Z" layer — lower-altitude than `Plan` (which sketches the overall approach), and deliberately kept out of `Invariants` (which is the caller-facing contract).
+
+- **When to include it**: when real alternatives were weighed and the losing option is likely to be re-proposed later ("why not just use a cron?", "why not store this in Redis?"). If nothing was contested, omit the section — don't manufacture decisions.
+- **Format**: one bullet per decision, each naming the choice and the reason. Reference the rejected alternative when it's non-obvious.
+  - Good: `Chose optimistic locking over row locks — write contention is rare and row locks stalled the import job in load tests.`
+  - Bad: `Uses optimistic locking.` (no reason — that's just a fact, put it in Notes if it even matters)
+- **Boundary**: these are *decisions*, not *contracts*. If a bullet describes something a caller can observe and rely on, it's an invariant — move it to `Requirement`. If it's a gotcha or an anti-pattern warning, it's a `Note`. Implementation decisions answer "why is it built this way", not "what must stay true".
+
+If a separate design doc already captures these, link it in `Source plan` and keep this section to the 2-3 decisions most likely to be second-guessed.
+
 ### Validation section (acceptance criteria)
 
-Each criterion is a verifiable condition a human reviewer can check by reading alone (no test execution needed). Two acceptable formats:
+Each criterion is a verifiable condition a human reviewer can check by reading alone (no test execution needed). **Number the criteria** (`1.`, `2.`, …) so each one is independently addressable — reviews, CHANGELOG entries, and test names can cite "Validation #3" without ambiguity. Two acceptable formats:
 
 **Plain SHALL statement:**
 ```markdown
-- The login response SHALL include a `user.id` field of type UUIDv4.
-- The system SHALL reject email addresses longer than 254 characters with HTTP 400.
+1. The login response SHALL include a `user.id` field of type UUIDv4.
+2. The system SHALL reject email addresses longer than 254 characters with HTTP 400.
 ```
 
 **Given / When / Then (preferred for branching scenarios):**
 ```markdown
-- **Given** a user with `deleted_at IS NOT NULL`, **when** they POST `/auth/login` with valid credentials, **then** the response is `401` with body `{ "code": "account_disabled" }`.
-- **Given** a valid refresh token, **when** the user calls `/auth/refresh`, **then** the old refresh token is revoked atomically with the new one being issued.
+1. **Given** a user with `deleted_at IS NOT NULL`, **when** they POST `/auth/login` with valid credentials, **then** the response is `401` with body `{ "code": "account_disabled" }`.
+2. **Given** a valid refresh token, **when** the user calls `/auth/refresh`, **then** the old refresh token is revoked atomically with the new one being issued.
 ```
+
+Mix the two formats freely in one numbered list — keep a single running sequence so numbers stay stable. When a criterion is retired, leave the higher numbers as-is (don't renumber) so existing references don't silently point at the wrong thing.
 
 Tests prove these criteria; the criteria themselves are the source of truth for "what does correct mean". When a test changes (framework swap, assertion rewrite), the criteria do not — they describe the contract from the caller's perspective.
 
@@ -325,12 +342,16 @@ Mission link: serves the "secure self-serve onboarding" goal. Chose JWT over ser
     - **THEN** the old refresh token is revoked
     - **AND** a new refresh token is issued in the same DB transaction
 
+## Implementation decisions
+- Chose opaque refresh tokens (random 256-bit, stored hashed) over JWT refresh tokens — opaque tokens can be revoked server-side per-row, which SOC2 audit requires; a JWT refresh token can't be revoked before expiry without a denylist.
+- Refresh rotation done in a single Postgres transaction, not two statements — avoids the window where both old and new tokens are valid if the process dies mid-rotation.
+
 ## Validation
-- **Given** valid email + correct password, **when** POST `/api/auth/login`, **then** response is 200 with body matching `{ access_token: <jwt>, refresh_token: <opaque>, expires_in: 900 }`.
-- **Given** valid email + wrong password, **when** POST `/api/auth/login`, **then** response is 401 with empty body.
-- **Given** a soft-deleted user, **when** they POST `/api/auth/login` with correct credentials, **then** response is 401.
-- **Given** a valid refresh token, **when** POST `/api/auth/refresh` succeeds, **then** the old refresh token returns 401 on subsequent use.
-- The system SHALL reject login attempts with email length > 254 chars with HTTP 400.
+1. **Given** valid email + correct password, **when** POST `/api/auth/login`, **then** response is 200 with body matching `{ access_token: <jwt>, refresh_token: <opaque>, expires_in: 900 }`.
+2. **Given** valid email + wrong password, **when** POST `/api/auth/login`, **then** response is 401 with empty body.
+3. **Given** a soft-deleted user, **when** they POST `/api/auth/login` with correct credentials, **then** response is 401.
+4. **Given** a valid refresh token, **when** POST `/api/auth/refresh` succeeds, **then** the old refresh token returns 401 on subsequent use.
+5. The system SHALL reject login attempts with email length > 254 chars with HTTP 400.
 
 ## Notes
 Do not cache decoded JWT — token revocation depends on per-request DB lookup. Refresh token rotation is required by SOC2.
@@ -365,7 +386,7 @@ For decision tree (which category does my change fall into?), per-category requi
 
 ## Progressive rigor — when to expand a spec entry
 
-Default: header metadata + Plan + Requirement + Validation + (optional Notes) is enough for ~80% of features. Resist the urge to make every spec exhaustive — over-detailed specs rot faster than they help.
+Default: header metadata + Plan + Requirement + Validation + (optional Implementation decisions / Notes) is enough for ~80% of features. Resist the urge to make every spec exhaustive — over-detailed specs rot faster than they help. Add `Implementation decisions` only when a real choice was contested; add `Notes` only when there's a genuine gotcha.
 
 Expand a spec (longer invariant list, scenario blocks, dense Notes, more validation criteria) only when at least one of these is true:
 

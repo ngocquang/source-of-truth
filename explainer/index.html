@@ -13,6 +13,48 @@
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
     --serif:ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+    /* transitions-dev tokens (only the groups used on this page) */
+    /* Card resize */
+    --resize-dur: 300ms;
+    --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Text states swap */
+    --text-swap-dur: 150ms;
+    --text-swap-translate-y: 4px;
+    --text-swap-blur: 2px;
+    --text-swap-ease: ease-in-out;
+    /* Page side-by-side */
+    --page-slide-dur: 200ms;
+    --page-fade-dur: 200ms;
+    --page-slide-distance: 8px;
+    --page-blur: 3px;
+    --page-stagger: 0ms;
+    --page-exit-enabled: 1;
+    --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Success check */
+    --check-opacity-dur: 550ms;
+    --check-rotate-dur: 550ms;
+    --check-rotate-from: 80deg;
+    --check-bob-dur: 450ms;
+    --check-y-amount: 40px;
+    --check-blur-dur: 500ms;
+    --check-blur-from: 10px;
+    --check-path-dur: 550ms;
+    --check-path-delay: 80ms;
+    --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-opacity: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-rotate: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
+    --check-ease-path: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Error state shake */
+    --shake-distance: 6px;
+    --shake-overshoot: 4px;
+    --shake-dur-a: 80ms;
+    --shake-dur-b: 60ms;
+    --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --revert-hold: 3000ms;
+    --revert-dur: 280ms;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
@@ -31,6 +73,8 @@
   .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#7fcdb9;font-weight:600;margin:0}
   h1{font-family:var(--mono);font-weight:600;font-size:clamp(2.2rem,7vw,3.4rem);line-height:1;margin:14px 0 0;letter-spacing:-.02em}
   .tagline{font-size:clamp(1rem,2.3vw,1.2rem);color:#bfe0d5;margin:14px 0 0;max-width:62ch}
+  .analogy{margin:18px 0 0;background:#103a33;border:1px solid #1c5046;border-radius:10px;padding:12px 16px;max-width:640px;font-size:14.5px;color:#d5eae2}
+  .analogy b{color:#9ed7c6}
   .tldr{margin:22px 0 0;display:flex;gap:8px;flex-wrap:wrap}
   .tldr code{font-family:var(--mono);font-size:12.5px;background:#103a33;color:#9ed7c6;padding:5px 11px;border-radius:7px;border:1px solid #1c5046}
 
@@ -49,30 +93,40 @@
   h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.45rem,3.4vw,2rem);line-height:1.18;margin:0 0 10px;letter-spacing:-.01em}
   h3.sub{font-family:var(--serif);font-size:1.2rem;margin:24px 0 10px}
   .lede{color:var(--muted);max-width:74ch;margin:0 0 22px;font-size:1rem}
+  .hint{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.04em;margin:0 0 10px}
+
+  /* loop figure (hero section 2) */
+  .loopfig{display:block;margin:6px auto 0;width:100%;max-width:820px;height:auto}
+
+  /* problem cards */
+  .probs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .prob{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+  .prob .no{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--rust);font-weight:600}
+  .prob b{display:block;margin:3px 0 2px}
+  .prob p{margin:0;font-size:13.6px;color:var(--muted)}
+  .prob .fix{margin-top:8px;font-size:12.8px;color:#0c4a40;background:var(--teal-soft);border-radius:6px;padding:5px 9px;display:inline-block}
+  .prob .fix b{display:inline;color:var(--teal);font-family:var(--mono);font-size:11.5px}
 
   /* code blocks */
   .codeblock{background:#0d231f;border:1px solid #15463c;border-radius:12px;overflow:hidden;margin:0}
   .codeblock .bar{background:#103029;padding:8px 14px;font-family:var(--mono);font-size:11px;color:#6c8a82;letter-spacing:.04em;display:flex;justify-content:space-between}
   pre.code{margin:0;font-family:var(--mono);font-size:12.6px;line-height:1.65;color:#d6e8e1;padding:15px 18px;white-space:pre;overflow-x:auto}
   pre.code .c{color:#6f8b82} pre.code .k{color:#7fcdb9} pre.code .v{color:#e8c98a} pre.code .when{color:#e8a373} pre.code .stop{color:#ef9a8f} pre.code .f{color:#6fd0b3}
-  p.note{font-size:13.5px;color:var(--muted);margin:10px 0 0}
-
-  /* steps */
-  .steps{display:grid;gap:11px;counter-reset:s}
-  .step{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px 14px 52px;position:relative}
-  .step::before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:13px;width:26px;height:26px;border-radius:7px;
-    background:var(--teal-soft);color:var(--teal);font-family:var(--mono);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center}
-  .step b{display:block;margin-bottom:2px} .step span{color:var(--muted);font-size:14px}
-  .step code{font-family:var(--mono);font-size:12.5px;background:var(--paper-2);padding:1px 5px;border-radius:4px}
-
-  /* gate chain figure */
-  .gatefig{display:block;margin:10px auto 0;width:100%;max-width:760px;height:auto}
-  .chain-note{font-size:13px;color:var(--muted);margin-top:12px}
 
   /* modes */
+  .scen{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+  .scen button{font-family:var(--mono);font-size:12px;padding:7px 13px;border-radius:20px;border:1px solid var(--line);
+    background:var(--paper);color:var(--muted);cursor:pointer;transition:border-color 150ms ease-out,color 150ms ease-out,background 150ms ease-out}
+  .scen button:hover{border-color:var(--teal);color:var(--teal)}
+  .scen button.on{background:var(--teal);border-color:var(--teal);color:#eaf3ef}
+  .scen-cap{font-size:13.8px;color:var(--muted);margin:0 0 16px;min-height:1.6em}
+  .scen-cap b{color:var(--teal)}
   .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .mode{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:4px solid var(--c,var(--teal));display:flex;flex-direction:column}
+  .mode{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;border-top:4px solid var(--c,var(--teal));display:flex;flex-direction:column;
+    transition:box-shadow 200ms ease-out,opacity 200ms ease-out,transform 200ms var(--resize-ease)}
   .mode.boot{--c:var(--gold)} .mode.read{--c:var(--teal)} .mode.sync{--c:var(--rust)}
+  .three.picked .mode{opacity:.45}
+  .three.picked .mode.lit{opacity:1;box-shadow:0 6px 22px rgba(12,58,51,.16);transform:translateY(-2px)}
   .mode .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--c)}
   .mode h3{font-family:var(--mono);font-size:1.05rem;margin:5px 0 2px;letter-spacing:-.01em}
   .mode .when{font-size:12px;color:var(--faint);font-family:var(--mono);margin-bottom:9px}
@@ -83,11 +137,36 @@
   /* two-col */
   .cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
 
-  /* legend */
-  .legend{display:flex;flex-direction:column;gap:8px}
-  .leg{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:10px 14px}
-  .leg b{font-family:var(--mono);font-size:12.5px;color:var(--teal)}
-  .leg span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+  /* gate chain figure + interactive panel */
+  .gatefig{display:block;margin:10px auto 0;width:100%;max-width:760px;height:auto}
+  .gate-hit{cursor:pointer}
+  .gate-hit:focus{outline:none}
+  .gate-hit:hover .gate-box,.gate-hit:focus .gate-box{stroke:#0f6e5e;stroke-width:2}
+  .gate-panel{max-width:760px;margin:14px auto 0;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:14px 18px;
+    overflow:hidden;transition:height var(--resize-dur) var(--resize-ease)}
+  .gate-panel .t-page h4{margin:0 0 4px;font-family:var(--mono);font-size:13px;color:var(--teal)}
+  .gate-panel .t-page p{margin:0 0 6px;font-size:13.8px;color:var(--muted)}
+  .gate-panel .t-page .q{font-family:var(--serif);font-style:italic;color:var(--ink);font-size:14.5px}
+  .gate-panel .t-page .ex{background:var(--paper-2);border-radius:7px;padding:8px 12px;font-size:13px;color:var(--muted);margin-top:6px}
+  .chain-note{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
+
+  /* walkthrough (terminal step-through) */
+  .term{background:#0d231f;border:1px solid #15463c;border-radius:12px;overflow:hidden}
+  .term .bar{background:#103029;padding:8px 14px;font-family:var(--mono);font-size:11px;color:#6c8a82;letter-spacing:.04em;display:flex;justify-content:space-between}
+  .term-body{position:relative;overflow:hidden;transition:height var(--resize-dur) var(--resize-ease)}
+  .term-step{padding:16px 18px;font-family:var(--mono);font-size:12.8px;line-height:1.7;color:#d6e8e1;white-space:pre-wrap}
+  .term-step .you{color:#e8c98a} .term-step .ai{color:#7fcdb9} .term-step .dim{color:#6f8b82}
+  .term-step .stop{color:#ef9a8f;font-weight:700}
+  .term-step .fileline{color:#6fd0b3}
+  .term-step .verdict{margin-top:10px;padding:9px 12px;border-radius:8px;background:#10322b;border:1px solid #1c5046;color:#bfe0d5;font-family:var(--sans);font-size:13px;line-height:1.5}
+  .term-step .verdict b{color:#9ed7c6}
+  .term-nav{display:flex;align-items:center;gap:12px;background:#103029;border-top:1px solid #15463c;padding:10px 14px}
+  .term-nav button{font-family:var(--mono);font-size:12px;padding:6px 14px;border-radius:7px;border:1px solid #1c5046;background:#0d231f;color:#9ed7c6;cursor:pointer;transition:background 150ms ease-out,opacity 150ms ease-out}
+  .term-nav button:hover:not(:disabled){background:#134138}
+  .term-nav button:disabled{opacity:.35;cursor:default}
+  .term-nav .dots{display:flex;gap:6px;margin-left:auto}
+  .term-nav .dots i{width:8px;height:8px;border-radius:50%;background:#1c5046;transition:background 200ms ease-out,transform 200ms var(--resize-ease)}
+  .term-nav .dots i.on{background:#7fcdb9;transform:scale(1.25)}
 
   /* data tables */
   .dtab{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
@@ -99,11 +178,41 @@
   .dtab .stop{color:var(--rust);font-weight:600}
   .dtab code{font-family:var(--mono);font-size:12px;background:var(--paper-2);padding:1px 4px;border-radius:4px}
 
+  /* interactive docs tree */
+  .tree{background:#0d231f;border:1px solid #15463c;border-radius:12px;overflow:hidden}
+  .tree .bar{background:#103029;padding:8px 14px;font-family:var(--mono);font-size:11px;color:#6c8a82;letter-spacing:.04em;display:flex;justify-content:space-between}
+  .tree ul{list-style:none;margin:0;padding:13px 16px;font-family:var(--mono);font-size:12.8px;line-height:1.9;color:#6f8b82}
+  .tree button{font-family:var(--mono);font-size:12.8px;background:none;border:none;color:#6fd0b3;cursor:pointer;padding:1px 7px;border-radius:6px;transition:background 150ms ease-out,color 150ms ease-out}
+  .tree button:hover{background:#134138}
+  .tree button.on{background:#7fcdb9;color:#0c3a33;font-weight:600}
+  .tree .cmt{color:#4f6d64;font-size:11.5px}
+  .filepane{position:relative;overflow:hidden;transition:height var(--resize-dur) var(--resize-ease)}
+  .filepane .t-page{background:#0d231f}
+  .filepane pre.code{font-size:12px}
+
   /* callout */
   .callout{background:var(--teal-soft);border:1px solid #b3d8cb;border-left:4px solid var(--teal);border-radius:9px;padding:13px 17px;margin-top:16px;font-size:13.8px;color:#0c4a40}
   .callout b{color:var(--teal)}
   .callout.warn{background:var(--gold-soft);border-color:#dcc98a;border-left-color:var(--gold);color:#5e4d12}
   .callout.warn b{color:var(--gold)}
+
+  /* quiz */
+  .quiz{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;transition:border-color 150ms ease-out;will-change:transform}
+  .quiz.is-error{transition:border-color var(--revert-dur,280ms) ease-out;border-color:var(--rust)}
+  .quiz .qhead{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+  .quiz .stmt{font-family:var(--serif);font-size:1.06rem;line-height:1.45;min-height:3em;margin:0 0 14px}
+  .quiz .stmt code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);padding:1px 5px;border-radius:4px}
+  .quiz .btns{display:flex;gap:10px;flex-wrap:wrap}
+  .quiz .btns button{flex:1;min-width:150px;font-family:var(--mono);font-size:12.5px;padding:10px 14px;border-radius:9px;cursor:pointer;
+    border:1px solid var(--line);background:var(--paper-2);color:var(--ink);transition:border-color 150ms ease-out,background 150ms ease-out}
+  .quiz .btns button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
+  .quiz .btns button:disabled{opacity:.5;cursor:default}
+  .quiz .fb{display:flex;gap:10px;align-items:flex-start;margin-top:14px;min-height:44px}
+  .quiz .fb .msg{font-size:13.5px;color:var(--muted);opacity:0;transition:opacity 200ms ease-out}
+  .quiz .fb .msg.show{opacity:1}
+  .quiz .fb .msg b.ok{color:var(--teal)} .quiz .fb .msg b.bad{color:var(--rust)}
+  .quiz .next-q{margin-top:12px;font-family:var(--mono);font-size:12px;padding:7px 14px;border-radius:7px;border:1px solid var(--teal);background:var(--teal);color:#eaf3ef;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 200ms ease-out}
+  .quiz .next-q.show{opacity:1;pointer-events:auto}
 
   /* iron rule split */
   .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
@@ -122,14 +231,105 @@
   .mininote{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 15px;overflow-x:auto;margin-top:14px}
   .mininote b{color:var(--teal)}
 
+  .legend{display:flex;flex-direction:column;gap:8px}
+  .leg{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:10px 14px}
+  .leg b{font-family:var(--mono);font-size:12.5px;color:var(--teal)}
+  .leg span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+
   footer{background:var(--teal-deep);color:#bfe0d5;padding:38px 0 46px}
   footer .wrap{display:flex;flex-direction:column;gap:8px}
   footer .big{font-family:var(--serif);font-size:1.2rem;color:#eaf3ef;max-width:56ch;line-height:1.4}
   footer code{font-family:var(--mono);font-size:.85em;background:#103a33;padding:1px 6px;border-radius:4px;color:#9ed7c6}
   code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:1px 5px;border-radius:4px}
 
+  /* ============ transitions-dev snippets (verbatim, adapted hooks) ============ */
+
+  /* Page side-by-side — extended for N steps via data-pos set by JS */
+  .t-page-slide{position:relative}
+  .t-page-slide .t-page[data-pos="before"]{--t-page-from-x:calc(var(--page-slide-distance) * -1)}
+  .t-page-slide .t-page[data-pos="after"]{--t-page-from-x:var(--page-slide-distance)}
+  .t-page-slide .t-page{
+    position:absolute;inset:0 0 auto 0;
+    opacity:0;pointer-events:none;
+    transform:translateX(calc(var(--t-page-from-x, 0px) * var(--page-exit-enabled)));
+    filter:blur(calc(var(--page-blur) * var(--page-exit-enabled)));
+    transition:
+      opacity   var(--page-fade-dur)  var(--page-fade-ease),
+      transform var(--page-slide-dur) var(--page-slide-ease),
+      filter    var(--page-slide-dur) var(--page-slide-ease);
+    will-change:opacity,transform,filter;
+  }
+  .t-page-slide .t-page[data-pos="active"]{
+    opacity:1;pointer-events:auto;transform:translateX(0);filter:blur(0);
+    transition-delay:var(--page-stagger);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .t-page-slide .t-page{transition:none !important}
+  }
+
+  /* Text states swap */
+  .t-text-swap{
+    display:inline-block;transform:translateY(0);filter:blur(0);opacity:1;
+    transition:
+      transform var(--text-swap-dur) var(--text-swap-ease),
+      filter    var(--text-swap-dur) var(--text-swap-ease),
+      opacity   var(--text-swap-dur) var(--text-swap-ease);
+    will-change:transform,filter,opacity;
+  }
+  .t-text-swap.is-exit{
+    transform:translateY(calc(var(--text-swap-translate-y) * -1));
+    filter:blur(var(--text-swap-blur));opacity:0;
+  }
+  .t-text-swap.is-enter-start{
+    transform:translateY(var(--text-swap-translate-y));
+    filter:blur(var(--text-swap-blur));opacity:0;transition:none;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .t-text-swap{transition:none !important}
+  }
+
+  /* Success check */
+  .t-success-check{display:inline-block;transform-origin:center;opacity:0;will-change:transform,opacity,filter}
+  .t-success-check svg{display:block;overflow:visible}
+  /* 42 = getTotalLength() of the check path below, rounded up */
+  .t-success-check svg path{stroke-dasharray:42;stroke-dashoffset:42}
+  .t-success-check[data-state="in"]{
+    animation:
+      t-check-fade   var(--check-opacity-dur) var(--check-ease-opacity) forwards,
+      t-check-rotate var(--check-rotate-dur)  var(--check-ease-rotate)  forwards,
+      t-check-blur   var(--check-blur-dur)    var(--check-ease-out)     forwards,
+      t-check-bob    var(--check-bob-dur)     var(--check-ease-bob)     forwards;
+  }
+  .t-success-check[data-state="in"] svg path{
+    animation:t-check-draw var(--check-path-dur) var(--check-ease-path) var(--check-path-delay, 0ms) forwards;
+  }
+  @keyframes t-check-fade{from{opacity:0}to{opacity:1}}
+  @keyframes t-check-rotate{from{transform:rotate(var(--check-rotate-from))}to{transform:rotate(0deg)}}
+  @keyframes t-check-blur{from{filter:blur(var(--check-blur-from))}to{filter:blur(0)}}
+  @keyframes t-check-bob{from{translate:0 var(--check-y-amount)}to{translate:0 0}}
+  @keyframes t-check-draw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion: reduce){
+    .t-success-check{animation:none !important;opacity:1}
+    .t-success-check svg path{animation:none !important;stroke-dashoffset:0 !important}
+  }
+
+  /* Error state shake (quiz card owns the border) */
+  .quiz.is-shaking{
+    animation:t-input-shake calc(var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2) linear;
+  }
+  @keyframes t-input-shake{
+    0%     {transform:translateX(0);                                animation-timing-function:var(--shake-ease)}
+    28.57% {transform:translateX(var(--shake-distance));            animation-timing-function:var(--shake-ease)}
+    57.14% {transform:translateX(calc(var(--shake-distance) * -1)); animation-timing-function:var(--shake-ease)}
+    78.57% {transform:translateX(var(--shake-overshoot));           animation-timing-function:var(--shake-ease)}
+    100%   {transform:translateX(0)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .quiz{animation:none !important;transform:none !important}
+  }
+
   @media (max-width:780px){
-    .three,.cols2,.split,.donts{grid-template-columns:1fr}
+    .three,.cols2,.split,.donts,.probs{grid-template-columns:1fr}
   }
   html{scroll-behavior:smooth} :target{scroll-margin-top:60px}
 </style>
@@ -140,7 +340,8 @@
   <div class="wrap">
     <p class="kicker">Spec-Driven Development</p>
     <h1>source-of-truth</h1>
-    <p class="tagline">A self-maintaining <code style="background:#103a33;color:#9ed7c6">docs/</code> directory as the project's source of truth: the AI <b>reads first</b> before editing code, <b>syncs after</b> a feature ships. The catalog owns <i>what &amp; why</i>; code owns <i>how</i>.</p>
+    <p class="tagline">A self-maintaining <code style="background:#103a33;color:#9ed7c6">docs/</code> catalog the AI must <b>read before</b> touching code and <b>update after</b> shipping. The catalog owns <i>what &amp; why</i>; code owns <i>how</i>.</p>
+    <div class="analogy">🗒️ <b>Plain English:</b> it's a shared notebook for your project. Any AI session — today's or next month's — opens the notebook first, so it never rebuilds, breaks, or forgets what's already there.</div>
     <div class="tldr">
       <code>READ → before coding</code>
       <code>SYNC → after shipping</code>
@@ -151,76 +352,123 @@
 
 <nav class="nav">
   <div class="wrap">
+    <a href="#loop">The loop</a>
     <a href="#problem">Problem</a>
     <a href="#modes">3 modes</a>
     <a href="#gates">Gate chain</a>
-    <a href="#catalog">docs/ structure</a>
-    <a href="#spec">Spec</a>
-    <a href="#read">Catalog check</a>
-    <a href="#sync">SYNC + CLI</a>
+    <a href="#demo">Live demo</a>
+    <a href="#catalog">docs/ files</a>
+    <a href="#spec">Spec + quiz</a>
+    <a href="#sync">SYNC</a>
     <a href="#ironrule">Iron-rule</a>
     <a href="#donts">Avoid</a>
     <a href="#pairs">Pairs with</a>
   </div>
 </nav>
 
+<!-- THE LOOP -->
+<section class="band" id="loop">
+  <div class="wrap">
+    <p class="eyebrow">The whole idea in one picture</p>
+    <h2>Every change goes through the same loop</h2>
+    <svg class="loopfig" viewBox="0 0 820 240" role="img" aria-label="Loop: you ask, AI reads docs, AI writes code, AI syncs docs back — repeat. Bootstrap runs once to create docs.">
+      <defs>
+        <marker id="la" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#0f6e5e"/></marker>
+        <marker id="lg" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#9a7b18"/></marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+        <!-- you -->
+        <rect x="16" y="86" width="130" height="68" rx="12" fill="#fbfcfb" stroke="#d3ddd6"/>
+        <text x="81" y="115" text-anchor="middle" font-size="15" font-weight="600" fill="#16201d">You ask</text>
+        <text x="81" y="134" text-anchor="middle" font-size="11.5" fill="#4c5a54">"add feature X"</text>
+        <!-- read -->
+        <rect x="216" y="86" width="150" height="68" rx="12" fill="#dcebe5" stroke="#0f6e5e" stroke-width="1.5"/>
+        <text x="291" y="111" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="14" font-weight="600" fill="#0c3a33">READ</text>
+        <text x="291" y="130" text-anchor="middle" font-size="11.5" fill="#4c5a54">check docs/ first</text>
+        <text x="291" y="145" text-anchor="middle" font-size="11.5" fill="#b4541f">STOP on conflict</text>
+        <!-- code -->
+        <rect x="436" y="86" width="150" height="68" rx="12" fill="#fbfcfb" stroke="#d3ddd6"/>
+        <text x="511" y="115" text-anchor="middle" font-size="15" font-weight="600" fill="#16201d">Write code</text>
+        <text x="511" y="134" text-anchor="middle" font-size="11.5" fill="#4c5a54">only after checks pass</text>
+        <!-- sync -->
+        <rect x="656" y="86" width="150" height="68" rx="12" fill="#f4e3d8" stroke="#b4541f" stroke-width="1.5"/>
+        <text x="731" y="111" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="14" font-weight="600" fill="#7a3813">SYNC</text>
+        <text x="731" y="130" text-anchor="middle" font-size="11.5" fill="#4c5a54">update docs/ from</text>
+        <text x="731" y="145" text-anchor="middle" font-size="11.5" fill="#4c5a54">the diff you shipped</text>
+        <!-- arrows -->
+        <g stroke="#0f6e5e" stroke-width="1.6" fill="none">
+          <line x1="146" y1="120" x2="206" y2="120" marker-end="url(#la)"/>
+          <line x1="366" y1="120" x2="426" y2="120" marker-end="url(#la)"/>
+          <line x1="586" y1="120" x2="646" y2="120" marker-end="url(#la)"/>
+          <path d="M731 154 L731 196 Q731 208 719 208 L303 208 Q291 208 291 196 L291 164" marker-end="url(#la)"/>
+        </g>
+        <text x="511" y="200" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#0f6e5e">docs/ stays true → next session trusts it</text>
+        <!-- bootstrap -->
+        <rect x="216" y="14" width="150" height="42" rx="10" fill="#f0e9cf" stroke="#9a7b18"/>
+        <text x="291" y="33" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="600" fill="#5e4d12">BOOTSTRAP</text>
+        <text x="291" y="48" text-anchor="middle" font-size="10.5" fill="#5e4d12">run once — creates docs/</text>
+        <line x1="291" y1="56" x2="291" y2="80" stroke="#9a7b18" stroke-width="1.4" marker-end="url(#lg)"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
 <!-- PROBLEM -->
-<section class="band" id="problem">
+<section class="band alt" id="problem">
   <div class="wrap">
     <p class="eyebrow">Problem</p>
-    <h2>Four failure modes when AI edits a codebase with no reference source</h2>
-    <p class="lede">These are the four recurring failures the skill was built to prevent. If you've never hit any of them, you probably don't need it yet.</p>
-    <div class="scroll-x">
-      <table class="dtab">
-        <tr><th>Failure</th><th>Description</th><th>How the catalog blocks it</th></tr>
-        <tr><td class="k">Rebuilding what already exists</td><td>Reimplementing a feature that already exists elsewhere.</td><td><code>READ</code> checks "Already exists?" before writing code.</td></tr>
-        <tr><td class="k">Silently removing a feature</td><td>A refactor drops a capability that no one intended to remove.</td><td>Specs document live features and their invariants.</td></tr>
-        <tr><td class="k">Breaking an invariant</td><td>Changing behavior without knowing the contract callers depend on.</td><td>The <code>Invariants</code> section in each spec.</td></tr>
-        <tr><td class="k">Drifting off-track</td><td>Building something that violates project principles or isn't on the roadmap.</td><td>Gate chain: constitution → roadmap → spec.</td></tr>
-      </table>
+    <h2>Four ways AI quietly wrecks a codebase</h2>
+    <p class="lede">Without a reference the AI trusts, long-running projects hit these four failures. Each one is blocked by a specific part of the catalog.</p>
+    <div class="probs">
+      <div class="prob"><span class="no">Failure 1</span><b>Rebuilds what already exists</b><p>Session #12 doesn't remember session #3 — so it writes a second, slightly different version.</p><span class="fix">Blocked by <b>READ → "Already exists?"</b></span></div>
+      <div class="prob"><span class="no">Failure 2</span><b>Silently deletes a feature</b><p>A refactor drops a capability nobody intended to remove — noticed weeks later.</p><span class="fix">Blocked by <b>specs + CHANGELOG</b></span></div>
+      <div class="prob"><span class="no">Failure 3</span><b>Breaks a contract</b><p>Changes behavior without knowing what callers depend on ("improves" a 404 into a 200).</p><span class="fix">Blocked by <b>Invariants in each spec</b></span></div>
+      <div class="prob"><span class="no">Failure 4</span><b>Drifts off-track</b><p>Builds something that violates project principles or was never planned.</p><span class="fix">Blocked by <b>constitution + roadmap gates</b></span></div>
     </div>
   </div>
 </section>
 
 <!-- THREE MODES -->
-<section class="band alt" id="modes">
+<section class="band" id="modes">
   <div class="wrap">
-    <p class="eyebrow">Operation</p>
-    <h2>Three modes, selected automatically by context</h2>
-    <p class="lede">The skill looks at whether a catalog exists, whether you're about to edit code, or whether you just shipped — then runs the appropriate mode.</p>
-    <div class="three">
-      <div class="mode boot"><span class="tag">Run once</span><h3>BOOTSTRAP</h3><div class="when">docs/overview.md not yet present</div>
-        <ol><li>Auto-detect stack, test runner, design system (no prompts)</li><li>Single interview pass: code quality, performance budget, mission</li><li>Confirm → write catalog + update <code>CLAUDE.md</code></li></ol></div>
-      <div class="mode read"><span class="tag">Before editing code</span><h3>READ</h3><div class="when">write / modify / delete</div>
-        <ol><li>Read <code>overview → constitution → roadmap → spec</code></li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
-      <div class="mode sync"><span class="tag">After shipping</span><h3>SYNC</h3><div class="when">"done" · "merge" · "shipped"</div>
-        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from the roadmap</li><li>Record removals / renames / contract changes in CHANGELOG</li></ol></div>
+    <p class="eyebrow">Operation · interactive</p>
+    <h2>Three modes, selected automatically</h2>
+    <p class="hint">▸ Click a situation to see which mode fires:</p>
+    <div class="scen" id="scenBtns">
+      <button data-mode="boot">"New repo — no docs/ yet"</button>
+      <button data-mode="read">"Fix this login bug"</button>
+      <button data-mode="sync">"Done, merge it"</button>
     </div>
-    <div class="rebar"><b>RE-BOOTSTRAP:</b> if a catalog exists but <code>constitution.md</code> or <code>mission.md</code> is missing → rebuild the missing file before allowing code edits. Updating <code>CLAUDE.md</code> in BOOTSTRAP is the highest-leverage step — it causes every future session to read the catalog automatically, even when the skill doesn't trigger.</div>
+    <p class="scen-cap"><span class="t-text-swap" id="scenCap">No mode picker, no flags — the skill infers the mode from what's on disk and what you just said.</span></p>
+    <div class="three" id="modeCards">
+      <div class="mode boot" data-mode="boot"><span class="tag">Run once</span><h3>BOOTSTRAP</h3><div class="when">docs/overview.md not yet present</div>
+        <ol><li>Auto-detect stack, test runner, design system (no prompts)</li><li>One interview pass: quality rules, perf budget, mission</li><li>Confirm → write catalog + update <code>CLAUDE.md</code></li></ol></div>
+      <div class="mode read" data-mode="read"><span class="tag">Before editing code</span><h3>READ</h3><div class="when">write / modify / delete — bug fixes included</div>
+        <ol><li>Read <code>overview → constitution → roadmap → spec</code></li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
+      <div class="mode sync" data-mode="sync"><span class="tag">After shipping</span><h3>SYNC</h3><div class="when">"done" · "merge" · "shipped" · before commit</div>
+        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes in CHANGELOG</li></ol></div>
+    </div>
+    <div class="rebar"><b>RE-BOOTSTRAP:</b> catalog exists but <code>constitution.md</code> / <code>mission.md</code> missing → rebuild that file before any code edit. Updating <code>CLAUDE.md</code> during BOOTSTRAP is the highest-leverage step: every future session then reads the catalog automatically.</div>
   </div>
 </section>
 
 <!-- GATE CHAIN -->
-<section class="band" id="gates">
+<section class="band alt" id="gates">
   <div class="wrap">
-    <p class="eyebrow">Mechanism</p>
-    <h2>Gate chain: each layer guards the layer below</h2>
-    <p class="lede">No layer can be crossed before the one above permits it. Read top-down to understand why a line of code exists; read bottom-up to understand how far a change can propagate.</p>
+    <p class="eyebrow">Mechanism · interactive</p>
+    <h2>Gate chain: each layer guards the one below</h2>
+    <p class="hint">▸ Click any layer in the diagram to see what it does:</p>
     <svg class="gatefig" viewBox="0 0 760 464" role="img" aria-labelledby="gateTitle gateDesc" xmlns="http://www.w3.org/2000/svg">
       <title id="gateTitle">Gate chain</title>
-      <desc id="gateDesc">Five stacked layers — constitution, mission, roadmap, specs, code — where each layer gates the one below. Read top-down to learn why a line of code exists; read bottom-up to see how far a change can propagate.</desc>
+      <desc id="gateDesc">Five stacked layers — constitution, mission, roadmap, specs, code — where each layer gates the one below. Click a layer for its explanation.</desc>
       <defs>
         <marker id="ahT" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#0f6e5e"/></marker>
         <marker id="ahR" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M1 1 L8 4.5 L1 8 Z" fill="#b4541f"/></marker>
       </defs>
-
-      <!-- side reading: right = top-down (why), left = bottom-up (how far) -->
       <line x1="646" y1="30" x2="646" y2="432" stroke="#0f6e5e" stroke-width="1.4" marker-end="url(#ahT)"/>
       <text x="666" y="231" transform="rotate(90 666 231)" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0f6e5e">READ TOP-DOWN · WHY a line of code exists</text>
       <line x1="114" y1="432" x2="114" y2="30" stroke="#b4541f" stroke-width="1.4" marker-end="url(#ahR)"/>
       <text x="94" y="231" transform="rotate(-90 94 231)" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#b4541f">READ BOTTOM-UP · HOW FAR a change reaches</text>
-
-      <!-- connectors with "gates" pills -->
       <g stroke="#0f6e5e" stroke-width="1.4">
         <line x1="380" y1="80" x2="380" y2="87"/><line x1="380" y1="107" x2="380" y2="113" marker-end="url(#ahT)"/>
         <line x1="380" y1="170" x2="380" y2="177"/><line x1="380" y1="197" x2="380" y2="203" marker-end="url(#ahT)"/>
@@ -233,63 +481,230 @@
         <rect x="350" y="267" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="281" fill="#0f6e5e">gates ↓</text>
         <rect x="350" y="357" width="60" height="20" rx="10" fill="#dcebe5" stroke="#0f6e5e"/><text x="380" y="371" fill="#0f6e5e">gates ↓</text>
       </g>
-
-      <!-- layers -->
       <g font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
-        <!-- 1 constitution -->
-        <rect x="150" y="24" width="460" height="56" rx="11" fill="#f0e9cf" stroke="#9a7b18" stroke-width="1.3"/>
-        <text x="172" y="46" font-size="15" font-weight="600" fill="#16201d">Constitution</text>
-        <text x="172" y="65" font-size="11.5" fill="#4c5a54">principles · stack · testing · performance</text>
-        <text x="588" y="57" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9a7b18">constitution.md</text>
-        <!-- 2 mission -->
-        <rect x="150" y="114" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
-        <text x="172" y="136" font-size="15" font-weight="600" fill="#16201d">Mission</text>
-        <text x="172" y="155" font-size="11.5" fill="#4c5a54">problem · users · value</text>
-        <text x="588" y="147" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">mission.md</text>
-        <!-- 3 roadmap -->
-        <rect x="150" y="204" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
-        <text x="172" y="226" font-size="15" font-weight="600" fill="#16201d">Roadmap</text>
-        <text x="172" y="245" font-size="11.5" fill="#4c5a54">Now / Next / Later</text>
-        <text x="588" y="237" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">roadmap.md</text>
-        <!-- 4 specs -->
-        <rect x="150" y="294" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
-        <text x="172" y="316" font-size="15" font-weight="600" fill="#16201d">Specs</text>
-        <text x="172" y="335" font-size="11.5" fill="#4c5a54">Plan · Requirement · Validation</text>
-        <text x="588" y="327" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">spec-&lt;feature&gt;.md</text>
-        <!-- 5 code -->
-        <rect x="150" y="384" width="460" height="56" rx="11" fill="#dcebe5" stroke="#0f6e5e" stroke-width="1.6"/>
-        <text x="172" y="406" font-size="15" font-weight="600" fill="#0c3a33">Code</text>
-        <text x="172" y="425" font-size="11.5" fill="#4c5a54">the only place that says “how”</text>
-        <text x="588" y="417" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0c3a33">src/…</text>
+        <g class="gate-hit" data-gate="1" tabindex="0" role="button" aria-label="Constitution layer">
+          <rect class="gate-box" x="150" y="24" width="460" height="56" rx="11" fill="#f0e9cf" stroke="#9a7b18" stroke-width="1.3"/>
+          <text x="172" y="46" font-size="15" font-weight="600" fill="#16201d">Constitution</text>
+          <text x="172" y="65" font-size="11.5" fill="#4c5a54">principles · stack · testing · performance</text>
+          <text x="588" y="57" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9a7b18">constitution.md</text>
+        </g>
+        <g class="gate-hit" data-gate="2" tabindex="0" role="button" aria-label="Mission layer">
+          <rect class="gate-box" x="150" y="114" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+          <text x="172" y="136" font-size="15" font-weight="600" fill="#16201d">Mission</text>
+          <text x="172" y="155" font-size="11.5" fill="#4c5a54">problem · users · value</text>
+          <text x="588" y="147" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">mission.md</text>
+        </g>
+        <g class="gate-hit" data-gate="3" tabindex="0" role="button" aria-label="Roadmap layer">
+          <rect class="gate-box" x="150" y="204" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+          <text x="172" y="226" font-size="15" font-weight="600" fill="#16201d">Roadmap</text>
+          <text x="172" y="245" font-size="11.5" fill="#4c5a54">Now / Next / Later</text>
+          <text x="588" y="237" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">roadmap.md</text>
+        </g>
+        <g class="gate-hit" data-gate="4" tabindex="0" role="button" aria-label="Specs layer">
+          <rect class="gate-box" x="150" y="294" width="460" height="56" rx="11" fill="#fbfcfb" stroke="#d3ddd6"/>
+          <text x="172" y="316" font-size="15" font-weight="600" fill="#16201d">Specs</text>
+          <text x="172" y="335" font-size="11.5" fill="#4c5a54">Plan · Requirement · Validation</text>
+          <text x="588" y="327" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0f6e5e">spec-&lt;feature&gt;.md</text>
+        </g>
+        <g class="gate-hit" data-gate="5" tabindex="0" role="button" aria-label="Code layer">
+          <rect class="gate-box" x="150" y="384" width="460" height="56" rx="11" fill="#dcebe5" stroke="#0f6e5e" stroke-width="1.6"/>
+          <text x="172" y="406" font-size="15" font-weight="600" fill="#0c3a33">Code</text>
+          <text x="172" y="425" font-size="11.5" fill="#4c5a54">the only place that says “how”</text>
+          <text x="588" y="417" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#0c3a33">src/…</text>
+        </g>
       </g>
     </svg>
+    <div class="gate-panel t-page-slide" id="gatePanel">
+      <div class="t-page" data-page-id="1">
+        <h4>constitution.md — the rules of the house</h4>
+        <p class="q">Answers: “Are we allowed to build it this way?”</p>
+        <div class="ex"><b>Example:</b> constitution says "stateless API tier" → a session-based login plan is rejected at the gate; JWT gets chosen instead. Changing this file requires your explicit approval + a CHANGELOG entry.</div>
+      </div>
+      <div class="t-page" data-page-id="2">
+        <h4>mission.md — why the project exists</h4>
+        <p class="q">Answers: “Does this actually serve our users?”</p>
+        <div class="ex"><b>Example:</b> problem, target users, value proposition, success metrics. A feature idea that serves nobody in <code>Users</code> shouldn't reach the roadmap. Content comes from you — never invented by the AI.</div>
+      </div>
+      <div class="t-page" data-page-id="3">
+        <h4>roadmap.md — what we're doing, in order</h4>
+        <p class="q">Answers: “Is this planned — Now, Next, or Later?”</p>
+        <div class="ex"><b>Example:</b> work not on the roadmap → <b style="color:var(--rust)">NOT TRACKED → STOP</b>, add a one-line entry first (takes seconds). Shipped entries leave the roadmap — it shrinks as you ship.</div>
+      </div>
+      <div class="t-page" data-page-id="4">
+        <h4>spec-&lt;feature&gt;.md — the contract of each feature</h4>
+        <p class="q">Answers: “What must not break when we touch this?”</p>
+        <div class="ex"><b>Example:</b> "wrong password → 401 with empty body". Any change that breaks a documented invariant stops for your confirmation and gets a CHANGELOG entry.</div>
+      </div>
+      <div class="t-page" data-page-id="5">
+        <h4>src/ — code, the only place that says “how”</h4>
+        <p class="q">Answers: “How is it implemented?”</p>
+        <div class="ex"><b>Example:</b> algorithms, libraries, file structure live here only. If a spec starts describing <i>how</i> (bcrypt, Redis, class names), that content is in the wrong layer — it belongs in code or spec Notes.</div>
+      </div>
+    </div>
     <p class="chain-note">principles gate plans → mission gates roadmap → roadmap gates specs → specs gate code.</p>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section class="band" id="demo">
+  <div class="wrap">
+    <p class="eyebrow">Live demo · interactive</p>
+    <h2>Watch READ mode stop a duplicate feature</h2>
+    <p class="lede">A real session, step by step. You ask for something that <i>already exists</i> — see how the catalog catches it before a single line is written.</p>
+    <div class="term">
+      <div class="bar"><span>claude — READ mode</span><span>demo session</span></div>
+      <div class="term-body t-page-slide" id="demoBody">
+        <div class="t-page term-step" data-page-id="1"><span class="dim">$</span> <span class="you">you:</span> Add an endpoint to search users by their email address.
+
+<span class="ai">claude:</span> Before touching code I'll check the catalog. <span class="dim">(READ mode fires — automatic, code edit requested)</span></div>
+        <div class="t-page term-step" data-page-id="2"><span class="ai">claude:</span> Reading the catalog…
+<span class="fileline">  ✓ docs/overview.md</span>      <span class="dim">→ index lists a feature: <b>email-search</b></span>
+<span class="fileline">  ✓ docs/constitution.md</span>  <span class="dim">→ stack: NestJS + PostgreSQL, no conflicts</span>
+<span class="fileline">  ✓ docs/roadmap.md</span>       <span class="dim">→ not in Now/Next/Later… because it already shipped</span></div>
+        <div class="t-page term-step" data-page-id="3"><span class="ai">claude:</span> Reading the matching spec…
+<span class="fileline">  ✓ docs/specs/spec-email-search.md</span>
+
+<span class="v" style="color:#e8c98a">  Surface:</span>    GET /api/users/search?email=
+<span class="v" style="color:#e8c98a">  Invariants:</span> case-insensitive match ·
+              soft-deleted users excluded ·
+              404 when not found (never 200 + null)</div>
+        <div class="t-page term-step" data-page-id="4"><span class="ai">claude:</span> Catalog check:
+  - Constitution:      no conflict
+  - Roadmap status:    shipped (off-roadmap)
+  - Invariants:        3 documented contracts
+  - <span class="stop">Already exists?    YES → spec-email-search</span>
+
+<span class="stop">STOP.</span> Feature already exists at <span class="fileline">docs/specs/spec-email-search.md</span>.
+Modify it, or is this genuinely different?</div>
+        <div class="t-page term-step" data-page-id="5"><span class="dim">$</span> <span class="you">you:</span> Oh right — just add fuzzy matching to the existing one.
+
+<span class="ai">claude:</span> Adding <b>email-search-fuzzy</b> to roadmap `Now`, then extending
+the existing endpoint. All 3 invariants preserved.
+<div class="verdict"><b>Outcome:</b> zero duplicate code written, existing contracts intact, roadmap still true. Without the catalog you'd now have two search endpoints slowly drifting apart.</div></div>
+      </div>
+      <div class="term-nav">
+        <button id="demoPrev">← Back</button>
+        <button id="demoNext">Next →</button>
+        <div class="dots" id="demoDots"></div>
+      </div>
+    </div>
+    <h3 class="sub">The 5 STOP rules of READ mode</h3>
+    <div class="scroll-x">
+      <table class="dtab">
+        <tr><th>Situation</th><th>Response</th></tr>
+        <tr><td class="k">Feature already exists</td><td><span class="stop">STOP.</span> "Already exists at <code>&lt;path&gt;</code>. Modify it, or is this genuinely different?"</td></tr>
+        <tr><td class="k">Breaks a documented invariant</td><td>"Breaks invariant <code>X</code>. Confirm (goes in CHANGELOG) or rethink?"</td></tr>
+        <tr><td class="k">Violates the constitution</td><td>"Conflicts with <code>&lt;principle&gt;</code>. Update the constitution first, or change approach."</td></tr>
+        <tr><td class="k">Not on the roadmap</td><td><span class="stop">STOP.</span> Add a roadmap entry (Now/Next) first — unless you explicitly override.</td></tr>
+        <tr><td class="k">Spec points to a missing file</td><td>"Spec <code>X</code> references a missing file — sync first?" Never silently self-corrects.</td></tr>
+      </table>
+    </div>
   </div>
 </section>
 
 <!-- CATALOG LAYOUT -->
 <section class="band alt" id="catalog">
   <div class="wrap">
-    <p class="eyebrow">Structure</p>
-    <h2>The catalog lives in <code>docs/</code></h2>
-    <p class="lede">Five project-level files plus one spec per feature. All markdown — human-readable, greppable, and easy to load into AI context.</p>
+    <p class="eyebrow">Structure · interactive</p>
+    <h2>Six files. That's the whole system.</h2>
+    <p class="hint">▸ Click any file in the tree to preview its exact format:</p>
     <div class="cols2">
-      <div class="codeblock">
-        <div class="bar"><span>docs/</span><span>tree</span></div>
-<pre class="code">docs/
-├─ <span class="f">overview.md</span>        <span class="c"># index — points to everything</span>
-├─ <span class="f">constitution.md</span>    <span class="c"># principles &amp; tech stack</span>
-├─ <span class="f">mission.md</span>         <span class="c"># why the project exists</span>
-├─ <span class="f">roadmap.md</span>         <span class="c"># Now / Next / Later</span>
-├─ <span class="f">CHANGELOG.md</span>       <span class="c"># removals / renames / contract changes</span>
-└─ specs/
-   └─ <span class="f">spec-&lt;feature&gt;.md</span> <span class="c"># Plan + Requirement + Validation</span></pre>
+      <div class="tree">
+        <div class="bar"><span>docs/</span><span>click a file</span></div>
+        <ul>
+          <li>docs/</li>
+          <li>├─ <button data-file="1" class="on">overview.md</button> <span class="cmt"># index — points to everything</span></li>
+          <li>├─ <button data-file="2">constitution.md</button> <span class="cmt"># principles &amp; tech stack</span></li>
+          <li>├─ <button data-file="3">mission.md</button> <span class="cmt"># why the project exists</span></li>
+          <li>├─ <button data-file="4">roadmap.md</button> <span class="cmt"># Now / Next / Later</span></li>
+          <li>├─ <button data-file="5">CHANGELOG.md</button> <span class="cmt"># removals · renames · contracts</span></li>
+          <li>└─ specs/</li>
+          <li>&nbsp;&nbsp;&nbsp;└─ <button data-file="6">spec-&lt;feature&gt;.md</button> <span class="cmt"># one per feature</span></li>
+        </ul>
       </div>
-      <div class="legend">
-        <div class="leg"><b>overview.md</b><span>Central index — summaries only, not a detail dump. Touch it only when adding, removing, or renaming a feature.</span></div>
-        <div class="leg"><b>constitution.md</b><span>Changes require your explicit approval + one CHANGELOG entry.</span></div>
-        <div class="leg"><b>roadmap.md</b><span>Delivery checklist. Once shipped, entries leave the roadmap.</span></div>
-        <div class="leg"><b>spec-&lt;feature&gt;.md</b><span>One file per feature, kebab-case. <code>Invariants</code> is the most important field.</span></div>
+      <div class="codeblock">
+        <div class="bar"><span id="fileTitle">docs/overview.md</span><span>preview</span></div>
+        <div class="filepane t-page-slide" id="filePane">
+          <div class="t-page" data-page-id="1"><pre class="code"><span class="k"># Spec catalog — my-project</span>
+
+<span class="k">## Project docs</span>
+- [Constitution](constitution.md) — principles, stack
+- [Mission](mission.md) — problem, users, value
+- [Roadmap](roadmap.md) — delivery plan
+- [CHANGELOG](CHANGELOG.md) — removals, renames
+
+<span class="k">## Feature specs</span>
+- [jwt-authentication](specs/…) — JWT + refresh
+- [email-search](specs/…) — search by email
+
+<span class="c"># summaries only — never a detail dump.
+# touched only when a feature is added /
+# removed / renamed.</span></pre></div>
+          <div class="t-page" data-page-id="2"><pre class="code"><span class="k"># Constitution</span>
+<span class="c">_Changes require user approval._</span>
+
+<span class="k">## Tech Stack</span>
+- Language: TypeScript on Node 22
+- Framework: NestJS 10 · DB: PostgreSQL 16
+<span class="k">## Code Quality</span>
+- No `any` types in new code
+<span class="k">## Testing Standards</span>
+- ≥80% coverage on src/, blocking
+<span class="k">## UX Consistency</span>  ·  <span class="k">## Performance</span>
+- <span class="v">_TBD: p95 latency budget?_</span> <span class="c">← unknown =
+  marked, never invented</span></pre></div>
+          <div class="t-page" data-page-id="3"><pre class="code"><span class="k"># Mission</span>
+
+<span class="k">## Problem</span>
+Ops teams juggle 6 dashboards to answer
+one question.
+<span class="k">## Users</span>
+- On-call engineer: needs answers in &lt;1 min
+<span class="k">## Value proposition</span>
+One query instead of six dashboards.
+<span class="k">## Success metrics</span>
+- Time-to-answer &lt; 60s
+
+<span class="c"># comes from YOU in the bootstrap
+# interview. AI never fabricates this.</span></pre></div>
+          <div class="t-page" data-page-id="4"><pre class="code"><span class="k"># Roadmap</span>
+<span class="c">_Forward plan only — shipped work leaves._</span>
+
+<span class="k">## Now</span>   <span class="c">(≤3 in flight, each has a spec)</span>
+- [ ] <span class="f">email-search-fuzzy</span> — fuzzy match
+      — [spec](…) — _started 2026-07-10_
+<span class="k">## Next</span>  <span class="c">(spec'd, queued)</span>
+- [ ] <span class="f">rate-limiting</span> — per-key limits — [spec](…)
+<span class="k">## Later</span> <span class="c">(idea pool, no spec yet)</span>
+- [ ] <span class="f">sso-login</span> — SAML for enterprise
+
+<span class="c"># one line per entry. detail → the spec.</span></pre></div>
+          <div class="t-page" data-page-id="5"><pre class="code"><span class="k"># Changelog</span>
+
+<span class="k">## 2026-07-08</span>
+<span class="k">### Removed</span>
+- <span class="f">csv-export</span> — Reason: replaced by API.
+  Replaced by: <span class="f">export-api</span>.
+<span class="k">### Contract changed</span>
+- <span class="f">email-search</span> — Old: 200+null on miss.
+  New: 404. Migration: handle 404.
+
+<span class="c"># answers ONE question: "was this removed
+# on purpose, or did the AI forget it?"</span></pre></div>
+          <div class="t-page" data-page-id="6"><pre class="code"><span class="k">### Feature: email-search</span>
+- Status: active · Roadmap: shipped
+- Source files: src/users/search.ts
+- Last verified: 2026-07-08 @ <span class="c">8cb70b0</span>
+
+<span class="k">## Plan</span>       <span class="c"># why + chosen approach</span>
+<span class="k">## Requirement</span> <span class="c"># surface + invariants</span>
+- Invariants: case-insensitive ·
+  soft-deleted excluded · 404 on miss
+<span class="k">## Validation</span> <span class="c"># checkable by reading</span>
+- Given unknown email → 404.
+
+<span class="c"># full anatomy in the next section ↓</span></pre></div>
+        </div>
       </div>
     </div>
   </div>
@@ -300,7 +715,7 @@
   <div class="wrap">
     <p class="eyebrow">Heart of the catalog</p>
     <h2>Anatomy of a spec</h2>
-    <p class="lede">One <code>spec-&lt;feature&gt;.md</code> per feature: header metadata + 3 main sections (+ optional Notes). Goal: someone (or an AI) who hasn't seen the code can still understand <i>why</i> it exists and which <i>contracts</i> must not be broken.</p>
+    <p class="lede">One <code>spec-&lt;feature&gt;.md</code> per feature: header + 3 sections (+ optional Notes). Goal: someone who has never seen the code understands <i>why</i> it exists and which <i>contracts</i> must not break.</p>
     <div class="cols2">
       <div class="codeblock">
         <div class="bar"><span>docs/specs/spec-jwt-authentication.md</span></div>
@@ -321,135 +736,112 @@ a stateless API tier. <span class="c">Non-goal: SSO.</span>
     THEN the old token is revoked
     AND a new token is issued in the same transaction</span>
 
-<span class="k">## Validation</span>      <span class="c"># verifiable by reading, no test run needed</span>
+<span class="k">## Validation</span>      <span class="c"># verifiable by reading alone</span>
 - Given wrong password → 401 empty body.
-- Given refresh token used a second time → 401.
+- Given refresh token reused → 401.
 
-<span class="k">## Notes</span>         <span class="c"># gotchas the code doesn't document itself</span>
+<span class="k">## Notes</span>         <span class="c"># gotchas code doesn't document</span>
 Do not cache decoded JWTs — revocation requires
 a DB lookup on every request.</pre>
       </div>
       <div>
-        <h3 class="sub" style="margin-top:0">Invariant vs. implementation detail</h3>
-        <p class="lede" style="margin-bottom:12px;font-size:14px">Invariants describe only <b>externally observable behavior</b> — what a caller can verify without reading source code. Implementation details belong in Notes.</p>
-        <div class="scroll-x">
-          <table class="dtab">
-            <tr><th>Is an Invariant</th><th>Is an implementation detail</th></tr>
-            <tr><td>HTTP status, response shape</td><td>Library choices (bcrypt, Redis)</td></tr>
-            <tr><td>Ordering &amp; idempotency</td><td>Class/function structure</td></tr>
-            <tr><td>Input validation rules</td><td>Caching/retry strategy</td></tr>
-            <tr><td>Caller-visible side effects</td><td>Micro-optimization</td></tr>
-          </table>
+        <h3 class="sub" style="margin-top:0">Quiz: Invariant, or implementation detail?</h3>
+        <p class="lede" style="margin-bottom:12px;font-size:14px">Invariants = only what a <b>caller can observe</b> without reading source. This is the #1 thing people get wrong — try it:</p>
+        <div class="quiz" id="quiz">
+          <div class="qhead"><span id="quizProg">Question 1 / 6</span><span id="quizScore">Score 0</span></div>
+          <p class="stmt" id="quizStmt"></p>
+          <div class="btns">
+            <button id="ansInv">→ Invariants</button>
+            <button id="ansImpl">→ Notes (detail)</button>
+          </div>
+          <div class="fb">
+            <span class="t-success-check" data-state="out" aria-hidden="true">
+              <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+                <path d="M10 24 L20 34 L38 14" stroke="#0f6e5e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="msg" id="quizMsg"></span>
+          </div>
+          <button class="next-q" id="quizNext">Next question →</button>
         </div>
-        <div class="callout"><b>Rule:</b> if rewriting in another language would change a bullet point, it's an implementation detail — move it to Notes. And: <b>if you can't prove it from code or tests, don't write it</b> — a vague invariant is worse than none.</div>
+        <div class="callout" style="margin-top:14px"><b>Litmus test:</b> if rewriting the code in another language would change the bullet → it's implementation detail, move it to Notes. And <b>if you can't prove it from code or tests, don't write it.</b></div>
       </div>
     </div>
-    <div class="callout warn"><b>Progressive rigor:</b> a short spec is the right default for ~80% of features. Expand to WHEN/THEN/AND or SHALL/MUST only when: a regression has occurred · there is a race or ordering concern · compliance is involved · ≥2 clients call it · an AI has misread it before. <b>Length is not quality.</b> Every Validation criterion must trace back to an Invariants bullet — no orphan criteria.</div>
-  </div>
-</section>
-
-<!-- READ MODE -->
-<section class="band alt" id="read">
-  <div class="wrap">
-    <p class="eyebrow">READ mode</p>
-    <h2>Print the "Catalog check" — then STOP on conflict</h2>
-    <p class="lede">The Catalog check is not internal reasoning — it's printed so you can override. Any of the situations below causes the skill to stop and ask rather than proceed.</p>
-    <div class="cols2">
-      <div class="codeblock">
-        <div class="bar"><span>catalog check</span><span>stdout</span></div>
-<pre class="code"><span class="v">Constitution:</span>      &lt;relevant principles / "no conflict"&gt;
-<span class="v">Roadmap status:</span>   Now|Next|Later|<span class="stop">NOT TRACKED</span>
-<span class="v">Related features:</span> &lt;list / "none"&gt;
-<span class="v">Invariants:</span>      &lt;contracts to preserve&gt;
-<span class="v">Acceptance:</span>      &lt;acceptance criteria still required to pass&gt;
-<span class="v">Already exists?</span>   &lt;yes + feature / no&gt;
-<span class="v">Plan:</span>            &lt;what will be done &amp; why it doesn't conflict&gt;</pre>
-      </div>
-      <div class="scroll-x">
-        <table class="dtab">
-          <tr><th>Situation</th><th>Response</th></tr>
-          <tr><td class="k">Feature already exists</td><td><span class="stop">STOP.</span> "Already exists at <code>&lt;path&gt;</code>. Modify it, or is this genuinely different?"</td></tr>
-          <tr><td class="k">Breaking a documented invariant</td><td>"Breaks invariant <code>X</code>. Confirm (record in CHANGELOG) or reconsider?"</td></tr>
-          <tr><td class="k">Violates the constitution</td><td>"Conflicts with <code>&lt;principle&gt;</code>. Update the constitution first, or change your approach."</td></tr>
-          <tr><td class="k">Not tracked on the roadmap</td><td><span class="stop">STOP.</span> Add a roadmap entry (Now/Next) first — unless you explicitly override.</td></tr>
-          <tr><td class="k">Spec references a missing file</td><td>"Spec <code>X</code> references a missing file — sync first?" Does not silently self-correct.</td></tr>
-        </table>
-      </div>
-    </div>
+    <div class="callout warn"><b>Progressive rigor:</b> a short spec is right for ~80% of features. Expand to WHEN/THEN/AND only when: a past regression · race/ordering concern · compliance · ≥2 clients · an AI misread it before. <b>Length is not quality.</b> Every Validation criterion must trace to an Invariants bullet.</div>
   </div>
 </section>
 
 <!-- SYNC -->
-<section class="band" id="sync">
+<section class="band alt" id="sync">
   <div class="wrap">
     <p class="eyebrow">SYNC mode</p>
-    <h2>Reconcile diff → update catalog</h2>
-    <p class="lede">After shipping, the skill reads the <i>diff</i> (not the entire repo), classifies each change, updates the right files, and always shows you the catalog diff for review before writing.</p>
+    <h2>After shipping: reconcile the diff → update the catalog</h2>
+    <p class="lede">SYNC reads the <i>diff</i> (never the whole repo), classifies each change, and shows you the catalog diff before writing anything.</p>
     <div class="scroll-x">
       <table class="dtab">
         <tr><th>Change type</th><th>Catalog action</th></tr>
-        <tr><td class="k">New feature</td><td>Create <code>spec-&lt;name&gt;.md</code> + remove from roadmap when shipped + add to overview</td></tr>
-        <tr><td class="k">Feature update</td><td>Update spec; if Requirements change → record in CHANGELOG</td></tr>
-        <tr><td class="k">Remove feature</td><td><code>Status: removed</code> + roadmap + CHANGELOG <code>### Removed</code></td></tr>
+        <tr><td class="k">New feature</td><td>Create <code>spec-&lt;name&gt;.md</code> + remove from roadmap + add to overview</td></tr>
+        <tr><td class="k">Feature update</td><td>Update spec; Requirements changed → CHANGELOG entry</td></tr>
+        <tr><td class="k">Remove feature</td><td><code>Status: removed</code> + CHANGELOG <code>### Removed</code></td></tr>
         <tr><td class="k">Rename feature</td><td>Rename spec file + roadmap + CHANGELOG <code>### Renamed</code></td></tr>
-        <tr><td class="k">Internal refactor</td><td>Only update <code>Source files</code> if files move — <b>do not</b> touch overview/roadmap</td></tr>
-        <tr><td class="k">Tech stack change</td><td>Surface to you → update constitution + CHANGELOG <b>only after you confirm</b></td></tr>
+        <tr><td class="k">Internal refactor</td><td>Update <code>Source files</code> if files moved — <b>don't</b> touch overview/roadmap</td></tr>
+        <tr><td class="k">Tech stack change</td><td>Surface to you → constitution + CHANGELOG <b>only after you confirm</b></td></tr>
       </table>
     </div>
     <div class="codeblock" style="margin-top:16px">
       <div class="bar"><span>scripts/sync_helpers.sh</span><span>bash</span></div>
 <pre class="code"><span class="c"># changed files + commit hash + today's date</span>
 bash scripts/sync_helpers.sh diff
-<span class="c"># pre-formatted "Last verified" line ready to paste into a spec</span>
+<span class="c"># pre-formatted "Last verified" line for a spec</span>
 bash scripts/sync_helpers.sh stamp
 <span class="c"># find specs pointing to missing files</span>
 bash scripts/sync_helpers.sh stale</pre>
     </div>
-    <div class="callout"><b>Commit gate:</b> a commit request is itself a SYNC trigger — when you ask to commit (or the agent is about to), SYNC runs and <b>completes before the commit</b>, so the code and the catalog are committed together. Automatic, not a question.</div>
-    <div class="callout"><b>CHANGELOG records only 4 event types:</b> Removed · Renamed · Contract changed · Constitution change. New features, internal refactors, and bug fixes that preserve contracts <b>do not</b> need an entry (overview + spec are the record). It answers one question: <i>"Was this removed intentionally, or did the AI forget it?"</i></div>
+    <div class="callout"><b>Commit gate:</b> asking to commit is itself a SYNC trigger — SYNC completes <b>before</b> the commit so code and catalog land together. Automatic, not a question.</div>
+    <div class="callout"><b>CHANGELOG records only 4 event types:</b> Removed · Renamed · Contract changed · Constitution change. It answers one question: <i>"was this removed intentionally, or did the AI forget it?"</i> New features and safe refactors don't need an entry.</div>
   </div>
 </section>
 
 <!-- IRON RULE -->
-<section class="band alt" id="ironrule">
+<section class="band" id="ironrule">
   <div class="wrap">
     <p class="eyebrow">Hard rule</p>
     <h2>Iron-rule: every unit of work gets a roadmap entry</h2>
-    <p class="lede">Every change — feature, refactor, <b>and bug fix</b> — gets an entry in <code>roadmap.md</code> before any code is written. The rule exists to prevent the AI from rationalizing "too small to record" — because it's precisely those small, untracked changes that cause the roadmap to drift from reality and the gates to decay. It is <b>not</b> here to override you: you own the project.</p>
+    <p class="lede">Every change — feature, refactor, <b>and bug fix</b> — gets a one-line <code>roadmap.md</code> entry before code is written. It exists to stop the AI from rationalizing "too small to record" — untracked small changes are exactly how the roadmap drifts and the gates decay. It is <b>not</b> a way to overrule you: you own the project.</p>
     <div class="split">
       <div class="col no"><h5>✗ Violation</h5><ul><li>AI skips it unilaterally because "it seems minor"</li><li>Silently shipping something not on the roadmap</li><li>Treating urgency as permission to skip</li></ul></div>
-      <div class="col yes"><h5>✓ Valid</h5><ul><li>Add the entry (takes seconds), then proceed quickly</li><li>You understand the rule &amp; explicitly override it (e.g. live hotfix)</li><li>→ proceed + suggest a follow-up roadmap/CHANGELOG entry</li></ul></div>
+      <div class="col yes"><h5>✓ Valid</h5><ul><li>Add the entry (takes seconds), then move fast</li><li>You, knowing the rule, explicitly override (e.g. live hotfix)</li><li>→ proceed + retroactive roadmap/CHANGELOG entry after</li></ul></div>
     </div>
   </div>
 </section>
 
 <!-- DON'TS -->
-<section class="band" id="donts">
+<section class="band alt" id="donts">
   <div class="wrap">
     <p class="eyebrow">Discipline</p>
     <h2>No fabrication · No full-repo reads · No silent edits</h2>
     <p class="lede">An AI-maintained catalog is only trustworthy if it refuses to fill in blanks. These are the red flags the skill self-enforces.</p>
     <div class="donts">
-      <div class="dont"><b>Reading the entire codebase.</b> READ reads catalog files; SYNC reads the diff; BOOTSTRAP caps at ~15 files (or 15/package in a monorepo).</div>
-      <div class="dont"><b>Fabricating invariants.</b> If it's not visible in code or tests, don't assert it. Tests are the best source of invariants.</div>
-      <div class="dont"><b>Filling in constitution/mission from imagination.</b> These must come from you; <code>_TBD:_</code> is fine, fabrication is not.</div>
-      <div class="dont"><b>Updating overview for every change.</b> It's an index — only touch it when adding, removing, or renaming a feature.</div>
-      <div class="dont"><b>Silently editing the constitution.</b> Stack changes require your confirmation; principle changes require an explicit request.</div>
+      <div class="dont"><b>Reading the entire codebase.</b> READ reads catalog files; SYNC reads the diff; BOOTSTRAP caps at ~15 files (per package in a monorepo).</div>
+      <div class="dont"><b>Fabricating invariants.</b> Not visible in code or tests → don't assert it. Tests are the best source of invariants.</div>
+      <div class="dont"><b>Inventing constitution/mission content.</b> Must come from you; <code>_TBD:_</code> is fine, fabrication is not.</div>
+      <div class="dont"><b>Updating overview for every change.</b> It's an index — touch it only on add / remove / rename.</div>
+      <div class="dont"><b>Silently editing the constitution.</b> Stack changes need your confirmation; principle changes need an explicit request.</div>
       <div class="dont"><b>Skipping READ for a "simple" bug fix.</b> Bug fixes break invariants more often than features do.</div>
     </div>
-    <div class="mininote"><b>Slug naming:</b> lowercase kebab-case verb-noun form (<code>jwt-authentication</code>, <code>email-search</code>) · flat namespace, no nested directories · avoid abstract names (<code>util</code>, <code>core</code>, <code>manager</code>) · avoid bare nouns (<code>user</code> → <code>user-creation</code>).</div>
+    <div class="mininote"><b>Slug naming:</b> lowercase kebab-case verb-noun (<code>jwt-authentication</code>, <code>email-search</code>) · flat namespace · no abstract names (<code>util</code>, <code>core</code>) · no bare nouns (<code>user</code> → <code>user-creation</code>).</div>
   </div>
 </section>
 
 <!-- PAIRS WITH -->
-<section class="band alt" id="pairs">
+<section class="band" id="pairs">
   <div class="wrap">
     <p class="eyebrow">Where it fits</p>
     <h2>Works well with superpowers &amp; spec-kit</h2>
-    <p class="lede">source-of-truth is a <i>catalog</i> skill, not a workflow engine — it sits alongside a development methodology rather than replacing one. The methodology produces the work; the catalog keeps the source of truth honest across sessions. Pairing it with one of these is a great fit.</p>
+    <p class="lede">source-of-truth is a <i>catalog</i>, not a workflow engine. The methodology produces the work; the catalog keeps the source of truth honest across sessions.</p>
     <div class="cols2">
-      <div class="leg"><b><a href="https://github.com/obra/superpowers">superpowers</a></b><span>Drives <i>how</i> you work — brainstorming → planning → TDD → review. Each cycle <code>READ</code>s the catalog before coding and <code>SYNC</code>s it after shipping.</span></div>
-      <div class="leg"><b><a href="https://github.com/github/spec-kit">spec-kit</a></b><span>Generates specs &amp; plans up front for a feature. source-of-truth turns those one-off specs into a living catalog that stays in sync with the code as the project evolves.</span></div>
+      <div class="leg"><b><a href="https://github.com/obra/superpowers">superpowers</a></b><span>Drives <i>how</i> you work — brainstorming → planning → TDD → review. Each cycle <code>READ</code>s the catalog before coding and <code>SYNC</code>s after shipping.</span></div>
+      <div class="leg"><b><a href="https://github.com/github/spec-kit">spec-kit</a></b><span>Generates specs &amp; plans up front. source-of-truth turns those one-off specs into a living catalog that stays in sync as the project evolves.</span></div>
     </div>
   </div>
 </section>
@@ -460,6 +852,187 @@ bash scripts/sync_helpers.sh stale</pre>
     <p>Skill <code>source-of-truth</code> · plugin <code>source-of-truth</code> · auto-selected mode (BOOTSTRAP / READ / SYNC). The catalog owns <i>what &amp; why</i>; code owns <i>how</i>.</p>
   </div>
 </footer>
+
+<script>
+(function(){
+  "use strict";
+  var rootCS = getComputedStyle(document.documentElement);
+  function ms(name, fb){
+    var v = parseFloat(rootCS.getPropertyValue(name));
+    return Number.isFinite(v) ? v : fb;
+  }
+
+  /* ---- page-slide helper: sets data-pos + animates container height ---- */
+  function makeSlider(container){
+    var pages = Array.prototype.slice.call(container.querySelectorAll(":scope > .t-page"));
+    var current = 1;
+    function setHeight(){
+      var active = pages[current - 1];
+      container.style.height = active.offsetHeight + "px";
+    }
+    function show(n){
+      current = Math.max(1, Math.min(pages.length, n));
+      pages.forEach(function(p, i){
+        var pos = (i + 1 === current) ? "active" : (i + 1 < current ? "before" : "after");
+        p.setAttribute("data-pos", pos);
+      });
+      setHeight();
+    }
+    window.addEventListener("resize", setHeight);
+    show(1);
+    return { show: show, count: pages.length, current: function(){ return current; } };
+  }
+
+  /* ---- 1. scenario → mode picker ---- */
+  var scenBtns = document.querySelectorAll("#scenBtns button");
+  var modeCards = document.getElementById("modeCards");
+  var scenCap = document.getElementById("scenCap");
+  var swapDur = ms("--text-swap-dur", 150);
+  var CAPS = {
+    boot: "No docs/overview.md on disk → BOOTSTRAP: detect the stack, interview you once, write the catalog.",
+    read: "A bug fix is still a code edit → READ fires first. \"Simple\" fixes break invariants most often.",
+    sync: "\"Done / merge\" is a ship signal → SYNC reads the diff and updates the catalog before the commit."
+  };
+  function swapText(el, next){
+    el.classList.add("is-exit");
+    setTimeout(function(){
+      el.textContent = next;
+      el.classList.remove("is-exit");
+      el.classList.add("is-enter-start");
+      void el.offsetHeight; /* force reflow so the next change transitions */
+      el.classList.remove("is-enter-start");
+    }, swapDur);
+  }
+  scenBtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      scenBtns.forEach(function(b){ b.classList.toggle("on", b === btn); });
+      var mode = btn.getAttribute("data-mode");
+      modeCards.classList.add("picked");
+      Array.prototype.forEach.call(modeCards.children, function(card){
+        card.classList.toggle("lit", card.getAttribute("data-mode") === mode);
+      });
+      swapText(scenCap, CAPS[mode]);
+    });
+  });
+
+  /* ---- 2. gate chain click → explanation panel ---- */
+  var gatePanel = makeSlider(document.getElementById("gatePanel"));
+  document.querySelectorAll(".gate-hit").forEach(function(g){
+    function open(){ gatePanel.show(parseInt(g.getAttribute("data-gate"), 10)); }
+    g.addEventListener("click", open);
+    g.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); open(); }
+    });
+  });
+
+  /* ---- 3. READ walkthrough ---- */
+  var demo = makeSlider(document.getElementById("demoBody"));
+  var prevB = document.getElementById("demoPrev"), nextB = document.getElementById("demoNext");
+  var dotsWrap = document.getElementById("demoDots");
+  for(var i = 0; i < demo.count; i++) dotsWrap.appendChild(document.createElement("i"));
+  var dots = dotsWrap.children;
+  function demoUI(){
+    var c = demo.current();
+    prevB.disabled = c === 1;
+    nextB.disabled = c === demo.count;
+    for(var i = 0; i < dots.length; i++) dots[i].classList.toggle("on", i === c - 1);
+  }
+  prevB.addEventListener("click", function(){ demo.show(demo.current() - 1); demoUI(); });
+  nextB.addEventListener("click", function(){ demo.show(demo.current() + 1); demoUI(); });
+  demoUI();
+
+  /* ---- 4. docs/ tree file previews ---- */
+  var filePane = makeSlider(document.getElementById("filePane"));
+  var fileTitle = document.getElementById("fileTitle");
+  var FILE_NAMES = ["docs/overview.md","docs/constitution.md","docs/mission.md","docs/roadmap.md","docs/CHANGELOG.md","docs/specs/spec-email-search.md"];
+  var treeBtns = document.querySelectorAll(".tree button");
+  treeBtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var n = parseInt(btn.getAttribute("data-file"), 10);
+      treeBtns.forEach(function(b){ b.classList.toggle("on", b === btn); });
+      fileTitle.textContent = FILE_NAMES[n - 1];
+      filePane.show(n);
+    });
+  });
+
+  /* ---- 5. invariant quiz ---- */
+  var QUESTIONS = [
+    { s: "Wrong password returns <code>401</code> with an empty body — never <code>200</code> with a null token.", inv: true,
+      why: "A caller can verify this without reading source — it's the contract." },
+    { s: "Passwords are hashed with <code>bcrypt</code>.", inv: false,
+      why: "Library choice. Rewrite in Go with argon2 → behavior unchanged. Belongs in Notes." },
+    { s: "Email comparison is case-insensitive.", inv: true,
+      why: "Externally observable: <code>A@x.com</code> and <code>a@x.com</code> log into the same account." },
+    { s: "Search results are cached in Redis for 5 minutes.", inv: false,
+      why: "Caching strategy is internal. If staleness were a promise to callers, you'd phrase THAT as the invariant." },
+    { s: "Soft-deleted users are excluded from all search results.", inv: true,
+      why: "Callers rely on it — leaking deleted users would be a contract break (and maybe a privacy bug)." },
+    { s: "The login handler lives in <code>src/auth/login.ts</code>.", inv: false,
+      why: "That's the <code>Source files</code> metadata field — file layout is never a caller-visible contract." }
+  ];
+  var qi = 0, score = 0, answered = false;
+  var stmt = document.getElementById("quizStmt"), msg = document.getElementById("quizMsg");
+  var prog = document.getElementById("quizProg"), scoreEl = document.getElementById("quizScore");
+  var bInv = document.getElementById("ansInv"), bImpl = document.getElementById("ansImpl");
+  var nextQ = document.getElementById("quizNext");
+  var quiz = document.getElementById("quiz");
+  var check = quiz.querySelector(".t-success-check");
+  var shakeMs = ms("--shake-dur-a", 80) * 2 + ms("--shake-dur-b", 60) * 2;
+
+  function renderQ(){
+    answered = false;
+    stmt.innerHTML = "“" + QUESTIONS[qi].s + "”";
+    prog.textContent = "Question " + (qi + 1) + " / " + QUESTIONS.length;
+    msg.classList.remove("show");
+    nextQ.classList.remove("show");
+    check.setAttribute("data-state", "out");
+    bInv.disabled = false; bImpl.disabled = false;
+  }
+  function showCheck(){
+    check.setAttribute("data-state", "out");
+    void check.offsetWidth; /* force reflow so keyframes restart */
+    check.setAttribute("data-state", "in");
+  }
+  function shakeQuiz(){
+    quiz.classList.add("is-error");
+    quiz.classList.remove("is-shaking");
+    void quiz.offsetWidth; /* force reflow */
+    quiz.classList.add("is-shaking");
+    setTimeout(function(){ quiz.classList.remove("is-shaking"); }, shakeMs + 20);
+    setTimeout(function(){ quiz.classList.remove("is-error"); }, shakeMs + 1200);
+  }
+  function answer(saysInvariant){
+    if(answered) return;
+    answered = true;
+    bInv.disabled = true; bImpl.disabled = true;
+    var q = QUESTIONS[qi];
+    var right = (saysInvariant === q.inv);
+    if(right){
+      score++;
+      showCheck();
+      msg.innerHTML = "<b class='ok'>Correct.</b> " + q.why;
+    } else {
+      shakeQuiz();
+      msg.innerHTML = "<b class='bad'>Not quite — it's " + (q.inv ? "an Invariant" : "a detail → Notes") + ".</b> " + q.why;
+    }
+    scoreEl.textContent = "Score " + score;
+    msg.classList.add("show");
+    if(qi < QUESTIONS.length - 1){
+      nextQ.textContent = "Next question →";
+    } else {
+      nextQ.textContent = "Finished " + score + "/" + QUESTIONS.length + " — restart ↺";
+    }
+    nextQ.classList.add("show");
+  }
+  bInv.addEventListener("click", function(){ answer(true); });
+  bImpl.addEventListener("click", function(){ answer(false); });
+  nextQ.addEventListener("click", function(){
+    if(qi < QUESTIONS.length - 1){ qi++; } else { qi = 0; score = 0; scoreEl.textContent = "Score 0"; }
+    renderQ();
+  });
+  renderQ();
+})();
+</script>
 
 </body>
 </html>

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Source of Truth (Spec Catalog)"
+  short_description: "Spec-driven development gates: read the docs/ catalog before touching code, sync it after a feature ships"
+policy:
+  # The skill's whole point is to gate code changes automatically —
+  # Codex must be able to invoke it without an explicit $skill call.
+  allow_implicit_invocation: true

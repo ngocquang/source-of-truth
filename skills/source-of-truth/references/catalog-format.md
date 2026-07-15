@@ -20,8 +20,8 @@ docs/
 - [Index file: `docs/overview.md`](#index-file-docsoverviewmd)
 - [Constitution: `docs/constitution.md`](#constitution-docsconstitutionmd)
 - [Mission: `docs/mission.md`](#mission-docsmissionmd)
-- [Roadmap: `docs/roadmap.md`](#roadmap-docsroadmapmd) — lifecycle rules
-- [Per-feature spec: `docs/specs/spec-<feature_name>.md`](#per-feature-spec-docsspecsspec-feature_namemd) — status semantics, Plan / Requirement / Invariants (incl. structured WHEN/THEN format) / Validation / Notes
+- [Roadmap: `docs/roadmap.md`](#roadmap-docsroadmapmd) — lifecycle rules, spec critique gate
+- [Per-feature spec: `docs/specs/spec-<feature_name>.md`](#per-feature-spec-docsspecsspec-feature_namemd) — status semantics, Plan / Requirement / Invariants (incl. structured WHEN/THEN format) / Validation / Notes / Open questions
 - [Full example](#full-example)
 - [CHANGELOG: `docs/CHANGELOG.md`](#changelog-docschangelogmd)
 - [Progressive rigor — when to expand a spec entry](#progressive-rigor--when-to-expand-a-spec-entry)
@@ -147,13 +147,24 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 
 ### Lifecycle rules
 
-- **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation), then move the entry.
-- **Promote `Next` → `Now`**: only when actively starting work; record the start date.
+- **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), then move the entry.
+- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) against the best spec available — the catalog spec if one exists, otherwise the design plan the implementation will follow (e.g., superpowers brainstorm/plan output) — then resolve `Open questions` down to `None.`: fold each answer into the spec/plan, or demote the question to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
 - **Ship (`Now` → off-roadmap)**: at SYNC time when the feature ships, **remove the entry from `Now`** — the roadmap shrinks as you ship. Shipped state now lives in the spec (`Status: active`), `overview.md`, and CHANGELOG/git; there is no `Shipped` list to append to.
 - **Drop a `Later` / `Next` item**: delete from roadmap. No CHANGELOG (it never shipped).
 - **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a CHANGELOG entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.
 
 A feature in flight is in **exactly one** of `Now` / `Next` / `Later`; once shipped it is no longer on the roadmap.
+
+### Spec critique gate (runs at `Next → Now`)
+
+A spec is not ready to build from until it has been attacked. When a feature enters `Now`, run these four checks against the best spec available — the catalog spec if one exists, otherwise the design plan the implementation will follow — and record what survives:
+
+1. **Contradiction** — do any two Invariants (or an Invariant and a Plan statement) conflict?
+2. **Coverage** — does every entry point in `Surface` have at least one Validation criterion for its failure path, not just the happy path?
+3. **Testability** — can each Validation criterion be translated into an executable test as written? If not, rewrite it with concrete observable values, or delete it.
+4. **Silent guesses** — list every place the spec chose an answer the user never gave (field sets, formats, limits, auth rules).
+
+Anything unresolved goes into the `## Open questions` section of the catalog spec (or of the plan document, when the catalog spec doesn't exist yet) — one line each: the question + what breaks if guessed wrong. Do NOT park unresolved items in `Notes` or in prose ("TBD", "to confirm later", "placeholder"): only `Open questions` is checked by the `Next → Now` gate, so ambiguity parked anywhere else silently survives into implementation.
 
 ## Per-feature spec: `docs/specs/spec-<feature_name>.md`
 
@@ -184,6 +195,9 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 
 ## Notes (optional)
 <gotchas, hidden coupling, anti-patterns, historical context, things future AI must NOT do>
+
+## Open questions (roadmap-stage specs only — must read `None.` when the feature enters `Now`)
+<known unknowns recorded while drafting, plus anything the spec critique gate surfaces at `Next → Now`. One line each: <question> — <what breaks if guessed wrong>. Write `None.` explicitly once all are resolved. Omit the section for specs written at SYNC/BOOTSTRAP from already-shipped code.>
 ```
 
 ### Status semantics
@@ -272,6 +286,8 @@ Each criterion is a verifiable condition a human reviewer can check by reading a
 ```
 
 Tests prove these criteria; the criteria themselves are the source of truth for "what does correct mean". When a test changes (framework swap, assertion rewrite), the criteria do not — they describe the contract from the caller's perspective.
+
+**Direction rule (intent → tests):** the contract comes from intent — a catalog spec written before implementation, or the design plan (e.g., superpowers output) the feature was built from. Tests are written FROM those criteria, and at SYNC the Validation section derives from the plan's criteria as verified by the tests — do not reverse-engineer the contract from whatever the tests happen to assert. If tests and the pre-implementation criteria disagree at SYNC time, surface the mismatch to the user: either the implementation missed the contract, or the contract legitimately changed (→ CHANGELOG `### Contract changed`). Test-only extraction is for BOOTSTRAP and legacy features that never had a spec or plan.
 
 **Traceability rule**: every Validation criterion SHALL trace back to an `Invariants` bullet (1:1 or many:1 — never an orphan criterion). If you write a criterion with no matching invariant, the invariant is missing — add it.
 

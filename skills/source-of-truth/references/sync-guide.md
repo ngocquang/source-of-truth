@@ -104,6 +104,8 @@ Almost never touched in SYNC. If the user explicitly says "the mission has shift
 
 For new or modified features:
 
+**Direction check first:** if the feature had a pre-implementation contract — a catalog spec with Validation criteria, or a design plan (e.g., superpowers output, see step 3) — that contract is the source of the criteria: verify each criterion has a covering test and each new test traces back to a criterion. Do not rewrite criteria to match what the tests happen to assert; if tests and the contract disagree, surface it to the user (either the implementation missed the contract, or the contract legitimately changed → CHANGELOG `### Contract changed`). The test → criterion extraction below is for BOOTSTRAP and for features that never had a spec or plan.
+
 1. Read the test files first — tests describe contracts AND validation criteria explicitly
 2. Read the handler/function code
 3. Identify: status codes, error paths, input validation, side effects, time limits → these become `Invariants`
@@ -151,3 +153,4 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work and should shrink as you ship; stale `Now` entries make it drift from reality and the "is it tracked?" gate noisy.
 - **Letting roadmap entries grow past one line.** An entry is summary + spec link only; when updating the roadmap, move any accumulated detail (acceptance criteria, sub-tasks, rationale) into the spec instead of preserving it.
 - **Mixing spec content and Validation criteria with implementation detail.** Validation = caller-visible acceptance criteria. "Uses Redis" is not a validation criterion (it's implementation). "Refresh token rejected on second use" is.
+- **Shipping a feature whose spec still carries `Open questions`.** Those were supposed to be resolved at `Next → Now`. Surface to the user: answer each now (fold into Invariants/Validation) or demote to a non-goal — don't delete silently.

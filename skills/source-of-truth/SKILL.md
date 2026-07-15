@@ -111,3 +111,5 @@ Full procedure → [`references/bootstrap-guide.md`](references/bootstrap-guide.
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work — it should shrink as you ship.
 - **Multi-line roadmap entries.** One line per entry: slug + one-line summary + spec link. Detail belongs in the spec — a roadmap that carries detail bloats and drifts.
 - **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).
+- **Skipping the spec critique gate when a feature enters `Now`.** Entering `Now` requires running the gate and resolving `Open questions` to `None.` — parking ambiguity in `Notes` or "TBD" prose instead is the violation. Gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
+- **Writing Validation criteria from the tests alone when a pre-implementation spec or plan exists.** Intent → tests, never the reverse; test-only extraction is for BOOTSTRAP and plan-less legacy features.

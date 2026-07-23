@@ -86,6 +86,8 @@ This is mandatory for new/removed/renamed features — silent drift between code
 
 Add/remove/update the one-line entry for any feature that was added, removed, or renamed. **Internal refactors don't touch overview.**
 
+Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and CHANGELOG. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no CHANGELOG entry needed).
+
 #### 5c. `docs/constitution.md`
 
 Touch ONLY if step 2 flagged a tech stack or principle change AND the user explicitly confirms (tech stack) or explicitly requests (principle). Otherwise leave it — drifting constitution silently is the failure mode this gate prevents.
@@ -145,7 +147,7 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 ## Common pitfalls
 
 - **Reading the entire codebase.** SYNC reads only the diff + relevant spec files. Stay focused.
-- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature.
+- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and CHANGELOG already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
 - **Inventing invariants or validation criteria.** Same rule as Bootstrap — code/tests only. No imagination. If a test was deleted along with the feature it tested, that invariant goes too.

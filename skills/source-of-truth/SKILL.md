@@ -105,7 +105,7 @@ Full procedure → [`references/bootstrap-guide.md`](references/bootstrap-guide.
 - **Reading the entire codebase.** READ reads catalog files; SYNC reads diff + relevant files; BOOTSTRAP caps at 15 files (15 per package in monorepos).
 - **Inventing invariants, principles, or mission content.** If it's not in code/tests or from the user, don't claim it.
 - **Auto-filling constitution or mission from imagination.** Phase B needs real user input — `_TBD:` is acceptable, fabrication is not.
-- **Updating overview.md for every change.** It's an index — touch it only when features are added/removed/renamed.
+- **Updating overview.md for every change.** It's an index — touch it only when features are added/removed/renamed. No "Last sync" stamps or sync history in it — git and CHANGELOG hold that; delete any such section on sight.
 - **Auto-updating constitution silently.** Tech stack needs user confirmation; principle changes need an explicit request.
 - **Skipping user confirmation in SYNC.** Always show the diff first; batch multi-feature updates into one.
 - **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.

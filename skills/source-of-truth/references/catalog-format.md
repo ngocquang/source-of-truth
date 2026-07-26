@@ -1,32 +1,6 @@
 # Catalog format — full reference
 
-Read this file when you need the exact schema for any of the catalog files. SKILL.md references this for details so it can stay short.
-
-The catalog has five project-level files at `docs/` and one spec file per feature under `docs/specs/`.
-
-```
-docs/
-├─ overview.md
-├─ constitution.md
-├─ mission.md
-├─ roadmap.md
-├─ CHANGELOG.md
-└─ specs/
-    └─ spec-<feature>.md
-```
-
-## Contents
-
-- [Index file: `docs/overview.md`](#index-file-docsoverviewmd)
-- [Constitution: `docs/constitution.md`](#constitution-docsconstitutionmd)
-- [Mission: `docs/mission.md`](#mission-docsmissionmd)
-- [Roadmap: `docs/roadmap.md`](#roadmap-docsroadmapmd) — lifecycle rules, spec critique gate
-- [Per-feature spec: `docs/specs/spec-<feature_name>.md`](#per-feature-spec-docsspecsspec-feature_namemd) — status semantics, Plan / Requirement / Invariants (incl. structured WHEN/THEN format) / Implementation decisions / Validation (numbered) / Notes / Open questions
-- [Full example](#full-example)
-- [CHANGELOG: `docs/CHANGELOG.md`](#changelog-docschangelogmd)
-- [Progressive rigor — when to expand a spec entry](#progressive-rigor--when-to-expand-a-spec-entry)
-- [Capability slug rules](#capability-slug-rules)
-- [Naming collisions](#naming-collisions)
+Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the five project-level docs, the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
 
 ## Index file: `docs/overview.md`
 
@@ -141,15 +115,15 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 - [ ] **<feature-slug>** — <one-line summary>
 ```
 
-**One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Design detail, acceptance criteria, sub-tasks, and rationale live in the spec, not the roadmap — detail carried on the roadmap duplicates the spec, drifts from it, and bloats the file until nobody reads it. If an entry seems to need more than one line, that's the signal to write (or expand) its spec and link it; `Later` items have no spec yet, so their summary line is all there is — keep it to one line too.
+**One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Detail (acceptance criteria, sub-tasks, rationale) lives in the spec — carried on the roadmap it duplicates the spec, drifts, and bloats the file. An entry that seems to need more lines is the signal to write or expand its spec; `Later` items (no spec yet) keep to one line too.
 
-**No `Shipped` group.** A roadmap shows *unshipped* work; once a feature ships it leaves the roadmap. Its shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and CHANGELOG/git — not a list that grows forever and becomes a merge-conflict hotspot. (Optional: a team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10, archived like CHANGELOG — but overview already serves this.)
+**No `Shipped` group.** Once a feature ships it leaves the roadmap; shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and CHANGELOG/git — not a list that grows forever and becomes a merge-conflict hotspot. (A team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10 — but overview already serves this.)
 
 ### Lifecycle rules
 
 - **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), then move the entry.
-- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) against the best spec available — the catalog spec if one exists, otherwise the design plan the implementation will follow (e.g., superpowers brainstorm/plan output) — then resolve `Open questions` down to `None.`: fold each answer into the spec/plan, or demote the question to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
-- **Ship (`Now` → off-roadmap)**: at SYNC time when the feature ships, **remove the entry from `Now`** — the roadmap shrinks as you ship. Shipped state now lives in the spec (`Status: active`), `overview.md`, and CHANGELOG/git; there is no `Shipped` list to append to.
+- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
+- **Ship (`Now` → off-roadmap)**: at SYNC time, **remove the entry from `Now`** — the roadmap shrinks as you ship; there is no `Shipped` list to append to.
 - **Drop a `Later` / `Next` item**: delete from roadmap. No CHANGELOG (it never shipped).
 - **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a CHANGELOG entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.
 

@@ -15,8 +15,8 @@ The **catalog** is the source of truth for "what exists, why, and what rules app
 This skill is **RIGID, not advisory**. Two rules have no exceptions:
 
 1. **Follow this process exactly.** Do not skip a mode, shortcut the Catalog check, or "use judgment" to bypass a gate. READ before *any* write/modify/delete; SYNC after *any* ship. "It's a small change" is not a reason to skip — small changes break invariants most often.
-2. **Iron-rule — every unit of work goes on the roadmap.** EVERY change — new feature, enhancement, refactor, **and bug fix** — gets a `roadmap.md` entry before code is written. The rule's job is to stop *your own* rationalizing — "too small to track", "just a typo", "I'll add it after" are not reasons to skip; untracked small changes are exactly how the roadmap drifts from reality and the gate quietly dies. So the default is firm: if it's not on the roadmap, surface that, add it (`Now`/`Next`) first, then code.
-   What this rule is **not** is a way to overrule the user — they own the project; the skill serves them. Always surface the gate first. **Urgency is not an override:** "be quick", "don't overthink it", "we demo in 5 minutes" mean *work fast*, not *skip the gate* — the entry costs seconds, so add it and then move fast. A real override is the user, aware of the rule, explicitly telling you to proceed without the entry (e.g. a live production hotfix); then do it, say you're proceeding on their explicit call, and recommend a retroactive roadmap + CHANGELOG entry afterward. The violation is *you* skipping the gate — silently, because it felt small, or because the user was merely in a hurry.
+2. **Iron-rule — every unit of work goes on the roadmap.** EVERY change — new feature, enhancement, refactor, **and bug fix** — gets a `roadmap.md` entry before code is written. "Too small to track", "just a typo", "I'll add it after" are not reasons to skip — untracked small changes are exactly how the roadmap drifts from reality and the gate quietly dies. Default: surface it, add it (`Now`/`Next`), then code.
+   The rule never overrules the user — they own the project. **Urgency is not an override:** "be quick", "don't overthink it", "we demo in 5 minutes" mean *work fast*, not *skip the gate* — the entry costs seconds. A real override is the user, aware of the rule, explicitly choosing to proceed without the entry (e.g. a live production hotfix): do it, say so, and recommend a retroactive roadmap + CHANGELOG entry. The violation is *you* skipping the gate silently, because it felt small or rushed.
 
 ## Layout
 
@@ -75,7 +75,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    | Feature already exists | STOP. "Feature X already exists at `<path>`. Modify it instead, or is there a real difference?" |
    | Change would break a documented invariant | "This breaks invariant `<X>` on feature `<Y>`. Confirm (it'll go in CHANGELOG) or rethink." |
    | Change violates a constitution principle | "This conflicts with constitution: `<principle>`. Update the constitution first (with reason + CHANGELOG entry) or change the approach." |
-   | Work is not on the roadmap (any change — including a bug fix) | STOP and surface it: "This isn't on the roadmap yet — adding it to `roadmap.md` (`Now` or `Next`), then I'll code." Add by default; only an explicit, rule-aware user override skips it (then recommend a retroactive entry). See non-negotiable rule 2. |
+   | Work is not on the roadmap (any change — including a bug fix) | STOP — iron-rule (non-negotiable rule 2): surface it, add it to `roadmap.md` (`Now`/`Next`), then code. |
    | Spec's `Source files` reference paths that no longer exist | "Spec `<X>` references `<path>` which no longer exists — sync this spec first?" Don't silently fix. |
 
 8. Only after user confirms, write code.
@@ -90,27 +90,19 @@ Full procedure (categorization, plan-aware extraction, multi-feature batching, r
 
 ## BOOTSTRAP mode
 
-Runs once. Three phases:
+Runs once, in three phases: **A** auto-detect from the repo (tech stack, test framework, design system, README intro), **B** interview the user in a single batch for what can't be detected, **C** confirm, then write all 5 project docs + per-feature specs and update CLAUDE.md (the highest-leverage step — don't skip it).
 
-- **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro
-- **B — Interview user** (single batch): ask only the things we can't detect (Code Quality rules, Performance budgets, Mission users/value/metrics)
-- **C — Confirm and write**: show populated docs, get OK, then write all 5 project docs (overview, constitution, mission, roadmap, CHANGELOG) + per-feature specs, and update CLAUDE.md
-
-`constitution.md` and `mission.md` MUST have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for sections the user defers, but blank fields and fabricated content are not. Updating CLAUDE.md is the highest-leverage step — don't skip it.
+`constitution.md` and `mission.md` MUST have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for sections the user defers, but blank fields and fabricated content are not.
 
 Full procedure → [`references/bootstrap-guide.md`](references/bootstrap-guide.md).
 
 ## Red flags
 
+Mode-specific pitfalls live in each guide's pitfalls section; these apply across modes:
+
 - **Reading the entire codebase.** READ reads catalog files; SYNC reads diff + relevant files; BOOTSTRAP caps at 15 files (15 per package in monorepos).
-- **Inventing invariants, principles, or mission content.** If it's not in code/tests or from the user, don't claim it.
-- **Auto-filling constitution or mission from imagination.** Phase B needs real user input — `_TBD:` is acceptable, fabrication is not.
-- **Updating overview.md for every change.** It's an index — touch it only when features are added/removed/renamed. No "Last sync" stamps or sync history in it — git and CHANGELOG hold that; delete any such section on sight.
-- **Auto-updating constitution silently.** Tech stack needs user confirmation; principle changes need an explicit request.
-- **Skipping user confirmation in SYNC.** Always show the diff first; batch multi-feature updates into one.
+- **Inventing content.** Invariants come from code/tests; constitution and mission come from the user. `_TBD: <question>_` is acceptable, fabrication is not.
 - **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.
-- **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work — it should shrink as you ship.
-- **Multi-line roadmap entries.** One line per entry: slug + one-line summary + spec link. Detail belongs in the spec — a roadmap that carries detail bloats and drifts.
 - **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).
-- **Skipping the spec critique gate when a feature enters `Now`.** Entering `Now` requires running the gate and resolving `Open questions` to `None.` — parking ambiguity in `Notes` or "TBD" prose instead is the violation. Gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
-- **Writing Validation criteria from the tests alone when a pre-implementation spec or plan exists.** Intent → tests, never the reverse; test-only extraction is for BOOTSTRAP and plan-less legacy features.
+- **Sloppy roadmap lifecycle.** One line per entry (detail lives in the spec); shipped work leaves `Now`; a feature enters `Now` only through the spec critique gate with `Open questions` resolved to `None.` — parking ambiguity in `Notes` or "TBD" prose is the violation. Lifecycle rules + gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
+- **Writing Validation criteria from the tests alone when a pre-implementation spec or plan exists.** Intent → tests, never the reverse — full direction rule → [`references/catalog-format.md`](references/catalog-format.md); test-only extraction is for BOOTSTRAP and plan-less legacy features.

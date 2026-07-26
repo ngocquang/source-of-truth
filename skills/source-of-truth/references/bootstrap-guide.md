@@ -2,11 +2,7 @@
 
 Read this file when running BOOTSTRAP mode (no `docs/overview.md` exists yet, but the project has code). Also runs in **Re-bootstrap** form when the catalog exists but `constitution.md` or `mission.md` is missing/empty (see end of this file).
 
-Bootstrap runs **once** per project. After this, SYNC mode handles all incremental updates.
-
-## Why this matters
-
-Bootstrap also updates `CLAUDE.md` so that **future sessions automatically read the catalog** even when this skill doesn't trigger. This propagates the "always read the spec first" rule across every session — it's the single most important step. Don't skip it.
+Bootstrap runs **once** per project. After this, SYNC mode handles all incremental updates. Its single most important step is updating `CLAUDE.md`, so that **future sessions automatically read the catalog** even when this skill doesn't trigger — don't skip it.
 
 ## Three-phase flow
 
@@ -274,8 +270,7 @@ Re-bootstrap blocks code changes until the catalog is complete. The "STOP, compl
 
 - **Reading too many files.** The cap exists because spec quality drops when you skim too much. Stop at the cap and mark PARTIAL.
 - **Inventing invariants from imagination.** If code/tests don't show it, don't claim it.
-- **Fabricating constitution or mission content.** Phase B requires user input. `_TBD:` is acceptable; invented principles are not — they propagate to every future session as if they were truth.
-- **Writing constitution rules from "common sense".** "No `any` types" sounds reasonable but if the user actually allows `any` in their codebase, that rule will block legitimate work. Ask.
+- **Fabricating constitution or mission content — including "common sense" rules.** Phase B requires user input; `_TBD:` is acceptable, invented principles are not (they propagate to every future session as truth). "No `any` types" sounds reasonable, but if the user actually allows `any`, that rule blocks legitimate work. Ask.
 - **Skipping Phase C confirmation.** The user must see constitution + mission before they're written.
 - **Forgetting CLAUDE.md.** Without this step, future sessions won't know the catalog exists, and SYNC mode will never get triggered.
 - **Bootstrapping a project that already has the catalog.** Check first — if `docs/overview.md` exists AND constitution/mission have content, switch to SYNC mode instead.

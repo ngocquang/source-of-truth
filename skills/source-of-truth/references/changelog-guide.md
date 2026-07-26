@@ -6,14 +6,7 @@ For user-facing release notes (marketing changelog, app store update text), use 
 
 ## What goes in the CHANGELOG
 
-The CHANGELOG records four kinds of catalog-level events:
-
-- A feature was **removed** or **deprecated**
-- A feature was **renamed** (its capability slug changed)
-- A feature's **contract changed** (an `Invariants` bullet or `Validation` criterion was modified)
-- The **constitution changed** (Tech Stack, Code Quality, Testing, UX, or Performance principle was updated)
-
-Internal refactors, bug fixes that preserve the contract, and additions of new features do NOT require a CHANGELOG entry. New features show up in the `overview.md` index and their own spec — that is enough audit trail.
+Four kinds of catalog-level events: a feature was **removed/deprecated**, **renamed** (slug changed), its **contract changed** (an `Invariants` bullet or `Validation` criterion was modified), or the **constitution changed**. Internal refactors, contract-preserving bug fixes, and new features do NOT get entries — new features are already trailed by the `overview.md` index and their own spec.
 
 ## Decision tree — does my change need a CHANGELOG entry?
 
@@ -108,7 +101,6 @@ Example:
 
 ```markdown
 ### Contract changed
-- **invoice-generation** — Old: returned PDF as base64 string in the response body. New: returns S3 URL with 1-hour TTL. Migration: clients must fetch the URL and follow the redirect; bodies > 5MB are no longer supported.
 - **email-search** — Old: returned 200 with empty array on no match. New: returns 404. Migration: clients SHALL handle 404 as "no results"; previously they checked `result.length === 0`.
 ```
 
@@ -129,7 +121,6 @@ Example:
 ### Constitution change
 - **Tech Stack** — Added Redis 7 for refresh token storage. Reason: SOC2 requires revocable sessions; previous in-memory approach didn't survive redeploy.
 - **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/postmortems/2026-04-10-incident-142.md
-- **UX Consistency** — Banned `@mui/*` imports in new code; existing usage flagged for migration to shadcn/ui. Reason: dual design systems caused inconsistency in v3 audit.
 ```
 
 Tech stack changes that are temporary experiments do NOT belong here — wait until the dependency is committed to staying. The CHANGELOG records decisions, not experiments.

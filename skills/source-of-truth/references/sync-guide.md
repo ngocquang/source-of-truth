@@ -4,13 +4,7 @@ Read this file when running SYNC mode (a feature has just shipped or the user wa
 
 ## When SYNC triggers
 
-- User says "ship it", "done", "commit this", "let's merge", "ok ship", "xong rồi", or similar completion language
-- A `superpowers:executing-plans` run reports completion
-- A `superpowers:subagent-driven-development` workflow finishes
-- User explicitly asks: "update the catalog", "update specs", "sync docs", "sync specs", "update roadmap"
-- Diff has been applied AND conversation feels closed (tests pass, user signals satisfaction)
-
-If you're not sure whether SYNC has triggered, ask once: "Sync the catalog now, or keep going?"
+Completion language ("ship it", "done", "commit this", "xong rồi"), a `superpowers:executing-plans` / `subagent-driven-development` run reporting completion, an explicit sync request ("update the catalog / specs / roadmap"), or the diff is applied and the conversation feels closed. If unsure, ask once: "Sync the catalog now, or keep going?"
 
 ## Steps
 
@@ -75,11 +69,11 @@ Per the categorization in step 2:
 
 #### 5a. `docs/roadmap.md`
 
-This is mandatory for new/removed/renamed features — silent drift between code and roadmap defeats the gate.
+Mandatory for new/removed/renamed features — silent drift between code and roadmap defeats the gate. Full lifecycle rules → [`catalog-format.md`](catalog-format.md).
 
-- **New feature**: it leaves the roadmap on ship — **remove it from `## Now`** if it was there. There is no `Shipped` list; the spec (`Status: active`) + `overview.md` record it.
-- **Removed feature**: it is already off the roadmap; if it still sits in `Now` / `Next` / `Later`, delete that row. The removal itself is recorded by the spec `Status: removed` + CHANGELOG `### Removed`.
-- **Renamed feature**: update the entry's slug + spec link in the same group it was in.
+- **Shipped feature**: **remove it from `## Now`** — there is no `Shipped` list; the spec (`Status: active`) + `overview.md` record it.
+- **Removed feature**: delete any row it still has in `Now` / `Next` / `Later`; the removal is recorded by spec `Status: removed` + CHANGELOG `### Removed`.
+- **Renamed feature**: update the entry's slug + spec link in place.
 - **In-flight work being checkpointed (not shipped yet)**: ask once — "Add this to `## Now` so the roadmap reflects active work?"
 
 #### 5b. `docs/overview.md`
@@ -106,7 +100,7 @@ Almost never touched in SYNC. If the user explicitly says "the mission has shift
 
 For new or modified features:
 
-**Direction check first:** if the feature had a pre-implementation contract — a catalog spec with Validation criteria, or a design plan (e.g., superpowers output, see step 3) — that contract is the source of the criteria: verify each criterion has a covering test and each new test traces back to a criterion. Do not rewrite criteria to match what the tests happen to assert; if tests and the contract disagree, surface it to the user (either the implementation missed the contract, or the contract legitimately changed → CHANGELOG `### Contract changed`). The test → criterion extraction below is for BOOTSTRAP and for features that never had a spec or plan.
+**Direction check first:** if the feature had a pre-implementation contract — a catalog spec with Validation criteria, or a design plan (see step 3) — that contract is the source of the criteria; tests only verify it. If tests and the contract disagree, surface it to the user — do not rewrite criteria to match what the tests happen to assert. Full direction rule → [`catalog-format.md`](catalog-format.md) (Validation section). The test → criterion extraction below is for BOOTSTRAP and for features that never had a spec or plan.
 
 1. Read the test files first — tests describe contracts AND validation criteria explicitly
 2. Read the handler/function code
@@ -146,7 +140,6 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 
 ## Common pitfalls
 
-- **Reading the entire codebase.** SYNC reads only the diff + relevant spec files. Stay focused.
 - **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and CHANGELOG already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.

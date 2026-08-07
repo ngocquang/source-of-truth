@@ -1,6 +1,6 @@
 # Catalog format — full reference
 
-Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the five project-level docs, the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
+Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the four project-level docs and the changelog folder (one file per entry), the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
 
 ## Index file: `docs/overview.md`
 
@@ -14,7 +14,7 @@ _Project docs live in this folder; per-feature specs in `specs/`. No date line �
 - [Constitution](constitution.md) — principles, tech stack, quality bars
 - [Mission](mission.md) — problem, users, value, success metrics
 - [Roadmap](roadmap.md) — feature delivery plan & status
-- [CHANGELOG](CHANGELOG.md) — deletions, renames, contract changes
+- [Changelog](changelog/) — deletions, renames, contract changes (one file per entry)
 
 ## Feature specs
 - [jwt-authentication](specs/spec-jwt-authentication.md) — JWT auth with refresh token rotation
@@ -26,7 +26,7 @@ Links use **relative paths** (`constitution.md`, `specs/spec-jwt-authentication.
 
 ## Constitution: `docs/constitution.md`
 
-Project principles. Immutable-ish — changes require explicit user approval and a CHANGELOG entry under `### Constitution change`.
+Project principles. Immutable-ish — changes require explicit user approval and a changelog entry under `### Constitution change`.
 
 Five fixed sections. Empty subsections must use `_TBD: <prompt>_` rather than blanks (so future sessions know to ask).
 
@@ -61,7 +61,7 @@ _Project principles. Changes require user approval._
 - **SLO targets**: <link to SLO doc, or list directly>
 ```
 
-Constitution changes go in CHANGELOG with the reason. New tech stack adoption (adding a DB, swapping framework) is a constitution change AND usually triggers a roadmap update.
+Constitution changes get a changelog entry with the reason. New tech stack adoption (adding a DB, swapping framework) is a constitution change AND usually triggers a roadmap update.
 
 ## Mission: `docs/mission.md`
 
@@ -117,15 +117,15 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 
 **One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Detail (acceptance criteria, sub-tasks, rationale) lives in the spec — carried on the roadmap it duplicates the spec, drifts, and bloats the file. An entry that seems to need more lines is the signal to write or expand its spec; `Later` items (no spec yet) keep to one line too.
 
-**No `Shipped` group.** Once a feature ships it leaves the roadmap; shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and CHANGELOG/git — not a list that grows forever and becomes a merge-conflict hotspot. (A team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10 — but overview already serves this.)
+**No `Shipped` group.** Once a feature ships it leaves the roadmap; shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and changelog/git — not a list that grows forever and becomes a merge-conflict hotspot. (A team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10 — but overview already serves this.)
 
 ### Lifecycle rules
 
 - **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), then move the entry.
 - **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
 - **Ship (`Now` → off-roadmap)**: at SYNC time, **remove the entry from `Now`** — the roadmap shrinks as you ship; there is no `Shipped` list to append to.
-- **Drop a `Later` / `Next` item**: delete from roadmap. No CHANGELOG (it never shipped).
-- **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a CHANGELOG entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.
+- **Drop a `Later` / `Next` item**: delete from roadmap. No changelog entry (it never shipped).
+- **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a changelog entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.
 
 A feature in flight is in **exactly one** of `Now` / `Next` / `Later`; once shipped it is no longer on the roadmap.
 
@@ -183,7 +183,7 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 |---|---|---|
 | `active` | Feature is in use. Default for new entries. | Keep until deprecated. |
 | `deprecated` | Still works, but new code SHALL NOT call it. Has a successor (link in `Notes`). | Flip to `removed` once the successor has shipped for ≥1 release and no caller remains. |
-| `removed` | Entry point gone. | Keep the spec file for one release cycle so AI can see WHY it was removed (prevents reintroduction). After that, delete the file; CHANGELOG keeps the audit trail. |
+| `removed` | Entry point gone. | Keep the spec file for one release cycle so AI can see WHY it was removed (prevents reintroduction). After that, delete the file; the changelog keeps the audit trail. |
 
 Worked example: a `schedule-v2` feature deprecates in release 2.0, becomes `removed` in 2.1, and its spec file is deleted in 2.2.
 
@@ -260,7 +260,7 @@ If a separate design doc already captures these, link it in `Source plan` and ke
 
 ### Validation section (acceptance criteria)
 
-Each criterion is a verifiable condition a human reviewer can check by reading alone (no test execution needed). **Number the criteria** (`1.`, `2.`, …) so each one is independently addressable — reviews, CHANGELOG entries, and test names can cite "Validation #3" without ambiguity. Two acceptable formats:
+Each criterion is a verifiable condition a human reviewer can check by reading alone (no test execution needed). **Number the criteria** (`1.`, `2.`, …) so each one is independently addressable — reviews, changelog entries, and test names can cite "Validation #3" without ambiguity. Two acceptable formats:
 
 **Plain SHALL statement:**
 ```markdown
@@ -278,7 +278,7 @@ Mix the two formats freely in one numbered list — keep a single running sequen
 
 Tests prove these criteria; the criteria themselves are the source of truth for "what does correct mean". When a test changes (framework swap, assertion rewrite), the criteria do not — they describe the contract from the caller's perspective.
 
-**Direction rule (intent → tests):** the contract comes from intent — a catalog spec written before implementation, or the design plan (e.g., superpowers output) the feature was built from. Tests are written FROM those criteria, and at SYNC the Validation section derives from the plan's criteria as verified by the tests — do not reverse-engineer the contract from whatever the tests happen to assert. If tests and the pre-implementation criteria disagree at SYNC time, surface the mismatch to the user: either the implementation missed the contract, or the contract legitimately changed (→ CHANGELOG `### Contract changed`). Test-only extraction is for BOOTSTRAP and legacy features that never had a spec or plan.
+**Direction rule (intent → tests):** the contract comes from intent — a catalog spec written before implementation, or the design plan (e.g., superpowers output) the feature was built from. Tests are written FROM those criteria, and at SYNC the Validation section derives from the plan's criteria as verified by the tests — do not reverse-engineer the contract from whatever the tests happen to assert. If tests and the pre-implementation criteria disagree at SYNC time, surface the mismatch to the user: either the implementation missed the contract, or the contract legitimately changed (→ changelog `### Contract changed`). Test-only extraction is for BOOTSTRAP and legacy features that never had a spec or plan.
 
 **Traceability rule**: every Validation criterion SHALL trace back to an `Invariants` bullet (1:1 or many:1 — never an orphan criterion). If you write a criterion with no matching invariant, the invariant is missing — add it.
 
@@ -331,16 +331,15 @@ Mission link: serves the "secure self-serve onboarding" goal. Chose JWT over ser
 Do not cache decoded JWT — token revocation depends on per-request DB lookup. Refresh token rotation is required by SOC2.
 ```
 
-## CHANGELOG: `docs/CHANGELOG.md`
+## Changelog: `docs/changelog/`
 
 Tracks deletions, renames, contract changes, and constitution changes. Answers the critical question: "was this removed on purpose, or did AI forget?"
 
-Skeleton:
+A **folder of per-entry files** — one flat file per (date, feature), named `YYYY-MM-DD-<slug>.md`, so parallel sessions each write their own file and never merge-conflict. Constitution changes use the fixed slug `constitution`; renames use the new slug (old slug appears in the body). No index file — `ls docs/changelog/ | sort -r` is the chronology; `grep -r "<slug>" docs/changelog/` is the lookup.
+
+Skeleton of one entry file, e.g. `docs/changelog/2026-08-07-email-search.md` (no title or date heading inside — the filename carries both; include only the `###` sections that apply, in this order):
 
 ```markdown
-# Changelog
-
-## <YYYY-MM-DD>
 ### Removed
 - **<feature-slug>** — Reason: <why>. Replaced by: <successor or "nothing">.
 
@@ -354,9 +353,7 @@ Skeleton:
 - **<section>** — <what changed>. Reason: <why>.
 ```
 
-**One date heading per day.** Newest date on top. Within a day, subsections appear in this order: **Removed → Renamed → Contract changed → Constitution change**.
-
-For decision tree (which category does my change fall into?), per-category required fields, full examples, migration guidance, cross-link rules, and audit checklist → [`changelog-guide.md`](changelog-guide.md). Read that file before adding any CHANGELOG entry.
+For file naming rules, decision tree (which category does my change fall into?), per-category required fields, full examples, migration guidance, cross-link rules, audit checklist, and legacy `CHANGELOG.md` migration → [`changelog-guide.md`](changelog-guide.md). Read that file before adding any changelog entry.
 
 ## Progressive rigor — when to expand a spec entry
 
@@ -374,13 +371,13 @@ If none of these apply, keep the entry short. Length is not quality.
 
 ## Capability slug rules
 
-The `<feature_name>` in `spec-<feature_name>.md` is the capability slug. Treat it as a stable identifier — it appears in `overview.md`, `roadmap.md`, `CHANGELOG.md`, and cross-references between specs.
+The `<feature_name>` in `spec-<feature_name>.md` is the capability slug. Treat it as a stable identifier — it appears in `overview.md`, `roadmap.md`, changelog filenames and entries, and cross-references between specs.
 
 - **Format**: lowercase kebab-case, `verb-noun` or `noun-action` (e.g., `jwt-authentication`, `email-search`, `invoice-generation`, `order-cancellation`).
 - **Flat namespace**: no nested folders under `docs/specs/`. If two features feel like they need a folder, they are probably one feature with two scenarios.
 - **Avoid abstract names**: `util`, `helpers`, `core`, `service`, `manager` — these collide with everything and describe nothing.
 - **Avoid bare nouns**: `user`, `order`, `payment` — qualify them with the action (`user-creation`, `order-cancellation`, `payment-capture`).
-- **Stability**: once published, a slug rename SHALL go through the CHANGELOG `### Renamed` section so external links can be updated. The roadmap entry SHALL be updated in the same diff.
+- **Stability**: once published, a slug rename SHALL go through a changelog `### Renamed` entry so external links can be updated. The roadmap entry SHALL be updated in the same diff.
 
 ## Naming collisions
 

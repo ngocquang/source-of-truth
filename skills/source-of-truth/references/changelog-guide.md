@@ -1,14 +1,39 @@
-# CHANGELOG guide — source-of-truth audit log
+# Changelog guide — source-of-truth audit log
 
-Read this file when adding an entry to `docs/CHANGELOG.md`. The CHANGELOG is the audit trail that answers the critical question: **"was this removed on purpose, or did AI forget?"** It is for AI and developers reading the catalog later — NOT for end users.
+Read this file when adding a changelog entry to `docs/changelog/`. The changelog is the audit trail that answers the critical question: **"was this removed on purpose, or did AI forget?"** It is for AI and developers reading the catalog later — NOT for end users.
+
+The changelog is a **folder of per-entry files**, not a single file. One file per (date, feature): `docs/changelog/YYYY-MM-DD-<slug>.md`. Parallel sessions each create their own file, so the changelog never merge-conflicts — the reason a single `CHANGELOG.md` was retired (see Legacy migration below).
 
 For user-facing release notes (marketing changelog, app store update text), use a separate tool — that is a different artifact with a different audience.
 
-## What goes in the CHANGELOG
+## What goes in the changelog
 
 Four kinds of catalog-level events: a feature was **removed/deprecated**, **renamed** (slug changed), its **contract changed** (an `Invariants` bullet or `Validation` criterion was modified), or the **constitution changed**. Internal refactors, contract-preserving bug fixes, and new features do NOT get entries — new features are already trailed by the `overview.md` index and their own spec.
 
-## Decision tree — does my change need a CHANGELOG entry?
+## File layout — one file per (date, feature)
+
+```
+docs/changelog/
+├─ 2026-08-05-legacy-session-auth.md
+├─ 2026-08-07-email-search.md
+└─ 2026-08-07-constitution.md
+```
+
+Naming rules:
+
+- **Filename**: `YYYY-MM-DD-<slug>.md`. The date is the day the entry is written; the slug is the feature's capability slug.
+- **Constitution changes** use the fixed slug `constitution` (they have no feature slug).
+- **Renames** use the **new** slug in the filename; the old slug appears in the entry body, so grepping either slug finds it.
+- **One file covers all of that feature's events for that day.** If a change is both a rename and a contract change, both `###` sections go in the same file.
+- **If the file already exists** (same feature, same day — e.g. an earlier session already shipped part of it), append your `###` sections to it instead of creating a second file.
+- **Never create per-day folders or nested structure** — the folder stays flat so `ls docs/changelog/` sorts chronologically and one grep covers everything.
+
+Finding entries:
+
+- By feature: `ls docs/changelog/*-<slug>.md` (filename) or `grep -rl "<slug>" docs/changelog/` (body — catches renames referenced by old slug).
+- Chronological: `ls docs/changelog/ | sort -r` — newest first, no index file needed.
+
+## Decision tree — does my change need a changelog entry?
 
 ```
 Did the change ...
@@ -23,26 +48,26 @@ Did the change ...
 │   ├─ The new behavior is what callers should rely on going forward?
 │   │   → ### Contract changed
 │   └─ Just clarified wording without changing behavior?
-│       → No CHANGELOG entry. Bump the spec's `Last verified` date.
+│       → No changelog entry. Bump the spec's `Last verified` date.
 │
 ├─ Change a constitution section (added DB, swapped framework, raised
 │  coverage threshold, changed accessibility target, etc.)?
 │   → ### Constitution change
 │
 ├─ Add a new feature?
-│   → No CHANGELOG entry. The `overview.md` index + the feature's spec are the trail.
+│   → No changelog entry. The `overview.md` index + the feature's spec are the trail.
 │
 ├─ Refactor internals without affecting Invariants / Validation?
-│   → No CHANGELOG entry. Update spec `Source files` only.
+│   → No changelog entry. Update spec `Source files` only.
 │
 └─ Fix a bug where code was violating an Invariant
    (i.e., code now matches the spec)?
-    → No CHANGELOG entry. The spec was already correct; code caught up.
+    → No changelog entry. The spec was already correct; code caught up.
 ```
 
 ## Format per category
 
-All entries live under a single date heading. **One date heading per day** — multiple entries on the same day group under that heading. Newest date on top.
+Each entry file contains one or more `###` category sections. No date heading inside the file — the date lives in the filename.
 
 ### `### Removed`
 
@@ -82,7 +107,7 @@ Example:
 - **user-search** → **email-search**. Reason: clearer scope — we only search by email, never by name or other attributes.
 ```
 
-After a rename, the spec file SHALL be renamed in the same diff (`spec-<old>.md` → `spec-<new>.md`), and the roadmap entry SHALL be updated. CHANGELOG is the trail; spec + roadmap are the current state.
+After a rename, the spec file SHALL be renamed in the same diff (`spec-<old>.md` → `spec-<new>.md`), and the roadmap entry SHALL be updated. The changelog is the trail; spec + roadmap are the current state.
 
 ### `### Contract changed`
 
@@ -104,7 +129,7 @@ Example:
 - **email-search** — Old: returned 200 with empty array on no match. New: returns 404. Migration: clients SHALL handle 404 as "no results"; previously they checked `result.length === 0`.
 ```
 
-The Migration line is the most-read part of the CHANGELOG. Be specific. "Update your client" is not a migration — say what to update.
+The Migration line is the most-read part of the changelog. Be specific. "Update your client" is not a migration — say what to update.
 
 ### `### Constitution change`
 
@@ -123,29 +148,25 @@ Example:
 - **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/postmortems/2026-04-10-incident-142.md
 ```
 
-Tech stack changes that are temporary experiments do NOT belong here — wait until the dependency is committed to staying. The CHANGELOG records decisions, not experiments.
+Tech stack changes that are temporary experiments do NOT belong here — wait until the dependency is committed to staying. The changelog records decisions, not experiments.
 
-## Append rule (one date heading per day)
+## Entry file rules
+
+A complete entry file, e.g. `docs/changelog/2026-05-09-invoice-generation.md`:
 
 ```markdown
-## 2026-05-09
 ### Removed
-- **xml-export** — ...
+- **invoice-generation** — Reason: ... Replaced by: ...
 
 ### Contract changed
-- **invoice-generation** — ...
-
-## 2026-04-30
-### Renamed
-- **user-search** → **email-search**. ...
+- **invoice-generation** — Old: ... New: ... Migration: ...
 ```
 
 Rules:
 
-- One `## YYYY-MM-DD` heading per day. The first entry of a new day creates a new heading.
-- Within a day, group entries under their `###` subsection. Subsections appear in a stable order: **Removed → Renamed → Contract changed → Constitution change**.
-- Newest date goes on top.
-- Never edit a past date heading's content after the day has passed. If you discover a missed entry, add it under today's date with a parenthetical note `(retroactive — change actually shipped <date>)`.
+- No `# Changelog` title and no `## YYYY-MM-DD` heading inside the file — the filename carries both identity and date.
+- When a file has multiple `###` sections, keep them in a stable order: **Removed → Renamed → Contract changed → Constitution change**.
+- Never edit an entry file after its day has passed. If you discover a missed entry, create a new file under today's date with a parenthetical note `(retroactive — change actually shipped <date>)`.
 
 ## Cross-link rules
 
@@ -164,37 +185,29 @@ Cross-links are optional but strongly recommended for `### Constitution change` 
 
 When a PR touches the catalog, verify:
 
-1. **Every removed/renamed/contract-changed feature has a CHANGELOG entry** under today's date.
-2. **Every CHANGELOG entry has matching state** — Removed entries have `Status: removed` in the spec; Renamed entries have the file renamed and roadmap updated; Contract changed entries have the new `Invariants` / `Validation` content visible in the spec.
+1. **Every removed/renamed/contract-changed feature has an entry file** under today's date (`docs/changelog/<today>-<slug>.md`).
+2. **Every changelog entry has matching state** — Removed entries have `Status: removed` in the spec; Renamed entries have the file renamed and roadmap updated; Contract changed entries have the new `Invariants` / `Validation` content visible in the spec.
 3. **Every `Migration:` line is specific** (no "update your client", no blanks).
 4. **No invented entries** — if the diff doesn't show a removal/rename/contract change, don't write one.
 5. **No silent constitution drift** — if `package.json` / `Cargo.toml` shows a dependency change but no `### Constitution change` entry exists, either add one or document why it doesn't qualify (e.g., experimental, soon to be reverted).
-6. **One date heading per day** — if today's heading exists, add to it; don't create a duplicate.
-7. **Subsection order within a day**: Removed → Renamed → Contract changed → Constitution change.
+6. **One file per (date, feature)** — if `docs/changelog/<today>-<slug>.md` already exists, append to it; don't create a variant filename.
+7. **Filename convention holds**: `YYYY-MM-DD-<slug>.md`, flat in `docs/changelog/`, section order Removed → Renamed → Contract changed → Constitution change.
 
-Specs whose `Source files` paths no longer exist often signal a removal that needs a CHANGELOG entry — when reconciling, confirm each affected spec's `Source files` still resolve (see [`sync-guide.md`](sync-guide.md) → Stale spec exception).
+Specs whose `Source files` paths no longer exist often signal a removal that needs a changelog entry — when reconciling, confirm each affected spec's `Source files` still resolve (see [`sync-guide.md`](sync-guide.md) → Stale spec exception).
 
-## Archive policy (when CHANGELOG.md gets large)
+## Legacy migration (project still has `docs/CHANGELOG.md`)
 
-If `docs/CHANGELOG.md` grows beyond ~6 months of entries OR exceeds ~500 lines, split into monthly archive files. CHANGELOG.md becomes **index + current month inline**; past months move to `docs/changelog/YYYY-MM.md`.
+Earlier versions of this skill kept a single `docs/CHANGELOG.md` (optionally with monthly archives at `docs/changelog/YYYY-MM.md`). When you encounter one:
 
-### Target shape
+1. **Surface it once** — don't migrate silently:
 
-`CHANGELOG.md` keeps an intro + an `## Archives` index (relative links to each month, newest first, with entry counts) + the **current month inline**. Each archived month lives in `docs/changelog/YYYY-MM.md`, headed `# Changelog — YYYY-MM`, with date headings and subsection structure preserved.
+   > This project still uses the single-file `docs/CHANGELOG.md`, which merge-conflicts across parallel sessions. Move it to `docs/changelog/archive-legacy.md` (frozen) and write new entries as per-file fragments?
 
-### Trigger and procedure
+2. After the user confirms: `git mv docs/CHANGELOG.md docs/changelog/archive-legacy.md`. Do **not** rewrite its content — it is frozen history. Existing monthly archives (`docs/changelog/YYYY-MM.md`) stay where they are, also frozen.
+3. Update the project's `overview.md` link and the `## Spec Catalog` section of its `CLAUDE.md` to point at `docs/changelog/` instead of `docs/CHANGELOG.md`.
+4. All **new** entries go to `docs/changelog/YYYY-MM-DD-<slug>.md` — never append to the legacy files again.
 
-The skill does **NOT** auto-split. **First**, surface the option and let the user confirm (some teams prefer one grep-able file):
-
-> CHANGELOG.md is <N> lines spanning <M> months. Archive months older than the current to `docs/changelog/`?
-
-Only after they confirm: group entries by month, write each non-current month to its archive file, rewrite `CHANGELOG.md` as intro + `## Archives` index + current month inline, and show the multi-file diff before writing.
-
-### Ongoing, once split
-
-- New entries always go to the current-month section of `CHANGELOG.md` — nothing else changes day-to-day.
-- When the first entry of a new month arrives, move the previous month's content into `changelog/YYYY-MM.md` and update the `## Archives` index (previous month gets a count + link; new month becomes "current month").
-- In READ mode only `CHANGELOG.md` (index + current month) loads; open an archived month on demand — a historical question, a spec cross-link, or a removal audit.
+When searching history, one `grep -r "<slug>" docs/changelog/` covers fragments AND frozen legacy files. If the user declines the migration, keep appending to `docs/CHANGELOG.md` per its old one-date-heading-per-day rule — their call.
 
 ## Anti-patterns
 
@@ -203,9 +216,10 @@ Only after they confirm: group entries by month, write each non-current month to
 | `Reason: cleanup` | Future sessions can't tell if removal was deliberate or a mistake | Be specific: "no client used for 6 months", "replaced by X after audit" |
 | `Migration: update your client` | Doesn't tell the caller what to update | Say the exact behavior change: "handle 404 as empty result instead of checking length" |
 | Logging refactors as "Contract changed" | Refactors that preserve `Invariants` and `Validation` are not contract changes | If the spec text didn't change, don't log it. Bump `Last verified` only. |
-| Writing entries for features that never shipped | `Later` / `Next` drops don't need CHANGELOG (they never had a contract) | Just delete the roadmap row. CHANGELOG only logs features that actually shipped (had a contract). |
-| Long prose in entries | CHANGELOG is for scanning, not reading | Keep each bullet to 1-3 lines. Long context goes in a linked post-mortem/ADR. |
-| Multiple date headings on the same day | Breaks the append rule | Merge under one `## YYYY-MM-DD` heading. |
-| Editing past entries to "improve" wording | Past entries are immutable history | Add a new entry today with the correction; don't rewrite history. |
-| Bumping the CHANGELOG for renames in private code | Internal-only renames (no external callers) don't need CHANGELOG bloat | Only CHANGELOG renames of features with external surface (public API, CLI, UI route). |
+| Writing entries for features that never shipped | `Later` / `Next` drops don't need a changelog entry (they never had a contract) | Just delete the roadmap row. The changelog only logs features that actually shipped (had a contract). |
+| Long prose in entries | The changelog is for scanning, not reading | Keep each bullet to 1-3 lines. Long context goes in a linked post-mortem/ADR. |
+| Two files for the same (date, feature) | Splits one feature's daily trail across files | Append to the existing `YYYY-MM-DD-<slug>.md` instead. |
+| Date folders or nesting under `docs/changelog/` | Breaks flat-folder sort/grep; empty-folder churn | Flat files only, date prefix in the filename. |
+| Editing past entry files to "improve" wording | Past entries are immutable history | Add a new file today with the correction; don't rewrite history. |
+| Changelog entries for renames in private code | Internal-only renames (no external callers) don't need changelog bloat | Only log renames of features with external surface (public API, CLI, UI route). |
 | Logging every dependency bump | Patch/minor bumps of an existing tech stack entry are not constitution changes | Only log Tech Stack changes that add/remove a tool, swap a framework, or cross a major version. |

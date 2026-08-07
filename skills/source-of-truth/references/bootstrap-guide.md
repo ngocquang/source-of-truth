@@ -10,7 +10,7 @@ Bootstrap runs in three phases:
 
 - **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro. Pre-fill what we can prove from files.
 - **B — Interview user** (single batch): ask only the things we can't detect. Code Quality rules, Performance budgets, Mission users/value/metrics require user input.
-- **C — Confirm and write**: show the populated docs to the user, get OK, then write all 5 project docs (overview, constitution, mission, roadmap, CHANGELOG) + per-feature specs, and update CLAUDE.md.
+- **C — Confirm and write**: show the populated docs to the user, get OK, then write the 4 project docs (overview, constitution, mission, roadmap) + the changelog bootstrap entry + per-feature specs, and update CLAUDE.md.
 
 `constitution.md` and `mission.md` MUST have real content before bootstrap completes. Use `_TBD: <prompt>_` markers if the user defers a section, but never blank fields and never fabricated content. Fabricated content propagates to every future session as if it were truth.
 
@@ -18,7 +18,7 @@ Bootstrap runs in three phases:
 
 Ask before scanning:
 
-- "I'll create the spec catalog at `docs/overview.md` + `docs/constitution.md` + `docs/mission.md` + `docs/roadmap.md` + `docs/CHANGELOG.md` + `docs/specs/spec-<feature>.md` per feature. Continue?"
+- "I'll create the spec catalog at `docs/overview.md` + `docs/constitution.md` + `docs/mission.md` + `docs/roadmap.md` + `docs/changelog/` (one file per entry) + `docs/specs/spec-<feature>.md` per feature. Continue?"
 - **Initial bootstrap only** (no existing catalog): "Are there design docs I should pull from? (e.g. `docs/superpowers/`, `specs/`, `plans/`, ADRs, RFCs)"
 
 If the user has design docs, use them as the **primary source of feature intent and mission**. Code shows implementation; docs show intent. Combining both produces accurate plans, requirements, and validation criteria.
@@ -158,14 +158,11 @@ The roadmap holds only **unshipped** work. Bootstrapped features already exist i
 
 Write `docs/overview.md` listing project docs and all features. Use the format in `references/catalog-format.md`.
 
-### C5. Initialize the CHANGELOG
+### C5. Initialize the changelog
 
-Write `docs/CHANGELOG.md`:
+Write `docs/changelog/<today>-bootstrap.md` (this also creates the `docs/changelog/` folder — the changelog is a folder of per-entry files, `YYYY-MM-DD-<slug>.md`, never a single `CHANGELOG.md`):
 
 ```markdown
-# Changelog
-
-## <today's date>
 ### Bootstrapped
 - Initial spec catalog created from existing code at commit `<short hash>`.
 - Files scanned: <N>. Features identified: <M>. Marked PARTIAL: <list, or "none">.
@@ -186,7 +183,7 @@ This project follows Spec-Driven Development. The catalog lives at:
 - `docs/constitution.md` — principles, tech stack, quality bars (gates implementation choices)
 - `docs/mission.md` — problem, users, value, success metrics (gates feature scope)
 - `docs/roadmap.md` — Now / Next / Later forward plan (shipped work leaves the roadmap)
-- `docs/CHANGELOG.md` — deletions, renames, contract changes
+- `docs/changelog/YYYY-MM-DD-<slug>.md` — deletions, renames, contract changes (one flat file per entry — never a single CHANGELOG.md)
 - `docs/specs/spec-<feature>.md` — per-feature Plan + Requirement + Validation
 
 **Always read `docs/overview.md` at the start of every session** to load the source
@@ -207,20 +204,20 @@ override — but urgency is not an override: "be quick" or "we demo in 5 minutes
 means work fast, not skip the gate (the entry costs seconds, so add it and move
 fast). A real override is the user, aware of the rule, explicitly choosing to
 proceed without it (e.g. a live hotfix); then do so, say so, and recommend a
-retroactive roadmap + CHANGELOG entry. Quietly shipping off-roadmap — or skipping
+retroactive roadmap + changelog entry. Quietly shipping off-roadmap — or skipping
 because it felt small or rushed — is the violation.
 
 ### Gate 2 — Constitution
 Read `docs/constitution.md`. STOP if the planned approach conflicts with
 Tech Stack, Code Quality, Testing Standards, UX Consistency, or Performance
 Requirements. Either change the approach, or ask the user to update the
-constitution first (with reason + CHANGELOG entry under
+constitution first (with reason + a changelog entry under
 `### Constitution change`) before coding.
 
 ### Gate 3 — Spec invariants
 Read the relevant `docs/specs/spec-<feature>.md`. STOP if the change would
 break a documented invariant or acceptance criterion. Either confirm with
-the user (it goes in CHANGELOG under `### Contract changed`) or rethink.
+the user (it goes in the changelog under `### Contract changed`) or rethink.
 
 ### Commit gate — SYNC before every commit
 Before ANY `git commit` — whether you initiated it or the user asked for one —
@@ -230,8 +227,9 @@ commit — do not ask, just sync then commit:
 
 1. Reconcile each affected `docs/specs/spec-<feature>.md` with the diff.
 2. Remove the shipped entry from `Now` (the roadmap holds only unshipped work).
-3. Record removals / renames / contract changes / constitution changes in
-   `docs/CHANGELOG.md`.
+3. Record removals / renames / contract changes / constitution changes as
+   per-entry files `docs/changelog/YYYY-MM-DD-<slug>.md` (one flat file per
+   date + feature; parallel sessions never conflict).
 4. Commit the code **and** the catalog updates together.
 
 Self-gating: this applies only because `docs/overview.md` exists. Skip the sync
@@ -262,7 +260,7 @@ If `docs/overview.md` exists but `constitution.md` or `mission.md` is missing or
 1. Skip A5 (specs already exist) and skip C2/C3/C4/C5 unless those files are also missing.
 2. Run Phase A for the missing file's domain (tech stack + test runner + design system for constitution; README intro for mission).
 3. Run Phase B targeted at the missing sections only.
-4. Phase C writes only the missing file + appends a CHANGELOG entry under `### Bootstrapped (partial)`.
+4. Phase C writes only the missing file + a changelog entry `docs/changelog/<today>-bootstrap.md` under `### Bootstrapped (partial)` (append to that file if it already exists today).
 
 Re-bootstrap blocks code changes until the catalog is complete. The "STOP, complete bootstrap first" gate exists because READ mode can't reason about constitution/roadmap conflicts when those files don't exist.
 

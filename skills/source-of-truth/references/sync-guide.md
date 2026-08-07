@@ -26,16 +26,16 @@ Determine which features are affected. Also check if any of these changed (these
 | Category | Definition | Action |
 |---|---|---|
 | **New feature** | User-visible capability added | Create `spec-<name>.md` + remove from `Now` once shipped (roadmap holds only unshipped work) + index entry |
-| **Modified feature** | Existing feature's behavior or files changed | Update existing spec; if Requirement changed, log in CHANGELOG |
-| **Removed feature** | Feature's entry point deleted | Set `Status: removed` + roadmap update + CHANGELOG entry |
-| **Renamed feature** | Name changed, functionality preserved | Rename spec file + roadmap entry + CHANGELOG entry |
-| **Internal refactor** | No feature-level change | Update `Source files` if files moved; do not touch overview/roadmap/CHANGELOG |
-| **Tech stack change** | Dependency added/upgraded/swapped | Surface to user → update `constitution.md > Tech Stack` + CHANGELOG `### Constitution change` only after confirmation |
-| **Principle change** | Code Quality / Testing / UX / Performance rule changed | Update `constitution.md` + CHANGELOG `### Constitution change` only on **explicit** user request — never infer |
+| **Modified feature** | Existing feature's behavior or files changed | Update existing spec; if Requirement changed, add a changelog entry |
+| **Removed feature** | Feature's entry point deleted | Set `Status: removed` + roadmap update + changelog entry |
+| **Renamed feature** | Name changed, functionality preserved | Rename spec file + roadmap entry + changelog entry |
+| **Internal refactor** | No feature-level change | Update `Source files` if files moved; do not touch overview/roadmap/changelog |
+| **Tech stack change** | Dependency added/upgraded/swapped | Surface to user → update `constitution.md > Tech Stack` + changelog `### Constitution change` only after confirmation |
+| **Principle change** | Code Quality / Testing / UX / Performance rule changed | Update `constitution.md` + changelog `### Constitution change` only on **explicit** user request — never infer |
 
-For category boundaries (when a change is "Contract changed" vs an internal refactor, when a tech stack edit qualifies as a `### Constitution change`, etc.) → [`changelog-guide.md`](changelog-guide.md). Load it before writing any CHANGELOG entry.
+A changelog entry is a per-entry file `docs/changelog/YYYY-MM-DD-<slug>.md` (`constitution` as the slug for constitution changes) — one flat file per (date, feature), so parallel sessions never merge-conflict. For category boundaries (when a change is "Contract changed" vs an internal refactor, when a tech stack edit qualifies as a `### Constitution change`, etc.) and the exact file format → [`changelog-guide.md`](changelog-guide.md). Load it before writing any changelog entry.
 
-If `docs/CHANGELOG.md` is approaching ~500 lines or spans ≥6 months of entries, surface the archive option to the user (don't auto-split): "CHANGELOG.md is <N> lines spanning <M> months. Archive past months to `docs/changelog/`?" See `changelog-guide.md > Archive policy` for the full split procedure.
+If the project still has a single-file `docs/CHANGELOG.md`, surface the migration once (don't migrate silently): "Move `docs/CHANGELOG.md` to `docs/changelog/archive-legacy.md` (frozen) and write new entries as per-file fragments?" See `changelog-guide.md > Legacy migration` for the procedure.
 
 If a single PR touches **multiple features** (e.g., refactor across 5 modules), batch all updates and show the user **one combined diff** at step 7 — don't ask for confirmation per feature.
 
@@ -61,9 +61,9 @@ For modified features, work from the existing spec + diff + tests. The original 
 Per the categorization in step 2:
 
 - **New feature**: create `docs/specs/spec-<feature_name>.md` with metadata header + `Plan` + `Requirement` + `Validation`. `Last verified` = today + current short commit hash. Set `Roadmap: shipped (off-roadmap)`.
-- **Modified feature**: update existing spec. Update `Plan` if approach changed; update `Requirement > Invariants` if contract changed (and log in CHANGELOG); update `Validation` if acceptance criteria changed; update `Source files` if files moved. Bump `Last verified`.
-- **Removed feature**: set `Status: removed`. Add CHANGELOG entry under `### Removed`. Keep the file for one release cycle so AI can see WHY.
-- **Renamed feature**: rename `spec-<old>.md` → `spec-<new>.md`, update content, add CHANGELOG entry under `### Renamed`, update roadmap link in the same diff.
+- **Modified feature**: update existing spec. Update `Plan` if approach changed; update `Requirement > Invariants` if contract changed (and add a changelog entry under `### Contract changed`); update `Validation` if acceptance criteria changed; update `Source files` if files moved. Bump `Last verified`.
+- **Removed feature**: set `Status: removed`. Create `docs/changelog/<today>-<slug>.md` with a `### Removed` section. Keep the spec file for one release cycle so AI can see WHY.
+- **Renamed feature**: rename `spec-<old>.md` → `spec-<new>.md`, update content, create `docs/changelog/<today>-<new-slug>.md` with a `### Renamed` section, update roadmap link in the same diff.
 
 ### 5. Update sibling docs
 
@@ -72,7 +72,7 @@ Per the categorization in step 2:
 Mandatory for new/removed/renamed features — silent drift between code and roadmap defeats the gate. Full lifecycle rules → [`catalog-format.md`](catalog-format.md).
 
 - **Shipped feature**: **remove it from `## Now`** — there is no `Shipped` list; the spec (`Status: active`) + `overview.md` record it.
-- **Removed feature**: delete any row it still has in `Now` / `Next` / `Later`; the removal is recorded by spec `Status: removed` + CHANGELOG `### Removed`.
+- **Removed feature**: delete any row it still has in `Now` / `Next` / `Later`; the removal is recorded by spec `Status: removed` + changelog `### Removed` entry.
 - **Renamed feature**: update the entry's slug + spec link in place.
 - **In-flight work being checkpointed (not shipped yet)**: ask once — "Add this to `## Now` so the roadmap reflects active work?"
 
@@ -80,7 +80,7 @@ Mandatory for new/removed/renamed features — silent drift between code and roa
 
 Add/remove/update the one-line entry for any feature that was added, removed, or renamed. **Internal refactors don't touch overview.**
 
-Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and CHANGELOG. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no CHANGELOG entry needed).
+Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and the changelog. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no changelog entry needed).
 
 #### 5c. `docs/constitution.md`
 
@@ -88,13 +88,13 @@ Touch ONLY if step 2 flagged a tech stack or principle change AND the user expli
 
 If a tech stack change is detected from code (new DB dependency added, framework swap) but the user didn't mention updating the constitution, surface it:
 
-> I see Redis was added to dependencies. Update `Constitution > Tech Stack` (and add CHANGELOG entry under `### Constitution change`)? Or is this a temporary experiment?
+> I see Redis was added to dependencies. Update `Constitution > Tech Stack` (and add a changelog entry under `### Constitution change`)? Or is this a temporary experiment?
 
 Let the user confirm. Don't auto-write — experimental dependencies that get ripped out within the week shouldn't pollute the constitution.
 
 #### 5d. `docs/mission.md`
 
-Almost never touched in SYNC. If the user explicitly says "the mission has shifted", "we have new target users", or "value prop changed", run a focused interview (similar to bootstrap Phase B targeted at the specific section) and update + CHANGELOG `### Mission change`.
+Almost never touched in SYNC. If the user explicitly says "the mission has shifted", "we have new target users", or "value prop changed", run a focused interview (similar to bootstrap Phase B targeted at the specific section) and update + a changelog entry `### Mission change`.
 
 ### 6. Extract invariants and validation from code AND tests
 
@@ -118,7 +118,7 @@ Catalog updates:
 - docs/specs/spec-email-search.md: created (Plan + Requirement + Validation)
 - docs/specs/spec-user-search.md: deleted (renamed to email-search)
 - docs/roadmap.md: email-search removed from `Now` on ship (roadmap holds only unshipped work)
-- docs/CHANGELOG.md: + rename entry under 2026-05-09
+- docs/changelog/2026-05-09-email-search.md: created (### Renamed entry)
 - docs/constitution.md: untouched
 - docs/mission.md: untouched
 Apply?
@@ -140,11 +140,11 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 
 ## Common pitfalls
 
-- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and CHANGELOG already record history; delete any such section you find.
+- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
 - **Inventing invariants or validation criteria.** Same rule as Bootstrap — code/tests only. No imagination. If a test was deleted along with the feature it tested, that invariant goes too.
-- **Forgetting CHANGELOG.** Removals, renames, contract changes, and constitution changes must always go in CHANGELOG, otherwise future AI won't know if a change was deliberate or forgotten.
+- **Forgetting the changelog.** Removals, renames, contract changes, and constitution changes must always get an entry file in `docs/changelog/`, otherwise future AI won't know if a change was deliberate or forgotten.
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work and should shrink as you ship; stale `Now` entries make it drift from reality and the "is it tracked?" gate noisy.
 - **Letting roadmap entries grow past one line.** An entry is summary + spec link only; when updating the roadmap, move any accumulated detail (acceptance criteria, sub-tasks, rationale) into the spec instead of preserving it.
 - **Mixing spec content and Validation criteria with implementation detail.** Validation = caller-visible acceptance criteria. "Uses Redis" is not a validation criterion (it's implementation). "Refresh token rejected on second use" is.

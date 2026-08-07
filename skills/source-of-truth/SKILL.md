@@ -16,7 +16,7 @@ This skill is **RIGID, not advisory**. Two rules have no exceptions:
 
 1. **Follow this process exactly.** Do not skip a mode, shortcut the Catalog check, or "use judgment" to bypass a gate. READ before *any* write/modify/delete; SYNC after *any* ship. "It's a small change" is not a reason to skip — small changes break invariants most often.
 2. **Iron-rule — every unit of work goes on the roadmap.** EVERY change — new feature, enhancement, refactor, **and bug fix** — gets a `roadmap.md` entry before code is written. "Too small to track", "just a typo", "I'll add it after" are not reasons to skip — untracked small changes are exactly how the roadmap drifts from reality and the gate quietly dies. Default: surface it, add it (`Now`/`Next`), then code.
-   The rule never overrules the user — they own the project. **Urgency is not an override:** "be quick", "don't overthink it", "we demo in 5 minutes" mean *work fast*, not *skip the gate* — the entry costs seconds. A real override is the user, aware of the rule, explicitly choosing to proceed without the entry (e.g. a live production hotfix): do it, say so, and recommend a retroactive roadmap + CHANGELOG entry. The violation is *you* skipping the gate silently, because it felt small or rushed.
+   The rule never overrules the user — they own the project. **Urgency is not an override:** "be quick", "don't overthink it", "we demo in 5 minutes" mean *work fast*, not *skip the gate* — the entry costs seconds. A real override is the user, aware of the rule, explicitly choosing to proceed without the entry (e.g. a live production hotfix): do it, say so, and recommend a retroactive roadmap + changelog entry. The violation is *you* skipping the gate silently, because it felt small or rushed.
 
 ## Layout
 
@@ -26,9 +26,8 @@ docs/
 ├─ constitution.md      (principles: tech stack, code quality, testing, UX, performance)
 ├─ mission.md           (why: problem, users, value, success metrics)
 ├─ roadmap.md           (forward plan: Now / Next / Later — shipped work leaves the roadmap)
-├─ CHANGELOG.md         (deletions, renames, contract changes, constitution changes)
-├─ changelog/           (optional — monthly archives when CHANGELOG.md gets large)
-│   └─ YYYY-MM.md
+├─ changelog/           (deletions, renames, contract changes, constitution changes —
+│   └─ YYYY-MM-DD-<slug>.md   one flat file per entry so parallel sessions never conflict)
 └─ specs/
     └─ spec-<feature>.md  (per feature: Plan + Requirement + Validation; kebab-case)
 ```
@@ -54,7 +53,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
 2. Read `docs/constitution.md` (skim Tech Stack always; skim other sections relevant to the change — e.g., Performance if touching a hot path, Testing if changing tests, UX if touching the UI).
 3. Read `docs/roadmap.md`. Confirm the requested feature is in `Now` / `Next` / `Later`, or already shipped (a spec exists for it), or surface that it's not tracked yet.
 4. Read each related `docs/specs/spec-<feature>.md` (Plan + Requirement + Validation).
-5. If the request mentions something not in the catalog, check `docs/CHANGELOG.md` — it might have been removed deliberately.
+5. If the request mentions something not in the catalog, search `docs/changelog/` — it might have been removed deliberately. `ls docs/changelog/*-<slug>.md` finds entries by filename; `grep -rl "<slug>" docs/changelog/` catches renames and legacy files by content.
 6. **Before writing any code**, output this catalog check to the user (not internal thinking — user must be able to override):
 
    ```
@@ -73,8 +72,8 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    | Situation | Response |
    |---|---|
    | Feature already exists | STOP. "Feature X already exists at `<path>`. Modify it instead, or is there a real difference?" |
-   | Change would break a documented invariant | "This breaks invariant `<X>` on feature `<Y>`. Confirm (it'll go in CHANGELOG) or rethink." |
-   | Change violates a constitution principle | "This conflicts with constitution: `<principle>`. Update the constitution first (with reason + CHANGELOG entry) or change the approach." |
+   | Change would break a documented invariant | "This breaks invariant `<X>` on feature `<Y>`. Confirm (it'll go in the changelog) or rethink." |
+   | Change violates a constitution principle | "This conflicts with constitution: `<principle>`. Update the constitution first (with reason + changelog entry) or change the approach." |
    | Work is not on the roadmap (any change — including a bug fix) | STOP — iron-rule (non-negotiable rule 2): surface it, add it to `roadmap.md` (`Now`/`Next`), then code. |
    | Spec's `Source files` reference paths that no longer exist | "Spec `<X>` references `<path>` which no longer exists — sync this spec first?" Don't silently fix. |
 
@@ -86,11 +85,11 @@ Do NOT update catalog files in READ mode (except the stale-spec exception above,
 
 **Commit gate:** when a commit is imminent — the user asks to commit, or you're about to — SYNC runs and **completes before the commit** (sync the catalog, then commit code + catalog together). This is automatic, not a question. Self-gating: only when `docs/overview.md` exists. Skip only for a pure no-spec-impact refactor, or an explicit user override (then recommend a retroactive sync).
 
-Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, CHANGELOG handling, tech stack updates) → [`references/sync-guide.md`](references/sync-guide.md).
+Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates) → [`references/sync-guide.md`](references/sync-guide.md).
 
 ## BOOTSTRAP mode
 
-Runs once, in three phases: **A** auto-detect from the repo (tech stack, test framework, design system, README intro), **B** interview the user in a single batch for what can't be detected, **C** confirm, then write all 5 project docs + per-feature specs and update CLAUDE.md (the highest-leverage step — don't skip it).
+Runs once, in three phases: **A** auto-detect from the repo (tech stack, test framework, design system, README intro), **B** interview the user in a single batch for what can't be detected, **C** confirm, then write the 4 project docs + the changelog bootstrap entry + per-feature specs and update CLAUDE.md (the highest-leverage step — don't skip it).
 
 `constitution.md` and `mission.md` MUST have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for sections the user defers, but blank fields and fabricated content are not.
 

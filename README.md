@@ -87,7 +87,7 @@ It all lives in a `docs/` folder of plain, greppable markdown:
 - **`constitution.md`** — principles: tech stack, code quality, testing, UX, performance.
 - **`mission.md`** — why the project exists: problem, users, value, success metrics.
 - **`roadmap.md`** — forward plan (Now / Next / Later); shipped work leaves it.
-- **`CHANGELOG.md`** — removals, renames, contract changes, constitution changes.
+- **`changelog/YYYY-MM-DD-<slug>.md`** — removals, renames, contract changes, constitution changes. One flat file per entry, so parallel sessions never merge-conflict.
 - **`specs/spec-<feature>.md`** — one file per feature: Plan + Requirement + Validation.
 
 The **catalog** owns *what exists & why*; the **code** owns *how it works*. Exact schemas live in the skill's `references/`.
@@ -195,7 +195,7 @@ You don't invoke the skill manually — it activates on context. The whole loop 
 2. **Ask for a change as usual.** Before writing any code the skill enters **READ**: it loads the catalog and prints a **Catalog check** (what exists, invariants, roadmap status, conflicts) for you to review.
 3. **Resolve conflicts, then approve.** If the change collides with an existing feature, a documented invariant, the constitution, or isn't on the roadmap, the skill **stops and asks**. Add a roadmap entry or adjust the plan, then let it proceed.
 4. **Implement.** The skill writes code against the approved plan and the documented contracts.
-5. **Ship / commit.** Say *"done"*, *"commit"*, or *"merge"*. The skill enters **SYNC**: it reads the diff, updates the affected specs, moves shipped items off the roadmap, records removals/renames in the CHANGELOG, shows you the catalog diff, then commits code and catalog together.
+5. **Ship / commit.** Say *"done"*, *"commit"*, or *"merge"*. The skill enters **SYNC**: it reads the diff, updates the affected specs, moves shipped items off the roadmap, records removals/renames as changelog entry files, shows you the catalog diff, then commits code and catalog together.
 
 The catalog stays true to the code with no separate "update the docs" step — READ and SYNC are the only two touchpoints you need to remember.
 
@@ -209,7 +209,7 @@ The skill operates in three modes, selected automatically by context:
 |---|---|---|
 | **BOOTSTRAP** | `docs/overview.md` does NOT exist + project has code | Auto-detect stack → interview user for principles/mission → confirm & write the catalog. Runs once. |
 | **READ** | Before writing / modifying / deleting code (incl. bug fixes, refactors, "does X already exist?") | Load catalog, output a **Catalog check** to the user, stop on conflicts, only then write code. |
-| **SYNC** | A feature shipped ("ship it", "done", "commit", "merge", "xong rồi") or "update/sync the catalog" | Reconcile catalog with the diff: update specs, remove shipped entries from the roadmap, record deletions/renames in CHANGELOG. |
+| **SYNC** | A feature shipped ("ship it", "done", "commit", "merge", "xong rồi") or "update/sync the catalog" | Reconcile catalog with the diff: update specs, remove shipped entries from the roadmap, record deletions/renames as changelog entry files. |
 
 **RE-BOOTSTRAP**: a special case of BOOTSTRAP — when `docs/overview.md` exists but `constitution.md` or `mission.md` is missing/empty, re-bootstrap the missing file before any code change.
 
@@ -236,13 +236,13 @@ If the change collides with an existing feature, a documented invariant, a const
 
 ### SYNC mode — after shipping
 
-SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes in the CHANGELOG. Full procedure lives in the skill's `references/`.
+SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes as per-entry files in `docs/changelog/`. Full procedure lives in the skill's `references/`.
 
 ### BOOTSTRAP mode — three phases
 
 - **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro, and feature entry points.
 - **B — Interview** (single batch): ask only what can't be detected (code-quality rules, performance budgets, mission users/value/metrics).
-- **C — Confirm & write**: show populated docs, get OK, then write all 5 project docs, including CHANGELOG, plus per-feature specs, and update CLAUDE.md.
+- **C — Confirm & write**: show populated docs, get OK, then write the 4 project docs plus the changelog bootstrap entry and per-feature specs, and update CLAUDE.md.
 
 `constitution.md` and `mission.md` must have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for deferred sections, but blank fields and fabricated content are not.
 
@@ -261,7 +261,7 @@ Source-of-Truth is **rigid, not advisory** — its value comes from being follow
 
 ## Contributing
 
-Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The skill itself lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / CHANGELOG procedures. Edit there and the change reaches every supported agent.
+Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The skill itself lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / changelog procedures. Edit there and the change reaches every supported agent.
 
 ---
 

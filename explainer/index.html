@@ -421,7 +421,7 @@
     <p class="lede">Without a reference the AI trusts, long-running projects hit these four failures. Each one is blocked by a specific part of the catalog.</p>
     <div class="probs">
       <div class="prob"><span class="no">Failure 1</span><b>Rebuilds what already exists</b><p>Session #12 doesn't remember session #3 — so it writes a second, slightly different version.</p><span class="fix">Blocked by <b>READ → "Already exists?"</b></span></div>
-      <div class="prob"><span class="no">Failure 2</span><b>Silently deletes a feature</b><p>A refactor drops a capability nobody intended to remove — noticed weeks later.</p><span class="fix">Blocked by <b>specs + CHANGELOG</b></span></div>
+      <div class="prob"><span class="no">Failure 2</span><b>Silently deletes a feature</b><p>A refactor drops a capability nobody intended to remove — noticed weeks later.</p><span class="fix">Blocked by <b>specs + changelog</b></span></div>
       <div class="prob"><span class="no">Failure 3</span><b>Breaks a contract</b><p>Changes behavior without knowing what callers depend on ("improves" a 404 into a 200).</p><span class="fix">Blocked by <b>Invariants in each spec</b></span></div>
       <div class="prob"><span class="no">Failure 4</span><b>Drifts off-track</b><p>Builds something that violates project principles or was never planned.</p><span class="fix">Blocked by <b>constitution + roadmap gates</b></span></div>
     </div>
@@ -446,7 +446,7 @@
       <div class="mode read" data-mode="read"><span class="tag">Before editing code</span><h3>READ</h3><div class="when">write / modify / delete — bug fixes included</div>
         <ol><li>Read <code>overview → constitution → roadmap → spec</code></li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
       <div class="mode sync" data-mode="sync"><span class="tag">After shipping</span><h3>SYNC</h3><div class="when">"done" · "merge" · "shipped" · before commit</div>
-        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes in CHANGELOG</li></ol></div>
+        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes as changelog entry files</li></ol></div>
     </div>
     <div class="rebar"><b>RE-BOOTSTRAP:</b> catalog exists but <code>constitution.md</code> / <code>mission.md</code> missing → rebuild that file before any code edit. Updating <code>CLAUDE.md</code> during BOOTSTRAP is the highest-leverage step: every future session then reads the catalog automatically.</div>
   </div>
@@ -518,7 +518,7 @@
       <div class="t-page" data-page-id="1">
         <h4>constitution.md — the rules of the house</h4>
         <p class="q">Answers: “Are we allowed to build it this way?”</p>
-        <div class="ex"><b>Example:</b> constitution says "stateless API tier" → a session-based login plan is rejected at the gate; JWT gets chosen instead. Changing this file requires your explicit approval + a CHANGELOG entry.</div>
+        <div class="ex"><b>Example:</b> constitution says "stateless API tier" → a session-based login plan is rejected at the gate; JWT gets chosen instead. Changing this file requires your explicit approval + a changelog entry.</div>
       </div>
       <div class="t-page" data-page-id="2">
         <h4>mission.md — why the project exists</h4>
@@ -533,7 +533,7 @@
       <div class="t-page" data-page-id="4">
         <h4>spec-&lt;feature&gt;.md — the contract of each feature</h4>
         <p class="q">Answers: “What must not break when we touch this?”</p>
-        <div class="ex"><b>Example:</b> "wrong password → 401 with empty body". Any change that breaks a documented invariant stops for your confirmation and gets a CHANGELOG entry.</div>
+        <div class="ex"><b>Example:</b> "wrong password → 401 with empty body". Any change that breaks a documented invariant stops for your confirmation and gets a changelog entry.</div>
       </div>
       <div class="t-page" data-page-id="5">
         <h4>src/ — code, the only place that says “how”</h4>
@@ -593,7 +593,7 @@ the existing endpoint. All 3 invariants preserved.
       <table class="dtab">
         <tr><th>Situation</th><th>Response</th></tr>
         <tr><td class="k">Feature already exists</td><td><span class="stop">STOP.</span> "Already exists at <code>&lt;path&gt;</code>. Modify it, or is this genuinely different?"</td></tr>
-        <tr><td class="k">Breaks a documented invariant</td><td>"Breaks invariant <code>X</code>. Confirm (goes in CHANGELOG) or rethink?"</td></tr>
+        <tr><td class="k">Breaks a documented invariant</td><td>"Breaks invariant <code>X</code>. Confirm (goes in the changelog) or rethink?"</td></tr>
         <tr><td class="k">Violates the constitution</td><td>"Conflicts with <code>&lt;principle&gt;</code>. Update the constitution first, or change approach."</td></tr>
         <tr><td class="k">Not on the roadmap</td><td><span class="stop">STOP.</span> Add a roadmap entry (Now/Next) first — unless you explicitly override.</td></tr>
         <tr><td class="k">Spec points to a missing file</td><td>"Spec <code>X</code> references a missing file — sync first?" Never silently self-corrects.</td></tr>
@@ -617,7 +617,8 @@ the existing endpoint. All 3 invariants preserved.
           <li>├─ <button data-file="2">constitution.md</button> <span class="cmt"># principles &amp; tech stack</span></li>
           <li>├─ <button data-file="3">mission.md</button> <span class="cmt"># why the project exists</span></li>
           <li>├─ <button data-file="4">roadmap.md</button> <span class="cmt"># Now / Next / Later</span></li>
-          <li>├─ <button data-file="5">CHANGELOG.md</button> <span class="cmt"># removals · renames · contracts</span></li>
+          <li>├─ changelog/ <span class="cmt"># one file per entry — no conflicts</span></li>
+          <li>│&nbsp;&nbsp;&nbsp;└─ <button data-file="5">YYYY-MM-DD-&lt;slug&gt;.md</button> <span class="cmt"># removals · renames · contracts</span></li>
           <li>└─ specs/</li>
           <li>&nbsp;&nbsp;&nbsp;└─ <button data-file="6">spec-&lt;feature&gt;.md</button> <span class="cmt"># one per feature</span></li>
         </ul>
@@ -631,7 +632,7 @@ the existing endpoint. All 3 invariants preserved.
 - [Constitution](constitution.md) — principles, stack
 - [Mission](mission.md) — problem, users, value
 - [Roadmap](roadmap.md) — delivery plan
-- [CHANGELOG](CHANGELOG.md) — removals, renames
+- [Changelog](changelog/) — removals, renames
 
 <span class="k">## Feature specs</span>
 - [jwt-authentication](specs/…) — JWT + refresh
@@ -679,17 +680,17 @@ One query instead of six dashboards.
 - [ ] <span class="f">sso-login</span> — SAML for enterprise
 
 <span class="c"># one line per entry. detail → the spec.</span></pre></div>
-          <div class="t-page" data-page-id="5"><pre class="code"><span class="k"># Changelog</span>
+          <div class="t-page" data-page-id="5"><pre class="code"><span class="c"># one flat file per (date, feature) —
+# parallel sessions never merge-conflict.
+# no title / date heading: the filename
+# carries both.</span>
 
-<span class="k">## 2026-07-08</span>
-<span class="k">### Removed</span>
-- <span class="f">csv-export</span> — Reason: replaced by API.
-  Replaced by: <span class="f">export-api</span>.
 <span class="k">### Contract changed</span>
 - <span class="f">email-search</span> — Old: 200+null on miss.
   New: 404. Migration: handle 404.
 
-<span class="c"># answers ONE question: "was this removed
+<span class="c"># sibling: 2026-07-08-csv-export.md (### Removed)
+# answers ONE question: "was this removed
 # on purpose, or did the AI forget it?"</span></pre></div>
           <div class="t-page" data-page-id="6"><pre class="code"><span class="k">### Feature: email-search</span>
 - Status: active · Roadmap: shipped
@@ -781,11 +782,11 @@ a DB lookup on every request.</pre>
       <table class="dtab">
         <tr><th>Change type</th><th>Catalog action</th></tr>
         <tr><td class="k">New feature</td><td>Create <code>spec-&lt;name&gt;.md</code> + remove from roadmap + add to overview</td></tr>
-        <tr><td class="k">Feature update</td><td>Update spec; Requirements changed → CHANGELOG entry</td></tr>
-        <tr><td class="k">Remove feature</td><td><code>Status: removed</code> + CHANGELOG <code>### Removed</code></td></tr>
-        <tr><td class="k">Rename feature</td><td>Rename spec file + roadmap + CHANGELOG <code>### Renamed</code></td></tr>
+        <tr><td class="k">Feature update</td><td>Update spec; Requirements changed → changelog entry</td></tr>
+        <tr><td class="k">Remove feature</td><td><code>Status: removed</code> + changelog <code>### Removed</code></td></tr>
+        <tr><td class="k">Rename feature</td><td>Rename spec file + roadmap + changelog <code>### Renamed</code></td></tr>
         <tr><td class="k">Internal refactor</td><td>Update <code>Source files</code> if files moved — <b>don't</b> touch overview/roadmap</td></tr>
-        <tr><td class="k">Tech stack change</td><td>Surface to you → constitution + CHANGELOG <b>only after you confirm</b></td></tr>
+        <tr><td class="k">Tech stack change</td><td>Surface to you → constitution + changelog <b>only after you confirm</b></td></tr>
       </table>
     </div>
     <div class="codeblock" style="margin-top:16px">
@@ -798,7 +799,7 @@ bash scripts/sync_helpers.sh stamp
 bash scripts/sync_helpers.sh stale</pre>
     </div>
     <div class="callout"><b>Commit gate:</b> asking to commit is itself a SYNC trigger — SYNC completes <b>before</b> the commit so code and catalog land together. Automatic, not a question.</div>
-    <div class="callout"><b>CHANGELOG records only 4 event types:</b> Removed · Renamed · Contract changed · Constitution change. It answers one question: <i>"was this removed intentionally, or did the AI forget it?"</i> New features and safe refactors don't need an entry.</div>
+    <div class="callout"><b>The changelog (one file per entry) records only 4 event types:</b> Removed · Renamed · Contract changed · Constitution change. It answers one question: <i>"was this removed intentionally, or did the AI forget it?"</i> New features and safe refactors don't need an entry.</div>
   </div>
 </section>
 
@@ -810,7 +811,7 @@ bash scripts/sync_helpers.sh stale</pre>
     <p class="lede">Every change — feature, refactor, <b>and bug fix</b> — gets a one-line <code>roadmap.md</code> entry before code is written. It exists to stop the AI from rationalizing "too small to record" — untracked small changes are exactly how the roadmap drifts and the gates decay. It is <b>not</b> a way to overrule you: you own the project.</p>
     <div class="split">
       <div class="col no"><h5>✗ Violation</h5><ul><li>AI skips it unilaterally because "it seems minor"</li><li>Silently shipping something not on the roadmap</li><li>Treating urgency as permission to skip</li></ul></div>
-      <div class="col yes"><h5>✓ Valid</h5><ul><li>Add the entry (takes seconds), then move fast</li><li>You, knowing the rule, explicitly override (e.g. live hotfix)</li><li>→ proceed + retroactive roadmap/CHANGELOG entry after</li></ul></div>
+      <div class="col yes"><h5>✓ Valid</h5><ul><li>Add the entry (takes seconds), then move fast</li><li>You, knowing the rule, explicitly override (e.g. live hotfix)</li><li>→ proceed + retroactive roadmap/changelog entry after</li></ul></div>
     </div>
   </div>
 </section>
@@ -944,7 +945,7 @@ bash scripts/sync_helpers.sh stale</pre>
   /* ---- 4. docs/ tree file previews ---- */
   var filePane = makeSlider(document.getElementById("filePane"));
   var fileTitle = document.getElementById("fileTitle");
-  var FILE_NAMES = ["docs/overview.md","docs/constitution.md","docs/mission.md","docs/roadmap.md","docs/CHANGELOG.md","docs/specs/spec-email-search.md"];
+  var FILE_NAMES = ["docs/overview.md","docs/constitution.md","docs/mission.md","docs/roadmap.md","docs/changelog/2026-07-08-email-search.md","docs/specs/spec-email-search.md"];
   var treeBtns = document.querySelectorAll(".tree button");
   treeBtns.forEach(function(btn){
     btn.addEventListener("click", function(){

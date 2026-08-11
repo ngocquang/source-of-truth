@@ -65,6 +65,8 @@ Per the categorization in step 2:
 - **Removed feature**: set `Status: removed`. Create `docs/changelog/<today>-<slug>.md` with a `### Removed` section. Keep the spec file for one release cycle so AI can see WHY.
 - **Renamed feature**: rename `spec-<old>.md` → `spec-<new>.md`, update content, create `docs/changelog/<today>-<new-slug>.md` with a `### Renamed` section, update roadmap link in the same diff.
 
+**Review the spec before showing the diff.** Every spec you newly create here — and every existing spec whose `Requirement` or `Validation` you rewrote — goes through the spec critique gate → [`catalog-format.md`](catalog-format.md): dispatch a fresh-context reviewer on the strongest model available, fold its findings into the spec, then show the step-7 diff. Batch it — one reviewer covering all specs this sync touched, not one per spec. Metadata-only edits (`Source files`, `Last verified`, index links) don't need a review. A finding you can't resolve from code or tests is raised with the user in the step-7 diff message (or written as a `_TBD:_` marker), never as an `Open questions` section — a shipped spec carries none.
+
 ### 5. Update sibling docs
 
 #### 5a. `docs/roadmap.md`
@@ -143,6 +145,7 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 - **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
+- **Writing a spec and shipping it unreviewed.** New specs and rewritten `Requirement` / `Validation` sections go through the critique gate's independent reviewer first — "I just wrote it carefully" is not a substitute for a fresh context reading it.
 - **Inventing invariants or validation criteria.** Same rule as Bootstrap — code/tests only. No imagination. If a test was deleted along with the feature it tested, that invariant goes too.
 - **Forgetting the changelog.** Removals, renames, contract changes, and constitution changes must always get an entry file in `docs/changelog/`, otherwise future AI won't know if a change was deliberate or forgotten.
 - **Forgetting to remove a shipped feature from `Now`.** The roadmap holds only unshipped work and should shrink as you ship; stale `Now` entries make it drift from reality and the "is it tracked?" gate noisy.

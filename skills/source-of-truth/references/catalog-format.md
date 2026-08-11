@@ -121,7 +121,7 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 
 ### Lifecycle rules
 
-- **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), then move the entry.
+- **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), run it through the spec critique gate (below), then move the entry.
 - **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
 - **Ship (`Now` → off-roadmap)**: at SYNC time, **remove the entry from `Now`** — the roadmap shrinks as you ship; there is no `Shipped` list to append to.
 - **Drop a `Later` / `Next` item**: delete from roadmap. No changelog entry (it never shipped).
@@ -129,16 +129,47 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 
 A feature in flight is in **exactly one** of `Now` / `Next` / `Later`; once shipped it is no longer on the roadmap.
 
-### Spec critique gate (runs at `Next → Now`)
+### Spec critique gate
 
-A spec is not ready to build from until it has been attacked. When a feature enters `Now`, run these four checks against the best spec available — the catalog spec if one exists, otherwise the design plan the implementation will follow — and record what survives:
+A spec is not ready to build from until an **independent reviewer** has attacked it — the author of a spec is the worst judge of its gaps. The gate runs against the best spec available: the catalog spec if one exists, otherwise the design plan the implementation will follow.
+
+**When it runs** — four triggers, no others:
+
+1. A spec is drafted at `Later → Next`.
+2. A feature is promoted `Next → Now`.
+3. SYNC creates a spec, or rewrites an existing spec's `Requirement` / `Validation` (batched — one reviewer for all specs that sync touched).
+4. BOOTSTRAP finishes drafting its specs (batched — one reviewer for the whole set).
+
+Skip a trigger only when **this same session already reviewed this spec and has not edited it since** (so a draft-then-promote in one sitting reviews once, not twice). "Nothing material changed" from an earlier session is not a skip — that session's context is gone and its judgment isn't checkable.
+
+The reviewer is a **fresh-context subagent on the strongest model available** (Claude Code: the `Agent` tool with `model: opus`; other runtimes: whatever independent-agent mechanism they offer, on their strongest model). This is a required step of the gate, not an optional second opinion.
+
+**Step 1 — Dispatch the reviewer.** A fresh context knows nothing about the project, so pass it everything it needs to judge:
+
+- the full spec (or plan) text, pasted inline — not just a link
+- the paths of `docs/constitution.md` and `docs/mission.md` (the principles and the scope it must be checked against)
+- the `Source plan` document, if one exists
+- the source and test file paths the feature touches, if any exist yet
+- the four checks below, verbatim, as its review rubric
+
+**Step 2 — The four checks it runs:**
 
 1. **Contradiction** — do any two Invariants (or an Invariant and a Plan statement) conflict?
 2. **Coverage** — does every entry point in `Surface` have at least one Validation criterion for its failure path, not just the happy path?
 3. **Testability** — can each Validation criterion be translated into an executable test as written? If not, rewrite it with concrete observable values, or delete it.
 4. **Silent guesses** — list every place the spec chose an answer the user never gave (field sets, formats, limits, auth rules).
 
-Anything unresolved goes into the `## Open questions` section of the catalog spec (or of the plan document, when the catalog spec doesn't exist yet) — one line each: the question + what breaks if guessed wrong. Do NOT park unresolved items in `Notes` or in prose ("TBD", "to confirm later", "placeholder"): only `Open questions` is checked by the `Next → Now` gate, so ambiguity parked anywhere else silently survives into implementation.
+**Step 3 — What it returns.** Findings only. Each finding carries: which of the four checks it came from, the spec section or line it lands on, a severity (`blocker` | `should-fix` | `nit`), and one concrete suggested edit. The last line is a verdict: `ready to build` or `needs changes`. A rewritten spec, a restatement of what the spec already says, or a general appraisal is not the deliverable.
+
+**Step 4 — Fold the findings into the spec.** Apply every `blocker` and `should-fix` you agree with, editing the spec in place. Where you disagree with a finding, say so to the user in one line with the reason — don't drop it silently. Anything that needs a user decision goes into the `## Open questions` section of the catalog spec (or of the plan document, when the catalog spec doesn't exist yet) — one line each: the question + what breaks if guessed wrong.
+
+Roadmap-stage specs only, though: specs written at SYNC or BOOTSTRAP describe already-shipped code and carry no `Open questions` section (see the spec skeleton below). There, an unresolved finding is raised with the user directly — in the SYNC step-7 diff message, or in the BOOTSTRAP C7 summary — or written as a `_TBD: <question>_` marker in the affected section. Never as a guess stated as fact.
+
+Do NOT park unresolved items in `Notes` or in prose ("TBD", "to confirm later", "placeholder"): only `Open questions` is checked by the `Next → Now` gate, so ambiguity parked anywhere else silently survives into implementation.
+
+**Step 5 — Stop.** One review round is the default. Re-dispatch only when folding the findings materially changed `Requirement` or `Validation` (new invariants, rewritten criteria) — not for wording fixes. Don't loop until the reviewer runs out of things to say.
+
+**Fallback.** If the runtime has no independent-agent mechanism, run the four checks yourself as a separate pass over the finished spec, and tell the user the review was inline rather than independent. Skipping the review because the spec "is small" or "was just written carefully" is the violation — that is exactly when silent guesses survive.
 
 ## Per-feature spec: `docs/specs/spec-<feature_name>.md`
 

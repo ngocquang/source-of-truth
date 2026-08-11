@@ -137,6 +137,8 @@ For each spec, fill the four content sections:
 - **Requirement > Invariants**: extract from tests first, code second. Skip what you can't prove. Tests describe contracts more reliably than implementations.
 - **Validation**: convert each test case into a Given/When/Then or SHALL acceptance criterion. Each criterion SHALL trace to an Invariants bullet. If no tests exist for a feature, mark `_TBD: no tests yet — acceptance criteria need confirmation_`.
 
+Once all specs are drafted, run them through the spec critique gate → [`catalog-format.md`](catalog-format.md) — **one batched reviewer for the whole set**, not one per spec (bootstrap can draft a dozen specs at once). Pass it every drafted spec, plus the constitution and mission drafts, and ask it to weight check 4 (silent guesses) heaviest: bootstrap specs are reverse-engineered from code, so invented invariants are the dominant failure. Fold its findings, then continue to C3. Bootstrap specs describe already-shipped code, so they keep no `Open questions` section — anything the reviewer raises that you can't prove from code or tests becomes a `_TBD:_` marker or a question for the user in C7, never a guess written as fact.
+
 If a package's code is too complex for 15 files to capture meaningfully, mark the package's specs with a `PARTIAL` note in the index entry, like:
 
 ```markdown

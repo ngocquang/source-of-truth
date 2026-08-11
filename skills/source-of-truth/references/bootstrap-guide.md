@@ -221,6 +221,26 @@ Read the relevant `docs/specs/spec-<feature>.md`. STOP if the change would
 break a documented invariant or acceptance criterion. Either confirm with
 the user (it goes in the changelog under `### Contract changed`) or rethink.
 
+### After the gates — implementation route
+Once the gates clear, roadmap work is built one way — feature, refactor, or bug
+fix alike:
+
+1. In an **isolated git worktree** for that roadmap item, never in the main
+   checkout (`git worktree add`, or the runtime's worktree skill). Not a git
+   repo, or the user asks for an in-place edit: say which applies, then proceed.
+   "It's one small edit" is not one of those cases.
+2. Driven by the **superpowers skills when the runtime has them** — plan the
+   work (`brainstorming` → `writing-plans`), implement test-first
+   (`test-driven-development`), run a written plan (`executing-plans` /
+   `subagent-driven-development`), integrate (`finishing-a-development-branch`).
+   Without them, implement directly and say so.
+3. **Following the plan document** if one exists (the spec's `Source plan`,
+   `docs/superpowers/`, `plans/`): its task order is the route, the spec's
+   `Validation` criteria are what the tests assert. Surface deviations; don't
+   drift silently.
+4. **Sync + commit inside the worktree, before merging** — see the commit gate
+   below; the catalog belongs on the same branch as the code.
+
 ### Commit gate — SYNC before every commit
 Before ANY `git commit` — whether you initiated it or the user asked for one —
 the catalog must already reflect the change. So whenever a commit is requested

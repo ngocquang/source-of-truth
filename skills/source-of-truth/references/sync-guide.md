@@ -6,6 +6,10 @@ Read this file when running SYNC mode (a feature has just shipped or the user wa
 
 Completion language ("ship it", "done", "commit this", "xong rồi"), a `superpowers:executing-plans` / `subagent-driven-development` run reporting completion, an explicit sync request ("update the catalog / specs / roadmap"), or the diff is applied and the conversation feels closed. If unsure, ask once: "Sync the catalog now, or keep going?"
 
+## Where SYNC runs
+
+In the same working tree as the code it documents. When the feature was built in a worktree (→ SKILL.md, Implementation handoff), the order is: **sync the catalog in the worktree → commit code + catalog together → integrate the branch (`superpowers:finishing-a-development-branch` when available) → clean up the worktree.** Syncing after the merge, or from the main checkout while the code sits on a branch, puts catalog updates on the wrong commit — or loses them when the worktree is removed.
+
 ## Steps
 
 ### 1. Identify what changed

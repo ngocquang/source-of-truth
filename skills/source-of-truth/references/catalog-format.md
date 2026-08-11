@@ -122,7 +122,7 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 ### Lifecycle rules
 
 - **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), run it through the spec critique gate (below), then move the entry.
-- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan.
+- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan. Building the item then follows the implementation handoff — isolated worktree, the plan document, the runtime's `superpowers:*` skills → SKILL.md.
 - **Ship (`Now` → off-roadmap)**: at SYNC time, **remove the entry from `Now`** — the roadmap shrinks as you ship; there is no `Shipped` list to append to.
 - **Drop a `Later` / `Next` item**: delete from roadmap. No changelog entry (it never shipped).
 - **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a changelog entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.

@@ -218,7 +218,7 @@ Read `docs/constitution.md`. STOP if the planned approach conflicts with
 Tech Stack, Code Quality, Testing Standards, UX Consistency, or Performance
 Requirements. Either change the approach, or ask the user to update the
 constitution first (with reason + a changelog entry under
-`### Constitution change` and a `docs/decisions/` record) before coding.
+`### Constitution change`) before coding.
 
 ### Gate 3 — Spec invariants
 Read the relevant `docs/specs/spec-<feature>.md`. STOP if the change would

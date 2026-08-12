@@ -483,6 +483,7 @@ The investigation trail for a bug that was expensive to find. Same file mechanic
 - **Overview links to folders only**, never to individual entries — `overview.md` is an index and does not grow with history.
 - **An entry fits on one screen.** Length is not quality, the same rule Progressive rigor applies to specs. Sections with nothing real to say are dropped, not filled.
 - **A trigger that does not fire writes nothing** — no empty folder, no placeholder entry, no `none` line in a spec.
+- **A bug fix that reverses a decision record writes both entries, not one** — that event fires decision trigger #3 and debugging trigger #3 together. The debugging entry's `Root cause & fix` names the new decision record; the new record's `Context` names the debugging entry as what forced the reversal, and it supersedes the old one per the append-only rule above.
 
 ## Progressive rigor — when to expand a spec entry
 

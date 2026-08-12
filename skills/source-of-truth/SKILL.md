@@ -102,7 +102,7 @@ The gate ends where implementation begins, and roadmap work takes one route — 
 
 **Commit gate:** when a commit is imminent — the user asks to commit, or you're about to — SYNC runs and **completes before the commit** (sync the catalog, then commit code + catalog together). This is automatic, not a question. Self-gating: only when `docs/overview.md` exists. Skip only for a pure no-spec-impact refactor, or an explicit user override (then recommend a retroactive sync).
 
-Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates, record folders (decisions/debugging)) → [`references/sync-guide.md`](references/sync-guide.md).
+Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates, decisions/debugging record folders) → [`references/sync-guide.md`](references/sync-guide.md).
 
 ## BOOTSTRAP mode
 

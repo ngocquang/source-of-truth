@@ -172,6 +172,8 @@ Write `docs/changelog/<today>-bootstrap.md` (this also creates the `docs/changel
 - Mission sections user-provided: <list>. TBD: <list, or "none">.
 ```
 
+`docs/decisions/` and `docs/debugging/` are **not** created here. They come into existence when SYNC writes their first entry, and their `overview.md` links appear at the same moment. Do not create them empty, and do not mine git history for decision records — bootstrap infers nothing it cannot read off the code.
+
 ### C6. Update CLAUDE.md (DO NOT SKIP)
 
 This is the highest-leverage step. Append a section so every future session reads the catalog before coding, even when this skill doesn't trigger:
@@ -186,6 +188,8 @@ This project follows Spec-Driven Development. The catalog lives at:
 - `docs/mission.md` — problem, users, value, success metrics (gates feature scope)
 - `docs/roadmap.md` — Now / Next / Later forward plan (shipped work leaves the roadmap)
 - `docs/changelog/YYYY-MM-DD-<slug>.md` — deletions, renames, contract changes (one flat file per entry — never a single CHANGELOG.md)
+- `docs/decisions/YYYY-MM-DD-<slug>.md` — decisions spanning ≥2 features or the constitution (created on first entry)
+- `docs/debugging/YYYY-MM-DD-<slug>.md` — post-mortems for bugs whose root cause was not where the symptom pointed (created on first entry)
 - `docs/specs/spec-<feature>.md` — per-feature Plan + Requirement + Validation
 
 **Always read `docs/overview.md` at the start of every session** to load the source
@@ -294,3 +298,4 @@ Re-bootstrap blocks code changes until the catalog is complete. The "STOP, compl
 - **Skipping Phase C confirmation.** The user must see constitution + mission before they're written.
 - **Forgetting CLAUDE.md.** Without this step, future sessions won't know the catalog exists, and SYNC mode will never get triggered.
 - **Bootstrapping a project that already has the catalog.** Check first — if `docs/overview.md` exists AND constitution/mission have content, switch to SYNC mode instead.
+- **Creating `docs/decisions/` or `docs/debugging/` at bootstrap.** Both are created on first entry, by SYNC. An empty folder and a dead `overview.md` link teach the next session that the mechanism is decorative.

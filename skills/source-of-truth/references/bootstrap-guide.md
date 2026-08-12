@@ -218,7 +218,7 @@ Read `docs/constitution.md`. STOP if the planned approach conflicts with
 Tech Stack, Code Quality, Testing Standards, UX Consistency, or Performance
 Requirements. Either change the approach, or ask the user to update the
 constitution first (with reason + a changelog entry under
-`### Constitution change`) before coding.
+`### Constitution change` and a `docs/decisions/` record) before coding.
 
 ### Gate 3 — Spec invariants
 Read the relevant `docs/specs/spec-<feature>.md`. STOP if the change would
@@ -255,7 +255,8 @@ commit — do not ask, just sync then commit:
 2. Remove the shipped entry from `Now` (the roadmap holds only unshipped work).
 3. Record removals / renames / contract changes / constitution changes as
    per-entry files `docs/changelog/YYYY-MM-DD-<slug>.md` (one flat file per
-   date + feature; parallel sessions never conflict).
+   date + feature; parallel sessions never conflict) — a constitution change
+   also gets a `docs/decisions/YYYY-MM-DD-<slug>.md` record.
 4. Commit the code **and** the catalog updates together.
 
 Self-gating: this applies only because `docs/overview.md` exists. Skip the sync

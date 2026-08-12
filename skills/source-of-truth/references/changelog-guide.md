@@ -64,14 +64,14 @@ Did the change ...
 │
 ├─ Explain WHY a cross-cutting choice was made
 │  (architecture, tooling, a constitution edit's reasoning)?
-│   → Not a changelog entry. Write docs/decisions/YYYY-MM-DD-<slug>.md.
-│     A constitution change gets BOTH: the ### Constitution change audit
-│     line here, and the decision record it links to.
+│   → Not a changelog entry. Recorded at SYNC as docs/decisions/YYYY-MM-DD-<slug>.md
+│     (`sync-guide.md` § 5e). A constitution change gets BOTH: the
+│     ### Constitution change audit line here, and the decision record.
 │
-├─ Record how a hard bug was tracked down
-│  (root cause was not where the symptom pointed, recurrence, multi-session hunt)?
-│   → Not a changelog entry. Write docs/debugging/YYYY-MM-DD-<slug>.md,
-│     plus the guard (invariant + Validation criterion) in the spec.
+├─ Record how a hard bug was tracked down (full trigger list → `catalog-format.md`)?
+│   → Not a changelog entry. Recorded at SYNC as docs/debugging/YYYY-MM-DD-<slug>.md
+│     (`sync-guide.md` § 5e), plus the guard (invariant + Validation
+│     criterion) in the spec.
 │
 └─ Fix a bug where code was violating an Invariant
    (i.e., code now matches the spec)?
@@ -157,8 +157,8 @@ Example:
 
 ```markdown
 ### Constitution change
-- **Tech Stack** — Added Redis 7 for refresh token storage. Reason: SOC2 requires revocable sessions; previous in-memory approach didn't survive redeploy.
-- **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/debugging/2026-04-10-incident-142.md
+- **Tech Stack** — Added Redis 7 for refresh token storage. Reason: SOC2 requires revocable sessions; previous in-memory approach didn't survive redeploy. Linked: docs/decisions/2026-04-10-stateless-api-tier.md
+- **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/decisions/2026-04-10-coverage-threshold.md, docs/debugging/2026-04-10-incident-142.md
 ```
 
 Tech stack changes that are temporary experiments do NOT belong here — wait until the dependency is committed to staying. The changelog records decisions, not experiments.
@@ -189,11 +189,11 @@ When the entry references something external, link it inline. Common cross-links
 |---|---|
 | Removal/contract change driven by a post-mortem | `Linked: docs/debugging/<file>.md` (relative path) |
 | Removal triggered by a customer/issue | `Linked: <issue or ticket URL>` |
-| Constitution change tied to an audit/compliance event | `Linked: <audit-report-or-ADR>` |
+| Constitution change tied to an audit/compliance event | `Linked: <audit-report>` |
 | Constitution change entry | `Linked: docs/decisions/<file>.md` (the decision record; links back the same way) |
 | Renamed feature whose old slug is still referenced externally | `Old links: <list of external places that need updating>` |
 
-Cross-links are optional but strongly recommended for `### Constitution change` and `### Contract changed` entries — these are the high-cost decisions future sessions will second-guess.
+Cross-links are optional but strongly recommended for `### Contract changed` entries. For `### Constitution change` entries, the decision-record link (row above) is mandatory — everything else in the table stays optional. These are the high-cost decisions future sessions will second-guess.
 
 ## Audit checklist (run before merge)
 
@@ -231,7 +231,7 @@ When searching history, one `grep -r "<slug>" docs/changelog/` covers fragments 
 | `Migration: update your client` | Doesn't tell the caller what to update | Say the exact behavior change: "handle 404 as empty result instead of checking length" |
 | Logging refactors as "Contract changed" | Refactors that preserve `Invariants` and `Validation` are not contract changes | If the spec text didn't change, don't log it. Bump `Last verified` only. |
 | Writing entries for features that never shipped | `Later` / `Next` drops don't need a changelog entry (they never had a contract) | Just delete the roadmap row. The changelog only logs features that actually shipped (had a contract). |
-| Long prose in entries | The changelog is for scanning, not reading | Keep each bullet to 1-3 lines. Long context goes in a linked post-mortem/ADR. |
+| Long prose in entries | The changelog is for scanning, not reading | Keep each bullet to 1-3 lines. Long context goes in a linked `docs/debugging/` entry or `docs/decisions/` record. |
 | Two files for the same (date, feature) | Splits one feature's daily trail across files | Append to the existing `YYYY-MM-DD-<slug>.md` instead. |
 | Date folders or nesting under `docs/changelog/` | Breaks flat-folder sort/grep; empty-folder churn | Flat files only, date prefix in the filename. |
 | Editing past entry files to "improve" wording | Past entries are immutable history | Add a new file today with the correction; don't rewrite history. |

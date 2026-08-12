@@ -356,7 +356,7 @@ Use for things that would surprise a reader and cannot be inferred from code:
 - **Roadmap**: shipped (off-roadmap)
 - **Source files**: `src/auth/login.ts`, `src/auth/refresh.ts`, `src/auth/jwt.ts`, `src/middleware/require-auth.ts`
 - **Source plan**: `docs/superpowers/2025-12-jwt-auth-plan.md`
-- **Decisions**: `docs/decisions/2026-03-02-opaque-refresh-tokens.md`
+- **Decisions**: `docs/decisions/2025-11-18-stateless-api-tier.md`
 - **Last verified**: 2026-04-30 against `a1b2c3d`
 
 ## Plan

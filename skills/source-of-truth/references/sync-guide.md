@@ -84,7 +84,7 @@ Mandatory for new/removed/renamed features — silent drift between code and roa
 
 #### 5b. `docs/overview.md`
 
-Add/remove/update the one-line entry for any feature that was added, removed, or renamed — and add the folder link line when `docs/decisions/` or `docs/debugging/` receives its first entry (5e). **Internal refactors don't touch overview.**
+Add/remove/update the one-line entry for any feature that was added, removed, or renamed — and add the folder link line when `docs/decisions/` or `docs/debugging/` receives its first entry (5e). **Internal refactors don't add a feature-index entry.**
 
 Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and the changelog. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no changelog entry needed).
 
@@ -108,7 +108,7 @@ SYNC is the only place these are written. Run both trigger lists against what th
 
 **Decision record** — write `docs/decisions/<today>-<slug>.md` when the change embodies a decision that affects ≥2 specs, changes `constitution.md`, or reverses an existing record. A constitution change gets **both**: the changelog audit line (step 2) and the decision record carrying the reasoning, each linking to the other.
 
-**Debugging entry** — write `docs/debugging/<today>-<slug>.md` when the fix in this sync meets any of: the root cause was not in the file the symptom pointed to; the bug is a recurrence; the fix reverses an earlier deliberate decision; the investigation spanned more than one session. The entry's `Guard added` section links the invariant + Validation criterion added in step 4 — if no guard was possible, it says why.
+**Debugging entry** — write `docs/debugging/<today>-<slug>.md` when the fix in this sync meets any of: the root cause was not in the file the symptom pointed to; the bug is a recurrence; the fix reverses an earlier deliberate decision; the investigation spanned more than one session. The entry's `Guard added` section links the invariant + Validation criterion added in step 4 — if no guard was possible, it says why. Adding that invariant is a spec edit regardless of how the code fix itself was categorized in step 2 — run it through step 4's **Modified feature** case even when the fix was an Internal refactor; the contract didn't change, code now matches it, which `changelog-guide.md` already routes to no entry, not `### Contract changed`.
 
 Writing an entry includes two things in the same change:
 

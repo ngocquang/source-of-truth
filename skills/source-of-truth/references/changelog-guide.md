@@ -10,6 +10,8 @@ For user-facing release notes (marketing changelog, app store update text), use 
 
 Four kinds of catalog-level events: a feature was **removed/deprecated**, **renamed** (slug changed), its **contract changed** (an `Invariants` bullet or `Validation` criterion was modified), or the **constitution changed**. Internal refactors, contract-preserving bug fixes, and new features do NOT get entries — new features are already trailed by the `overview.md` index and their own spec.
 
+The changelog records **what changed**, in one line, for audit. **Why** a cross-cutting choice was made lives in `docs/decisions/`; **how** a hard bug was found lives in `docs/debugging/`. A constitution change produces a changelog entry and a decision record, linked to each other — the audit line stays scannable, the reasoning stays complete.
+
 ## File layout — one file per (date, feature)
 
 ```
@@ -59,6 +61,17 @@ Did the change ...
 │
 ├─ Refactor internals without affecting Invariants / Validation?
 │   → No changelog entry. Update spec `Source files` only.
+│
+├─ Explain WHY a cross-cutting choice was made
+│  (architecture, tooling, a constitution edit's reasoning)?
+│   → Not a changelog entry. Write docs/decisions/YYYY-MM-DD-<slug>.md.
+│     A constitution change gets BOTH: the ### Constitution change audit
+│     line here, and the decision record it links to.
+│
+├─ Record how a hard bug was tracked down
+│  (root cause was not where the symptom pointed, recurrence, multi-session hunt)?
+│   → Not a changelog entry. Write docs/debugging/YYYY-MM-DD-<slug>.md,
+│     plus the guard (invariant + Validation criterion) in the spec.
 │
 └─ Fix a bug where code was violating an Invariant
    (i.e., code now matches the spec)?

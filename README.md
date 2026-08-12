@@ -88,9 +88,11 @@ It all lives in a `docs/` folder of plain, greppable markdown:
 - **`mission.md`** — why the project exists: problem, users, value, success metrics.
 - **`roadmap.md`** — forward plan (Now / Next / Later); shipped work leaves it.
 - **`changelog/YYYY-MM-DD-<slug>.md`** — removals, renames, contract changes, constitution changes. One flat file per entry, so parallel sessions never merge-conflict.
+- **`decisions/YYYY-MM-DD-<slug>.md`** — decisions spanning two or more features, or the constitution: what was chosen, what lost, and why. Append-only — a change of mind supersedes, never overwrites.
+- **`debugging/YYYY-MM-DD-<slug>.md`** — post-mortems for bugs whose root cause was not where the symptom pointed: what it looked like, what it actually was, how to recognise it next time.
 - **`specs/spec-<feature>.md`** — one file per feature: Plan + Requirement + Validation.
 
-The **catalog** owns *what exists & why*; the **code** owns *how it works*. Exact schemas live in the skill's `references/`.
+The **catalog** owns *what exists & why*; the **code** owns *how it works*. Exact schemas live in the skill's `references/`. The last two folders are created the first time something qualifies — a fresh catalog has neither.
 
 ---
 

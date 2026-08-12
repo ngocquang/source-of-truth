@@ -790,7 +790,7 @@ a DB lookup on every request.</pre>
         <tr><td class="k">Feature update</td><td>Update spec; Requirements changed → changelog entry</td></tr>
         <tr><td class="k">Remove feature</td><td><code>Status: removed</code> + changelog <code>### Removed</code></td></tr>
         <tr><td class="k">Rename feature</td><td>Rename spec file + roadmap + changelog <code>### Renamed</code></td></tr>
-        <tr><td class="k">Internal refactor</td><td>Update <code>Source files</code> if files moved — <b>don't</b> touch overview/roadmap</td></tr>
+        <tr><td class="k">Internal refactor</td><td>Update <code>Source files</code> if files moved — <b>don't</b> touch overview/roadmap, unless it embodies a cross-cutting decision → decision record (can touch overview via its first-entry link)</td></tr>
         <tr><td class="k">Tech stack change</td><td>Surface to you → constitution + changelog <b>only after you confirm</b></td></tr>
       </table>
     </div>
@@ -831,7 +831,7 @@ bash scripts/sync_helpers.sh stale</pre>
       <div class="dont"><b>Reading the entire codebase.</b> READ reads catalog files; SYNC reads the diff; BOOTSTRAP caps at ~15 files (per package in a monorepo).</div>
       <div class="dont"><b>Fabricating invariants.</b> Not visible in code or tests → don't assert it. Tests are the best source of invariants.</div>
       <div class="dont"><b>Inventing constitution/mission content.</b> Must come from you; <code>_TBD:_</code> is fine, fabrication is not.</div>
-      <div class="dont"><b>Updating overview for every change.</b> It's an index — touch it only on add / remove / rename.</div>
+      <div class="dont"><b>Updating overview for every change.</b> It's an index — touch it only on add / remove / rename, or a record folder's first entry.</div>
       <div class="dont"><b>Silently editing the constitution.</b> Stack changes need your confirmation; principle changes need an explicit request.</div>
       <div class="dont"><b>Skipping READ for a "simple" bug fix.</b> Bug fixes break invariants more often than features do.</div>
     </div>

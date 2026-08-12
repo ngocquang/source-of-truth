@@ -310,7 +310,7 @@ Records the concrete choices settled during the design conversation, so a later 
 - **Format**: one bullet per decision, each naming the choice and the reason. Reference the rejected alternative when it's non-obvious.
   - Good: `Chose optimistic locking over row locks — write contention is rare and row locks stalled the import job in load tests.`
   - Bad: `Uses optimistic locking.` (no reason — that's just a fact, put it in Notes if it even matters)
-- **Boundary**: these are *decisions*, not *contracts*. If a bullet describes something a caller can observe and rely on, it's an invariant — move it to `Requirement`. If it's a gotcha or an anti-pattern warning, it's a `Note`. Implementation decisions answer "why is it built this way", not "what must stay true".
+- **Boundary**: these are *decisions*, not *contracts*. If a bullet describes something a caller can observe and rely on, it's an invariant — move it to `Requirement`. If it's a gotcha or an anti-pattern warning, it's a `Note`. Implementation decisions answer "why is it built this way", not "what must stay true". This section holds decisions scoped to **this one feature** only — a decision touching ≥2 specs or the constitution isn't one of these; it goes to `docs/decisions/` instead.
 
 If a separate design doc already captures these, link it in `Source plan` and keep this section to the 2-3 decisions most likely to be second-guessed.
 

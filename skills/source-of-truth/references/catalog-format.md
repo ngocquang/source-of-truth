@@ -1,6 +1,25 @@
 # Catalog format — full reference
 
-Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the four project-level docs and the changelog folder (one file per entry), the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
+Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the four project-level docs and the changelog folder (one file per entry), where content lives, decision records, debugging entries, the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
+
+## Where content lives
+
+Seven kinds of content, seven homes. A piece of content has exactly one — duplicating it across two files is how the catalog starts contradicting itself.
+
+| Content | Home |
+|---|---|
+| Externally observable contract of one feature | spec → `Requirement` / `Invariants` |
+| Decision scoped to **one** feature | spec → `Implementation decisions` |
+| Decision touching **≥2 features** or the **constitution** | `docs/decisions/` |
+| Bug investigation trail (symptom → real root cause) | `docs/debugging/` |
+| Durable guard against a bug recurring | spec → new invariant + matching `Validation` criterion |
+| Audit line: what changed, what callers must do | `docs/changelog/` |
+| Short gotcha / hidden coupling / anti-pattern | spec → `Notes` |
+
+Two consequences worth stating outright, because both are easy to get backwards:
+
+- A debugging entry does **not** replace the guard. The entry records the investigation; the protection lives in the spec as an invariant plus a Validation criterion.
+- A decision record does **not** replace the changelog entry. A constitution change still gets its audit line in `docs/changelog/`; that line links to the decision record, which carries the reasoning.
 
 ## Index file: `docs/overview.md`
 
@@ -15,6 +34,8 @@ _Project docs live in this folder; per-feature specs in `specs/`. No date line �
 - [Mission](mission.md) — problem, users, value, success metrics
 - [Roadmap](roadmap.md) — feature delivery plan & status
 - [Changelog](changelog/) — deletions, renames, contract changes (one file per entry)
+- [Decisions](decisions/) — cross-cutting decision records (one file per entry)
+- [Debugging](debugging/) — bug post-mortems: root cause + how to recognise it (one file per entry)
 
 ## Feature specs
 - [jwt-authentication](specs/spec-jwt-authentication.md) — JWT auth with refresh token rotation
@@ -22,7 +43,7 @@ _Project docs live in this folder; per-feature specs in `specs/`. No date line �
 - ...
 ```
 
-Links use **relative paths** (`constitution.md`, `specs/spec-jwt-authentication.md`) so the folder is portable if it moves.
+Links use **relative paths** (`constitution.md`, `specs/spec-jwt-authentication.md`) so the folder is portable if it moves. The `Decisions` and `Debugging` lines appear only once their folder has its first entry — see "Both folders: creation, links, and restraint" below.
 
 ## Constitution: `docs/constitution.md`
 
@@ -181,6 +202,8 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 - **Roadmap**: Now | Next | Later | shipped (off-roadmap once live)
 - **Source files**: <2-5 paths, most important first>
 - **Source plan**: <path to design doc, or "none">
+- **Decisions**: <docs/decisions/ paths, comma-separated — omit this line entirely if none>
+- **Debugging**: <docs/debugging/ paths, comma-separated — omit this line entirely if none>
 - **Last verified**: <YYYY-MM-DD> against `<short commit hash>`
 
 ## Plan
@@ -207,6 +230,8 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 ## Open questions (roadmap-stage specs only — must read `None.` when the feature enters `Now`)
 <known unknowns recorded while drafting, plus anything the spec critique gate surfaces at `Next → Now`. One line each: <question> — <what breaks if guessed wrong>. Write `None.` explicitly once all are resolved. Omit the section for specs written at SYNC/BOOTSTRAP from already-shipped code.>
 ```
+
+`Decisions` and `Debugging` are optional backlinks to the two record folders. **Omit the line when there is no such record** — a spec for a feature that never had a contested decision or a hard bug looks exactly as it did before. They sit in the header block READ always reads, so a prior decision or a past root cause surfaces before any code is touched, without growing the spec body. The session that writes a record adds these backlinks to every spec named in the record's `Scope` / `Feature`, in the same change; READ never writes them. When a spec named in a record is later deleted (a `removed` feature, one release cycle on), the record keeps that name — it is append-only, and that the decision once covered that feature is exactly the history worth keeping.
 
 ### Status semantics
 
@@ -319,8 +344,9 @@ Use for things that would surprise a reader and cannot be inferred from code:
 
 - Hidden coupling (`Order webhook fires before invoice creation — race condition possible if reversed`)
 - Performance constraints (`Must complete in <100ms — measured by SLO dashboard`)
-- Historical context (`Originally returned 500 on missing user; changed to 404 in v2 — clients still expect 404`)
 - Anti-patterns (`Do not cache decoded JWT — token revocation depends on per-request DB lookup`)
+
+`Notes` is for short gotchas only. Why a cross-cutting choice was made goes to `docs/decisions/`; how a hard bug was tracked down goes to `docs/debugging/`. Prose history parked in `Notes` is unfindable — nothing greps it and nothing links to it.
 
 ## Full example
 
@@ -330,6 +356,7 @@ Use for things that would surprise a reader and cannot be inferred from code:
 - **Roadmap**: shipped (off-roadmap)
 - **Source files**: `src/auth/login.ts`, `src/auth/refresh.ts`, `src/auth/jwt.ts`, `src/middleware/require-auth.ts`
 - **Source plan**: `docs/superpowers/2025-12-jwt-auth-plan.md`
+- **Decisions**: `docs/decisions/2026-03-02-opaque-refresh-tokens.md`
 - **Last verified**: 2026-04-30 against `a1b2c3d`
 
 ## Plan
@@ -386,13 +413,84 @@ Skeleton of one entry file, e.g. `docs/changelog/2026-08-07-email-search.md` (no
 
 For file naming rules, decision tree (which category does my change fall into?), per-category required fields, full examples, migration guidance, cross-link rules, audit checklist, and legacy `CHANGELOG.md` migration → [`changelog-guide.md`](changelog-guide.md). Read that file before adding any changelog entry.
 
+## Decision records: `docs/decisions/`
+
+Cross-cutting decisions — the ones a later session is most likely to reopen because the reasoning left with the person who made it. Same mechanics as the changelog: a flat folder, one file per entry, `YYYY-MM-DD-<slug>.md`, no index file. `ls docs/decisions/ | sort -r` is the chronology; `grep -rl "<slug>" docs/decisions/` is the lookup.
+
+**Write an entry when at least one holds:**
+
+1. The decision affects ≥2 specs.
+2. The decision changes `constitution.md` (any of its five sections).
+3. The decision reverses an existing decision record.
+
+A decision inside one feature's boundary is not one of these — it belongs in that spec's `Implementation decisions`.
+
+```markdown
+- **Status**: accepted | superseded
+- **Scope**: <spec slugs and/or constitution sections affected>
+- **Supersedes**: <filename> | none
+- **Superseded by**: <filename> | none
+
+## Context
+<the forces in play — constraints, what made this a real choice>
+
+## Decision
+<what was chosen, and what it commits the project to>
+
+## Alternatives rejected
+- <alternative> — <why it lost>
+```
+
+**Append-only.** A change of mind is a new entry carrying `Supersedes:`; the old entry gets `Status: superseded` plus a `Superseded by:` line, and nothing else in it is edited. Rewriting the old entry destroys the only thing the folder exists to hold.
+
+## Debugging entries: `docs/debugging/`
+
+The investigation trail for a bug that was expensive to find. Same file mechanics as `docs/decisions/`.
+
+**Write an entry when at least one holds:**
+
+1. The root cause was **not** in the file the symptom pointed to.
+2. The bug is a recurrence (this behavior was reported or fixed before).
+3. The fix reverses an earlier deliberate decision (a spec's `Implementation decisions`, or a decision record).
+4. The investigation spanned more than one working session.
+
+```markdown
+- **Feature**: <spec slug(s)>
+- **Trigger**: <which condition above fired>
+- **Root cause location**: <file where the cause actually was>
+
+## Symptom
+<what was observable, in the terms it was first reported>
+
+## Where it looked like the bug was
+<the plausible wrong place, and why it was plausible>
+
+## Root cause & fix
+<the actual mechanism, and what changed to correct it>
+
+## How to recognise it next time
+<the distinguishing signal that separates this from its look-alikes>
+
+## Guard added
+<link to the new invariant + Validation criterion, or "none — <reason>">
+```
+
+`Guard added` is not optional. A post-mortem with no guard and no reason is a story, not a contract — the folder holds the investigation, the spec holds the protection.
+
+## Both folders: creation, links, and restraint
+
+- **Created on first entry.** BOOTSTRAP creates neither. The session writing the first entry creates the folder and adds that folder's link to `overview.md`'s `## Project docs` list in the same change — so the index never carries a dead link and the repo never carries an empty folder.
+- **Overview links to folders only**, never to individual entries — `overview.md` is an index and does not grow with history.
+- **An entry fits on one screen.** Length is not quality, the same rule Progressive rigor applies to specs. Sections with nothing real to say are dropped, not filled.
+- **A trigger that does not fire writes nothing** — no empty folder, no placeholder entry, no `none` line in a spec.
+
 ## Progressive rigor — when to expand a spec entry
 
 Default: header metadata + Plan + Requirement + Validation + (optional Implementation decisions / Notes) is enough for ~80% of features. Resist the urge to make every spec exhaustive — over-detailed specs rot faster than they help. Add `Implementation decisions` only when a real choice was contested; add `Notes` only when there's a genuine gotcha.
 
 Expand a spec (longer invariant list, scenario blocks, dense Notes, more validation criteria) only when at least one of these is true:
 
-- The feature has caused a regression in the past (link the post-mortem in Notes)
+- The feature has caused a regression in the past (the post-mortem is a `docs/debugging/` entry, linked from the spec's `Debugging` field)
 - It has a documented race condition or ordering requirement
 - It crosses a compliance boundary (SOC2, GDPR, PCI, audit logging)
 - It is called by ≥2 teams or external clients (the contract is now public)

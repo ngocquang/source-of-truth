@@ -197,7 +197,7 @@ You don't invoke the skill manually — it activates on context. The whole loop 
 2. **Ask for a change as usual.** Before writing any code the skill enters **READ**: it loads the catalog and prints a **Catalog check** (what exists, invariants, roadmap status, conflicts) for you to review.
 3. **Resolve conflicts, then approve.** If the change collides with an existing feature, a documented invariant, the constitution, or isn't on the roadmap, the skill **stops and asks**. Add a roadmap entry or adjust the plan, then let it proceed.
 4. **Implement.** The skill writes code against the approved plan and the documented contracts.
-5. **Ship / commit.** Say *"done"*, *"commit"*, or *"merge"*. The skill enters **SYNC**: it reads the diff, updates the affected specs, moves shipped items off the roadmap, records removals/renames as changelog entry files, shows you the catalog diff, then commits code and catalog together.
+5. **Ship / commit.** Say *"done"*, *"commit"*, or *"merge"*. The skill enters **SYNC**: it reads the diff, updates the affected specs, moves shipped items off the roadmap, records removals/renames as changelog entry files and cross-cutting decisions/debugging as their own record folders, shows you the catalog diff, then commits code and catalog together.
 
 The catalog stays true to the code with no separate "update the docs" step — READ and SYNC are the only two touchpoints you need to remember.
 
@@ -211,7 +211,7 @@ The skill operates in three modes, selected automatically by context:
 |---|---|---|
 | **BOOTSTRAP** | `docs/overview.md` does NOT exist + project has code | Auto-detect stack → interview user for principles/mission → confirm & write the catalog. Runs once. |
 | **READ** | Before writing / modifying / deleting code (incl. bug fixes, refactors, "does X already exist?") | Load catalog, output a **Catalog check** to the user, stop on conflicts, only then write code. |
-| **SYNC** | A feature shipped ("ship it", "done", "commit", "merge", "xong rồi") or "update/sync the catalog" | Reconcile catalog with the diff: update specs, remove shipped entries from the roadmap, record deletions/renames as changelog entry files. |
+| **SYNC** | A feature shipped ("ship it", "done", "commit", "merge", "xong rồi") or "update/sync the catalog" | Reconcile catalog with the diff: update specs, remove shipped entries from the roadmap, record deletions/renames as changelog entry files, decisions/debugging as their own record folders. |
 
 **RE-BOOTSTRAP**: a special case of BOOTSTRAP — when `docs/overview.md` exists but `constitution.md` or `mission.md` is missing/empty, re-bootstrap the missing file before any code change.
 
@@ -228,6 +228,8 @@ Catalog check:
 - Constitution: <relevant principle, or "no conflict">
 - Roadmap status: <Now | Next | Later | shipped (off-roadmap) | NOT TRACKED>
 - Related existing features: <list, or "none found">
+- Prior decisions: <records constraining this change, or "none">
+- Known debugging traps: <past root causes in this area, or "none">
 - Invariants I must preserve: <list, or "none">
 - Acceptance criteria that must still pass: <list, or "none">
 - Already exists? <yes + which feature, or no>
@@ -238,7 +240,7 @@ If the change collides with an existing feature, a documented invariant, a const
 
 ### SYNC mode — after shipping
 
-SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes as per-entry files in `docs/changelog/`. Full procedure lives in the skill's `references/`.
+SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes as per-entry files in `docs/changelog/`, plus qualifying cross-cutting decisions and bug post-mortems in `docs/decisions/` and `docs/debugging/`. Full procedure lives in the skill's `references/`.
 
 ### BOOTSTRAP mode — three phases
 

@@ -33,7 +33,7 @@ Determine which features are affected. Also check if any of these changed (these
 | **Modified feature** | Existing feature's behavior or files changed | Update existing spec; if Requirement changed, add a changelog entry |
 | **Removed feature** | Feature's entry point deleted | Set `Status: removed` + roadmap update + changelog entry |
 | **Renamed feature** | Name changed, functionality preserved | Rename spec file + roadmap entry + changelog entry |
-| **Internal refactor** | No feature-level change | Update `Source files` if files moved; do not touch overview/roadmap/changelog |
+| **Internal refactor** | No feature-level change | Update `Source files` if files moved; do not touch overview/roadmap/changelog. A refactor that embodies a cross-cutting decision still gets a decision record → 5e. |
 | **Tech stack change** | Dependency added/upgraded/swapped | Surface to user → update `constitution.md > Tech Stack` + changelog `### Constitution change` only after confirmation |
 | **Principle change** | Code Quality / Testing / UX / Performance rule changed | Update `constitution.md` + changelog `### Constitution change` only on **explicit** user request — never infer |
 
@@ -135,13 +135,12 @@ For new or modified features:
 
 ```
 Catalog updates:
-- docs/overview.md: + new feature "email-search"
-- docs/specs/spec-email-search.md: created (Plan + Requirement + Validation)
+- docs/overview.md: + new feature "email-search", + Debugging folder link (first entry)
+- docs/specs/spec-email-search.md: created (Plan + Requirement + Validation) + Debugging backlink
 - docs/specs/spec-user-search.md: deleted (renamed to email-search)
 - docs/roadmap.md: email-search removed from `Now` on ship (roadmap holds only unshipped work)
 - docs/changelog/2026-05-09-email-search.md: created (### Renamed entry)
 - docs/debugging/2026-05-09-refresh-race-on-retry.md: created (root cause in middleware, guard = invariant #4)
-- docs/specs/spec-email-search.md: + Debugging backlink
 - docs/constitution.md: untouched
 - docs/mission.md: untouched
 Apply?

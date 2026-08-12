@@ -1,6 +1,6 @@
 # Catalog format — full reference
 
-Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: the four project-level docs and the changelog folder (one file per entry), where content lives, decision records, debugging entries, the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
+Read this file when you need the exact schema for any of the catalog files (layout tree → SKILL.md). Sections: where content lives, the four project-level docs and the changelog folder (one file per entry), decision records, debugging entries, the per-feature spec (with status semantics, Invariants, Implementation decisions, Validation, Open questions), a full example, progressive rigor, and slug rules.
 
 ## Where content lives
 
@@ -225,7 +225,7 @@ Each feature gets its own file. Naming uses kebab-case with the `spec-` prefix (
 <numbered acceptance criteria — verifiable conditions a reviewer can check by reading alone, without running tests. Each criterion is a Given/When/Then or a SHALL statement, numbered so it can be referenced independently. See "Validation section" below for format.>
 
 ## Notes (optional)
-<gotchas, hidden coupling, anti-patterns, historical context, things future AI must NOT do>
+<gotchas, hidden coupling, anti-patterns, things future AI must NOT do>
 
 ## Open questions (roadmap-stage specs only — must read `None.` when the feature enters `Now`)
 <known unknowns recorded while drafting, plus anything the spec critique gate surfaces at `Next → Now`. One line each: <question> — <what breaks if guessed wrong>. Write `None.` explicitly once all are resolved. Omit the section for specs written at SYNC/BOOTSTRAP from already-shipped code.>

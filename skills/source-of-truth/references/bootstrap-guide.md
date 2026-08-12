@@ -256,7 +256,10 @@ commit — do not ask, just sync then commit:
 3. Record removals / renames / contract changes / constitution changes as
    per-entry files `docs/changelog/YYYY-MM-DD-<slug>.md` (one flat file per
    date + feature; parallel sessions never conflict) — a constitution change
-   also gets a `docs/decisions/YYYY-MM-DD-<slug>.md` record.
+   also gets a `docs/decisions/YYYY-MM-DD-<slug>.md` record, and so does any
+   decision spanning ≥2 specs or reversing an existing one; a bug fix meeting
+   any of the skill's debugging triggers gets a `docs/debugging/YYYY-MM-DD-<slug>.md`
+   entry (full trigger lists → skill references: `sync-guide.md`, `catalog-format.md`).
 4. Commit the code **and** the catalog updates together.
 
 Self-gating: this applies only because `docs/overview.md` exists. Skip the sync

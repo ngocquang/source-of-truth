@@ -84,7 +84,7 @@ Mandatory for new/removed/renamed features — silent drift between code and roa
 
 #### 5b. `docs/overview.md`
 
-Add/remove/update the one-line entry for any feature that was added, removed, or renamed. **Internal refactors don't touch overview.**
+Add/remove/update the one-line entry for any feature that was added, removed, or renamed — and add the folder link line when `docs/decisions/` or `docs/debugging/` receives its first entry (5e). **Internal refactors don't touch overview.**
 
 Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and the changelog. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no changelog entry needed).
 
@@ -101,6 +101,21 @@ Let the user confirm. Don't auto-write — experimental dependencies that get ri
 #### 5d. `docs/mission.md`
 
 Almost never touched in SYNC. If the user explicitly says "the mission has shifted", "we have new target users", or "value prop changed", run a focused interview (similar to bootstrap Phase B targeted at the specific section) and update + a changelog entry `### Mission change`.
+
+#### 5e. Record folders: `docs/decisions/`, `docs/debugging/`
+
+SYNC is the only place these are written. Run both trigger lists against what this sync covers; a trigger that does not fire writes nothing.
+
+**Decision record** — write `docs/decisions/<today>-<slug>.md` when the change embodies a decision that affects ≥2 specs, changes `constitution.md`, or reverses an existing record. A constitution change gets **both**: the changelog audit line (step 2) and the decision record carrying the reasoning, each linking to the other.
+
+**Debugging entry** — write `docs/debugging/<today>-<slug>.md` when the fix in this sync meets any of: the root cause was not in the file the symptom pointed to; the bug is a recurrence; the fix reverses an earlier deliberate decision; the investigation spanned more than one session. The entry's `Guard added` section links the invariant + Validation criterion added in step 4 — if no guard was possible, it says why.
+
+Writing an entry includes two things in the same change:
+
+1. Add the backlink to every spec named in the entry's `Scope` / `Feature` — the `Decisions:` / `Debugging:` header field, added if the spec doesn't have it yet.
+2. If this is the folder's first entry, create the folder and add its one-line link to `overview.md`'s `## Project docs` list (`- [Decisions](decisions/) — …`).
+
+Schemas, trigger lists, and the append-only rule → [`catalog-format.md`](catalog-format.md).
 
 ### 6. Extract invariants and validation from code AND tests
 
@@ -125,6 +140,8 @@ Catalog updates:
 - docs/specs/spec-user-search.md: deleted (renamed to email-search)
 - docs/roadmap.md: email-search removed from `Now` on ship (roadmap holds only unshipped work)
 - docs/changelog/2026-05-09-email-search.md: created (### Renamed entry)
+- docs/debugging/2026-05-09-refresh-race-on-retry.md: created (root cause in middleware, guard = invariant #4)
+- docs/specs/spec-email-search.md: + Debugging backlink
 - docs/constitution.md: untouched
 - docs/mission.md: untouched
 Apply?
@@ -146,7 +163,7 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 
 ## Common pitfalls
 
-- **Updating overview.md for every change.** It's an index — only touch when features are added/removed/renamed, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
+- **Updating overview.md for every change.** It's an index — only touch it when features are added/removed/renamed, or when a record folder gets its first entry, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
 - **Writing a spec and shipping it unreviewed.** New specs and rewritten `Requirement` / `Validation` sections go through the critique gate's independent reviewer first — "I just wrote it carefully" is not a substitute for a fresh context reading it.
@@ -156,3 +173,6 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 - **Letting roadmap entries grow past one line.** An entry is summary + spec link only; when updating the roadmap, move any accumulated detail (acceptance criteria, sub-tasks, rationale) into the spec instead of preserving it.
 - **Mixing spec content and Validation criteria with implementation detail.** Validation = caller-visible acceptance criteria. "Uses Redis" is not a validation criterion (it's implementation). "Refresh token rejected on second use" is.
 - **Shipping a feature whose spec still carries `Open questions`.** Those were supposed to be resolved at `Next → Now`. Surface to the user: answer each now (fold into Invariants/Validation) or demote to a non-goal — don't delete silently.
+- **Writing a record because the change felt significant.** Both folders have enumerated trigger conditions; if none fired, no entry is written. A folder filling up with entries nobody needed is the same failure as a folder nobody writes to.
+- **Writing an entry and forgetting the backlink.** The entry and the spec's `Decisions` / `Debugging` field are written in the same change — a record no spec points at will not be found by READ.
+- **Rewriting a superseded decision record.** Records are append-only: the new entry carries `Supersedes:`, the old one gets `Superseded by:` and keeps its body.

@@ -28,6 +28,10 @@ docs/
 ├─ roadmap.md           (forward plan: Now / Next / Later — shipped work leaves the roadmap)
 ├─ changelog/           (deletions, renames, contract changes, constitution changes —
 │   └─ YYYY-MM-DD-<slug>.md   one flat file per entry so parallel sessions never conflict)
+├─ decisions/           (cross-cutting decision records — created on first entry)
+│   └─ YYYY-MM-DD-<slug>.md
+├─ debugging/           (bug post-mortems: root cause + how to spot it — created on first entry)
+│   └─ YYYY-MM-DD-<slug>.md
 └─ specs/
     └─ spec-<feature>.md  (per feature: Plan + Requirement + Validation; kebab-case)
 ```
@@ -54,13 +58,16 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
 3. Read `docs/roadmap.md`. Confirm the requested feature is in `Now` / `Next` / `Later`, or already shipped (a spec exists for it), or surface that it's not tracked yet.
 4. Read each related `docs/specs/spec-<feature>.md` (Plan + Requirement + Validation).
 5. If the request mentions something not in the catalog, search `docs/changelog/` — it might have been removed deliberately. `ls docs/changelog/*-<slug>.md` finds entries by filename; `grep -rl "<slug>" docs/changelog/` catches renames and legacy files by content.
-6. **Before writing any code**, output this catalog check to the user (not internal thinking — user must be able to override):
+6. Check the record folders for anything that constrains this change: `grep -rl "<slug>" docs/decisions/ docs/debugging/`, plus a grep for the source paths you are about to touch. A spec's `Decisions` / `Debugging` header fields point at the same records. Both folders exist only once they have an entry — no match is the normal case, not a problem. If a record names this feature but the spec has no backlink, surface it; do not write the backlink yourself (READ writes nothing).
+7. **Before writing any code**, output this catalog check to the user (not internal thinking — user must be able to override):
 
    ```
    Catalog check:
    - Constitution: <relevant principle, or "no conflict">
    - Roadmap status: <Now | Next | Later | shipped (off-roadmap) | NOT TRACKED>
    - Related existing features: <list, or "none found">
+   - Prior decisions: <records constraining this change, or "none">
+   - Known debugging traps: <past root causes in this area, or "none">
    - Invariants I must preserve: <list, or "none">
    - Acceptance criteria that must still pass: <list, or "none">
    - Already exists? <yes + which feature, or no>
@@ -68,7 +75,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    - Implementation route: <plan doc path, or "no plan"> · <worktree/branch I'll work in> · <superpowers skills I'll drive it with, or "not available">
    ```
 
-7. Handle these cases before proceeding:
+8. Handle these cases before proceeding:
 
    | Situation | Response |
    |---|---|
@@ -78,7 +85,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    | Work is not on the roadmap (any change — including a bug fix) | STOP — iron-rule (non-negotiable rule 2): surface it, add it to `roadmap.md` (`Now`/`Next`), then code. |
    | Spec's `Source files` reference paths that no longer exist | "Spec `<X>` references `<path>` which no longer exists — sync this spec first?" Don't silently fix. |
 
-8. Only after user confirms, write code — via the implementation handoff below, never freehand in the main checkout.
+9. Only after user confirms, write code — via the implementation handoff below, never freehand in the main checkout.
 
 Do NOT update catalog files in READ mode (except the stale-spec exception above, with user confirmation) — proactive updates belong to SYNC.
 
@@ -95,7 +102,7 @@ The gate ends where implementation begins, and roadmap work takes one route — 
 
 **Commit gate:** when a commit is imminent — the user asks to commit, or you're about to — SYNC runs and **completes before the commit** (sync the catalog, then commit code + catalog together). This is automatic, not a question. Self-gating: only when `docs/overview.md` exists. Skip only for a pure no-spec-impact refactor, or an explicit user override (then recommend a retroactive sync).
 
-Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates) → [`references/sync-guide.md`](references/sync-guide.md).
+Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates, record folders (decisions/debugging)) → [`references/sync-guide.md`](references/sync-guide.md).
 
 ## BOOTSTRAP mode
 
@@ -117,3 +124,4 @@ Mode-specific pitfalls live in each guide's pitfalls section; these apply across
 - **Sloppy roadmap lifecycle.** One line per entry (detail lives in the spec); shipped work leaves `Now`; a feature enters `Now` only through the spec critique gate with `Open questions` resolved to `None.` — parking ambiguity in `Notes` or "TBD" prose is the violation. Lifecycle rules + gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
 - **Writing a spec and using it unreviewed.** Every spec passes the spec critique gate first — when drafted at `Later → Next`, when promoted `Next → Now`, when SYNC creates or rewrites one, and when BOOTSTRAP finishes its batch: a fresh-context reviewer on the strongest model available (Claude Code: `Agent` with `model: opus`), whose findings you fold back into the spec. Running the four checks in your own head, in the same context that wrote the spec, is the failure the gate exists to prevent. Reviewer inputs, return shape, and fold-back → [`references/catalog-format.md`](references/catalog-format.md).
 - **Writing Validation criteria from the tests alone when a pre-implementation spec or plan exists.** Intent → tests, never the reverse — full direction rule → [`references/catalog-format.md`](references/catalog-format.md); test-only extraction is for BOOTSTRAP and plan-less legacy features.
+- **Parking history in `Notes`.** Why a cross-cutting choice was made belongs in `docs/decisions/`; how a hard bug was found belongs in `docs/debugging/`; `Notes` is for short gotchas. Boundary table → [`references/catalog-format.md`](references/catalog-format.md).

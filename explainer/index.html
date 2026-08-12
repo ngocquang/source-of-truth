@@ -444,9 +444,9 @@
       <div class="mode boot" data-mode="boot"><span class="tag">Run once</span><h3>BOOTSTRAP</h3><div class="when">docs/overview.md not yet present</div>
         <ol><li>Auto-detect stack, test runner, design system (no prompts)</li><li>One interview pass: quality rules, perf budget, mission</li><li>Confirm → write catalog + update <code>CLAUDE.md</code></li></ol></div>
       <div class="mode read" data-mode="read"><span class="tag">Before editing code</span><h3>READ</h3><div class="when">write / modify / delete — bug fixes included</div>
-        <ol><li>Read <code>overview → constitution → roadmap → spec</code></li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
+        <ol><li>Read <code>overview → constitution → roadmap → spec</code> + check the record folders</li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
       <div class="mode sync" data-mode="sync"><span class="tag">After shipping</span><h3>SYNC</h3><div class="when">"done" · "merge" · "shipped" · before commit</div>
-        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes as changelog entry files</li></ol></div>
+        <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes as changelog entry files + decision/debugging records when triggered</li></ol></div>
     </div>
     <div class="rebar"><b>RE-BOOTSTRAP:</b> catalog exists but <code>constitution.md</code> / <code>mission.md</code> missing → rebuild that file before any code edit. Updating <code>CLAUDE.md</code> during BOOTSTRAP is the highest-leverage step: every future session then reads the catalog automatically.</div>
   </div>
@@ -518,7 +518,7 @@
       <div class="t-page" data-page-id="1">
         <h4>constitution.md — the rules of the house</h4>
         <p class="q">Answers: “Are we allowed to build it this way?”</p>
-        <div class="ex"><b>Example:</b> constitution says "stateless API tier" → a session-based login plan is rejected at the gate; JWT gets chosen instead. Changing this file requires your explicit approval + a changelog entry.</div>
+        <div class="ex"><b>Example:</b> constitution says "stateless API tier" → a session-based login plan is rejected at the gate; JWT gets chosen instead. Changing this file requires your explicit approval + a changelog entry + a decision record.</div>
       </div>
       <div class="t-page" data-page-id="2">
         <h4>mission.md — why the project exists</h4>

@@ -158,7 +158,7 @@ Example:
 ```markdown
 ### Constitution change
 - **Tech Stack** — Added Redis 7 for refresh token storage. Reason: SOC2 requires revocable sessions; previous in-memory approach didn't survive redeploy.
-- **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/postmortems/2026-04-10-incident-142.md
+- **Testing Standards** — Raised coverage threshold from 70% → 80% on `src/auth/`. Reason: post-mortem on incident #142 (token expiry edge case shipped without test). Linked: docs/debugging/2026-04-10-incident-142.md
 ```
 
 Tech stack changes that are temporary experiments do NOT belong here — wait until the dependency is committed to staying. The changelog records decisions, not experiments.
@@ -187,9 +187,10 @@ When the entry references something external, link it inline. Common cross-links
 
 | When to link | Format |
 |---|---|
-| Removal/contract change driven by a post-mortem | `Linked: docs/postmortems/<file>.md` (relative path) |
+| Removal/contract change driven by a post-mortem | `Linked: docs/debugging/<file>.md` (relative path) |
 | Removal triggered by a customer/issue | `Linked: <issue or ticket URL>` |
 | Constitution change tied to an audit/compliance event | `Linked: <audit-report-or-ADR>` |
+| Constitution change entry | `Linked: docs/decisions/<file>.md` (the decision record; links back the same way) |
 | Renamed feature whose old slug is still referenced externally | `Old links: <list of external places that need updating>` |
 
 Cross-links are optional but strongly recommended for `### Constitution change` and `### Contract changed` entries — these are the high-cost decisions future sessions will second-guess.

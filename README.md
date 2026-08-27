@@ -242,6 +242,8 @@ If the change collides with an existing feature, a documented invariant, a const
 
 SYNC reconciles the catalog with what changed: it reads the diff (`git diff --name-only`, current commit, date), updates the affected specs, moves shipped roadmap entries off `Now`, and records removals / renames / contract changes as per-entry files in `docs/changelog/`, plus qualifying cross-cutting decisions and bug post-mortems in `docs/decisions/` and `docs/debugging/`. Full procedure lives in the skill's `references/`.
 
+Before it writes any catalog file, SYNC runs a **comment sweep** on that same diff via the bundled [`no-comments`](./skills/no-comments/SKILL.md) skill: an independent reviewer (the `Comment Sicko` agent) audits every comment and lint/type suppression in the shipping code, and the accepted findings are fixed while the diff is still open — so the specs describe the code that actually ships. The sweep never blocks SYNC; a runtime without the skill reports the gap and continues.
+
 ### BOOTSTRAP mode — three phases
 
 - **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro, and feature entry points.
@@ -265,7 +267,7 @@ Source-of-Truth is **rigid, not advisory** — its value comes from being follow
 
 ## Contributing
 
-Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The skill itself lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / changelog procedures. Edit there and the change reaches every supported agent.
+Issues and pull requests are welcome at [github.com/ngocquang/source-of-truth](https://github.com/ngocquang/source-of-truth). The catalog skill lives in `skills/source-of-truth/` — `SKILL.md` is the entry point, with `references/` for the detailed BOOTSTRAP / SYNC / changelog procedures. The comment-sweep skill lives in `skills/no-comments/`, and the reviewer it dispatches in `agents/comment-sicko.md`. Edit there and the change reaches every supported agent.
 
 ---
 

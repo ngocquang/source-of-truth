@@ -10,6 +10,18 @@ Completion language ("ship it", "done", "commit this", "xong rồi"), a `superpo
 
 In the same working tree as the code it documents. When the feature was built in a worktree (→ SKILL.md, Implementation handoff), the order is: **sync the catalog in the worktree → commit code + catalog together → integrate the branch (`superpowers:finishing-a-development-branch` when available) → clean up the worktree.** Syncing after the merge, or from the main checkout while the code sits on a branch, puts catalog updates on the wrong commit — or loses them when the worktree is removed.
 
+## Comment sweep gate
+
+Every SYNC sweeps the shipping code's comments before it writes a single catalog file. Order matters: the sweep can delete comments, remove workarounds, and land small root-cause fixes, so a catalog written before it documents code that is about to change.
+
+1. Gather the diff (step 1 below) — that diff is the sweep's scope.
+2. Invoke the `no-comments` skill with it. That skill dispatches an independent reviewer, audits its findings, and applies the accepted ones.
+3. Re-read the diff afterwards if the sweep changed code, then finish step 1 (feature mapping, dependency/test-config checks) and continue from step 2.
+
+The sweep never blocks SYNC. If the runtime doesn't have `no-comments`, note "comment sweep: skill unavailable" in the step-7 diff message and continue. If the sweep reports open work (a constraint it couldn't encode, a root cause outside the scope), carry those lines into the step-7 message too — they are the user's call, not yours to silently drop.
+
+The sweep touches code, not the catalog: its deletions and fixes are part of the same commit as the catalog update, never a separate "cleanup" commit landed behind the user's back.
+
 ## Steps
 
 ### 1. Identify what changed
@@ -18,6 +30,8 @@ Gather the diff, current commit, and date:
 
 - `git diff --name-only HEAD~1 HEAD` for the last committed change; `git diff --name-only` + `git status` for uncommitted work
 - `git rev-parse --short HEAD` for the `Last verified` hash; today's date completes the stamp
+
+Hand this diff to the comment sweep gate (above) before touching any catalog file.
 
 Determine which features are affected. Also check if any of these changed (these can trigger constitution surfacing in step 5c):
 
@@ -163,6 +177,7 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 ## Common pitfalls
 
 - **Updating overview.md for every change.** It's an index — only touch it when features are added/removed/renamed, or when a record folder gets its first entry, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
+- **Writing the catalog before the comment sweep.** The sweep changes code; specs written ahead of it describe a diff that no longer exists. Sweep on the step-1 diff, then catalog. Skipping the sweep silently is the other half of the same failure — an unavailable skill gets reported, not ignored.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
 - **Writing a spec and shipping it unreviewed.** New specs and rewritten `Requirement` / `Validation` sections go through the critique gate's independent reviewer first — "I just wrote it carefully" is not a substitute for a fresh context reading it.

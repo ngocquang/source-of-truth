@@ -1,0 +1,7 @@
+interface:
+  display_name: "No Comments (Comment Sweep)"
+  short_description: "Audit the comments and lint/type suppressions in a diff, then act on the accepted findings"
+policy:
+  # The source-of-truth SYNC gate invokes this skill on every sync —
+  # Codex must be able to run it without an explicit $skill call.
+  allow_implicit_invocation: true

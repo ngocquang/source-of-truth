@@ -143,7 +143,7 @@ _Idea pool. No spec yet. Promote to Next by writing a spec._
 ### Lifecycle rules
 
 - **Promote `Later` → `Next`**: write the spec first (Plan + Requirement + Validation + Open questions — record known unknowns), run it through the spec critique gate (below), then move the entry.
-- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan. Building the item then follows the implementation handoff — isolated worktree, the plan document, the runtime's `superpowers:*` skills → SKILL.md.
+- **Promote `Next` → `Now`**: only when actively starting work; record the start date. Run the spec critique gate (below) and resolve `Open questions` down to `None.` — fold each answer into the spec/plan, or demote it to a non-goal. Tests are written from the surviving criteria (intent → tests, never the reverse); the catalog spec itself is typically written at SYNC, after ship, from that same plan. Building the item then follows the implementation handoff — isolated worktree, the plan document, the runtime's process skills → SKILL.md.
 - **Ship (`Now` → off-roadmap)**: at SYNC time, **remove the entry from `Now`** — the roadmap shrinks as you ship; there is no `Shipped` list to append to.
 - **Drop a `Later` / `Next` item**: delete from roadmap. No changelog entry (it never shipped).
 - **Deprecate / remove a shipped feature**: set the spec `Status: removed` and add a changelog entry under `### Removed`. It is already off the roadmap (nothing to move); if it somehow still sits in `Now` / `Next`, delete that row too.
@@ -334,7 +334,7 @@ Mix the two formats freely in one numbered list — keep a single running sequen
 
 Tests prove these criteria; the criteria themselves are the source of truth for "what does correct mean". When a test changes (framework swap, assertion rewrite), the criteria do not — they describe the contract from the caller's perspective.
 
-**Direction rule (intent → tests):** the contract comes from intent — a catalog spec written before implementation, or the design plan (e.g., superpowers output) the feature was built from. Tests are written FROM those criteria, and at SYNC the Validation section derives from the plan's criteria as verified by the tests — do not reverse-engineer the contract from whatever the tests happen to assert. If tests and the pre-implementation criteria disagree at SYNC time, surface the mismatch to the user: either the implementation missed the contract, or the contract legitimately changed (→ changelog `### Contract changed`). Test-only extraction is for BOOTSTRAP and legacy features that never had a spec or plan.
+**Direction rule (intent → tests):** the contract comes from intent — a catalog spec written before implementation, or the design plan the feature was built from. Tests are written FROM those criteria, and at SYNC the Validation section derives from the plan's criteria as verified by the tests — do not reverse-engineer the contract from whatever the tests happen to assert. If tests and the pre-implementation criteria disagree at SYNC time, surface the mismatch to the user: either the implementation missed the contract, or the contract legitimately changed (→ changelog `### Contract changed`). Test-only extraction is for BOOTSTRAP and legacy features that never had a spec or plan.
 
 **Traceability rule**: every Validation criterion SHALL trace back to an `Invariants` bullet (1:1 or many:1 — never an orphan criterion). If you write a criterion with no matching invariant, the invariant is missing — add it.
 
@@ -355,7 +355,7 @@ Use for things that would surprise a reader and cannot be inferred from code:
 - **Status**: active
 - **Roadmap**: shipped (off-roadmap)
 - **Source files**: `src/auth/login.ts`, `src/auth/refresh.ts`, `src/auth/jwt.ts`, `src/middleware/require-auth.ts`
-- **Source plan**: `docs/superpowers/2025-12-jwt-auth-plan.md`
+- **Source plan**: `plans/2025-12-jwt-auth-plan.md`
 - **Decisions**: `docs/decisions/2025-11-18-stateless-api-tier.md`
 - **Last verified**: 2026-04-30 against `a1b2c3d`
 

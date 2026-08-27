@@ -4,11 +4,11 @@ Read this file when running SYNC mode (a feature has just shipped or the user wa
 
 ## When SYNC triggers
 
-Completion language ("ship it", "done", "commit this", "xong rồi"), a `superpowers:executing-plans` / `subagent-driven-development` run reporting completion, an explicit sync request ("update the catalog / specs / roadmap"), or the diff is applied and the conversation feels closed. If unsure, ask once: "Sync the catalog now, or keep going?"
+Completion language ("ship it", "done", "commit this", "xong rồi"), a plan-execution run reporting completion, an explicit sync request ("update the catalog / specs / roadmap"), or the diff is applied and the conversation feels closed. If unsure, ask once: "Sync the catalog now, or keep going?"
 
 ## Where SYNC runs
 
-In the same working tree as the code it documents. When the feature was built in a worktree (→ SKILL.md, Implementation handoff), the order is: **sync the catalog in the worktree → commit code + catalog together → integrate the branch (`superpowers:finishing-a-development-branch` when available) → clean up the worktree.** Syncing after the merge, or from the main checkout while the code sits on a branch, puts catalog updates on the wrong commit — or loses them when the worktree is removed.
+In the same working tree as the code it documents. When the feature was built in a worktree (→ SKILL.md, Implementation handoff), the order is: **sync the catalog in the worktree → commit code + catalog together → integrate the branch (the runtime's branch-integration skill when available) → clean up the worktree.** Syncing after the merge, or from the main checkout while the code sits on a branch, puts catalog updates on the wrong commit — or loses them when the worktree is removed.
 
 ## Comment sweep gate
 
@@ -65,10 +65,9 @@ Only look for external plans when the change introduces a **new feature** (no sp
 
 For new features only, check these locations in order:
 
-1. `docs/superpowers/` — superpowers brainstorming + plan output
-2. `docs/`, `plans/`, `specs/` (top-level — distinct from `docs/specs/` which is the catalog itself)
-3. Recent commit messages — they may reference plan filenames
-4. The PR description if available
+1. `docs/`, `plans/`, `specs/` (top-level — distinct from `docs/specs/` which is the catalog itself), including any planning-output subfolder a process skill wrote there
+2. Recent commit messages — they may reference plan filenames
+3. The PR description if available
 
 If a plan exists for a new feature, **read it**. The plan tells intent (feeds the spec's `Plan` section); the diff tells implementation (feeds `Source files` and verifies `Requirement`); tests feed `Validation`. Never write a new spec entry from code alone if a plan is available.
 

@@ -1,7 +1,7 @@
 ---
 name: source-of-truth
 description: "Use when a project keeps (or should keep) a docs/ spec catalog and the task touches it: before writing, modifying, or deleting production code (refactors and bug fixes included) or checking whether a capability already exists; after a feature ships or the user signals completion; when the user wants to change the project's roadmap, mission, or constitution, or to update/sync/bootstrap the spec docs; or when code exists but docs/overview.md doesn't."
-when_to_use: "User says 'ship it', 'done', 'commit', 'merge', 'sync', 'update the catalog', 'sync specs', 'sync docs', 'update roadmap', 'bootstrap docs'; an executing-plans or subagent-driven-development run reports completion; user asks 'is there already a thing that does X?'; user wants to edit roadmap.md, mission.md, or constitution.md."
+when_to_use: "User says 'ship it', 'done', 'commit', 'merge', 'sync', 'update the catalog', 'sync specs', 'sync docs', 'update roadmap', 'bootstrap docs'; a plan-execution run reports completion; user asks 'is there already a thing that does X?'; user wants to edit roadmap.md, mission.md, or constitution.md."
 ---
 
 # Spec Catalog (Spec-Driven Development)
@@ -45,7 +45,7 @@ Exact schemas → [`references/catalog-format.md`](references/catalog-format.md)
 | `docs/overview.md` does NOT exist + project has code | **BOOTSTRAP** → [`references/bootstrap-guide.md`](references/bootstrap-guide.md) |
 | `docs/overview.md` exists but `constitution.md` or `mission.md` is missing/empty | **RE-BOOTSTRAP** the missing file before any code change → [`references/bootstrap-guide.md`](references/bootstrap-guide.md) (Re-bootstrap section) |
 | User wants to write/modify/delete code (incl. bug fixes, refactors, "is there already a thing that does X?") | **READ** (below) |
-| Feature shipped: "ship it", "done", "commit", "merge", "xong rồi"; or `executing-plans`/`subagent-driven-development` reports completion; or "update the catalog / sync specs" | **SYNC** → [`references/sync-guide.md`](references/sync-guide.md) |
+| Feature shipped: "ship it", "done", "commit", "merge", "xong rồi"; or a plan-execution run reports completion; or "update the catalog / sync specs" | **SYNC** → [`references/sync-guide.md`](references/sync-guide.md) |
 
 Ambiguous? Ask once: "Sync the catalog now, or keep going?"
 
@@ -72,7 +72,7 @@ Do NOT skip for "simple" changes — bug fixes break invariants more often than 
    - Acceptance criteria that must still pass: <list, or "none">
    - Already exists? <yes + which feature, or no>
    - Plan: <what I'm about to do and why it doesn't conflict>
-   - Implementation route: <plan doc path, or "no plan"> · <worktree/branch I'll work in> · <superpowers skills I'll drive it with, or "not available">
+   - Implementation route: <plan doc path, or "no plan"> · <worktree/branch I'll work in> · <process skills I'll drive it with, or "none available">
    ```
 
 8. Handle these cases before proceeding:
@@ -93,9 +93,9 @@ Do NOT update catalog files in READ mode (except the stale-spec exception above,
 
 The gate ends where implementation begins, and roadmap work takes one route — the same for a feature, an enhancement, a refactor, or a bug fix.
 
-1. **Work in an isolated worktree.** If the project is a git repo and you are not already in a dedicated worktree for this roadmap item, create one before the first edit (`superpowers:using-git-worktrees` when available, otherwise `git worktree add`). Report the path in the catalog check's `Implementation route` line. Not a git repo, or the user asks for an in-place edit: say which one applies and continue. "It's one small edit" is not one of those cases — the main checkout is where half-finished roadmap items get committed by accident.
-2. **Drive it with the superpowers skills when the runtime has them** (any `superpowers:*` skill in the skill list): `brainstorming` → `writing-plans` for work that isn't planned yet, `test-driven-development` while implementing, `executing-plans` or `subagent-driven-development` to run a written plan, `finishing-a-development-branch` to integrate. When they aren't available, implement directly and name that in the `Implementation route` line so the user knows which process is running.
-3. **Follow the plan document when one exists.** Look where SYNC looks for plans (the spec's `Source plan` field, then `docs/superpowers/`, `plans/`, `specs/` → [`references/sync-guide.md`](references/sync-guide.md) step 3). The plan's task order and checkpoints are the route; the spec's `Validation` criteria are what the tests assert (intent → tests). Don't re-plan planned work, and surface any deviation from the plan instead of drifting silently.
+1. **Work in an isolated worktree.** If the project is a git repo and you are not already in a dedicated worktree for this roadmap item, create one before the first edit (the runtime's worktree skill when available, otherwise `git worktree add`). Report the path in the catalog check's `Implementation route` line. Not a git repo, or the user asks for an in-place edit: say which one applies and continue. "It's one small edit" is not one of those cases — the main checkout is where half-finished roadmap items get committed by accident.
+2. **Drive it with the runtime's process skills when it has them**: a planning skill for work that isn't planned yet, a test-first skill while implementing, a plan-execution skill to run a written plan, a branch-integration skill to integrate. When they aren't available, implement directly and name that in the `Implementation route` line so the user knows which process is running.
+3. **Follow the plan document when one exists.** Look where SYNC looks for plans (the spec's `Source plan` field, then `docs/`, `plans/`, `specs/` → [`references/sync-guide.md`](references/sync-guide.md) step 3). The plan's task order and checkpoints are the route; the spec's `Validation` criteria are what the tests assert (intent → tests). Don't re-plan planned work, and surface any deviation from the plan instead of drifting silently.
 4. **Sync the catalog inside the worktree, before the merge** — SYNC's commit gate applies to the branch where the code lives → [`references/sync-guide.md`](references/sync-guide.md).
 
 ## SYNC mode
@@ -122,7 +122,7 @@ Mode-specific pitfalls live in each guide's pitfalls section; these apply across
 - **Inventing content.** Invariants come from code/tests; constitution and mission come from the user. `_TBD: <question>_` is acceptable, fabrication is not.
 - **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.
 - **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).
-- **Implementing freehand.** Editing the main checkout instead of a worktree, ignoring an existing plan document, or hand-rolling a process the runtime's `superpowers:*` skills already cover → Implementation handoff (above).
+- **Implementing freehand.** Editing the main checkout instead of a worktree, ignoring an existing plan document, or hand-rolling a process the runtime's own planning / test-first / plan-execution skills already cover → Implementation handoff (above).
 - **Syncing a diff nobody swept.** The comment sweep runs on every SYNC, before the catalog steps — writing specs first means documenting code that is about to change, and skipping it entirely ships the narration and workarounds the gate exists to catch.
 - **Sloppy roadmap lifecycle.** One line per entry (detail lives in the spec); shipped work leaves `Now`; a feature enters `Now` only through the spec critique gate with `Open questions` resolved to `None.` — parking ambiguity in `Notes` or "TBD" prose is the violation. Lifecycle rules + gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
 - **Writing a spec and using it unreviewed.** Every spec passes the spec critique gate first — when drafted at `Later → Next`, when promoted `Next → Now`, when SYNC creates or rewrites one, and when BOOTSTRAP finishes its batch: a fresh-context reviewer on the strongest model available (Claude Code: `Agent` with `model: opus`), whose findings you fold back into the spec. Running the four checks in your own head, in the same context that wrote the spec, is the failure the gate exists to prevent. Reviewer inputs, return shape, and fold-back → [`references/catalog-format.md`](references/catalog-format.md).

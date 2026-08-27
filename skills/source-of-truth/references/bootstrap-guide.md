@@ -19,7 +19,7 @@ Bootstrap runs in three phases:
 Ask before scanning:
 
 - "I'll create the spec catalog at `docs/overview.md` + `docs/constitution.md` + `docs/mission.md` + `docs/roadmap.md` + `docs/changelog/` (one file per entry) + `docs/specs/spec-<feature>.md` per feature. Continue?"
-- **Initial bootstrap only** (no existing catalog): "Are there design docs I should pull from? (e.g. `docs/superpowers/`, `specs/`, `plans/`, ADRs, RFCs)"
+- **Initial bootstrap only** (no existing catalog): "Are there design docs I should pull from? (e.g. `specs/`, `plans/`, `docs/`, ADRs, RFCs)"
 
 If the user has design docs, use them as the **primary source of feature intent and mission**. Code shows implementation; docs show intent. Combining both produces accurate plans, requirements, and validation criteria.
 
@@ -233,13 +233,11 @@ fix alike:
    checkout (`git worktree add`, or the runtime's worktree skill). Not a git
    repo, or the user asks for an in-place edit: say which applies, then proceed.
    "It's one small edit" is not one of those cases.
-2. Driven by the **superpowers skills when the runtime has them** — plan the
-   work (`brainstorming` → `writing-plans`), implement test-first
-   (`test-driven-development`), run a written plan (`executing-plans` /
-   `subagent-driven-development`), integrate (`finishing-a-development-branch`).
-   Without them, implement directly and say so.
-3. **Following the plan document** if one exists (the spec's `Source plan`,
-   `docs/superpowers/`, `plans/`): its task order is the route, the spec's
+2. Driven by the **runtime's planning / test-first / plan-execution skills when
+   it has them** — plan the work, implement test-first, run the written plan,
+   integrate. Without them, implement directly and say so.
+3. **Following the plan document** if one exists (the spec's `Source plan`, or a
+   `docs/` / `plans/` / `specs/` document): its task order is the route, the spec's
    `Validation` criteria are what the tests assert. Surface deviations; don't
    drift silently.
 4. **Sync + commit inside the worktree, before merging** — see the commit gate

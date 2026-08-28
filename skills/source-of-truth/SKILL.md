@@ -102,9 +102,7 @@ The gate ends where implementation begins, and roadmap work takes one route — 
 
 **Commit gate:** when a commit is imminent — the user asks to commit, or you're about to — SYNC runs and **completes before the commit** (sync the catalog, then commit code + catalog together). This is automatic, not a question. Self-gating: only when `docs/overview.md` exists. Skip only for a pure no-spec-impact refactor, or an explicit user override (then recommend a retroactive sync).
 
-**Comment sweep gate:** every SYNC runs the `no-comments` skill on the diff it just gathered, before any catalog file is touched. An independent reviewer audits the comments in the shipping code; accepted findings are fixed while the diff is still open, so the specs written afterwards describe the code that actually ships. Runtimes without the skill say so in the sync report and continue — SYNC surfaces the gap, it never blocks on it. Procedure → [`references/sync-guide.md`](references/sync-guide.md), `## Comment sweep gate`.
-
-Full procedure (comment sweep, categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates, decisions/debugging record folders) → [`references/sync-guide.md`](references/sync-guide.md).
+Full procedure (categorization, plan-aware extraction, multi-feature batching, roadmap moves, changelog handling, tech stack updates, decisions/debugging record folders) → [`references/sync-guide.md`](references/sync-guide.md).
 
 ## BOOTSTRAP mode
 
@@ -123,7 +121,6 @@ Mode-specific pitfalls live in each guide's pitfalls section; these apply across
 - **Skipping READ for bug fixes, or silently fixing stale specs.** Both are exactly what this skill exists to prevent.
 - **Building off-roadmap (iron-rule).** Skipping the entry on your own "too small" judgment, or without surfacing it. Surface first; an explicit user override is fine (recommend a retroactive entry).
 - **Implementing freehand.** Editing the main checkout instead of a worktree, ignoring an existing plan document, or hand-rolling a process the runtime's own planning / test-first / plan-execution skills already cover → Implementation handoff (above).
-- **Syncing a diff nobody swept.** The comment sweep runs on every SYNC, before the catalog steps — writing specs first means documenting code that is about to change, and skipping it entirely ships the narration and workarounds the gate exists to catch.
 - **Sloppy roadmap lifecycle.** One line per entry (detail lives in the spec); shipped work leaves `Now`; a feature enters `Now` only through the spec critique gate with `Open questions` resolved to `None.` — parking ambiguity in `Notes` or "TBD" prose is the violation. Lifecycle rules + gate checklist → [`references/catalog-format.md`](references/catalog-format.md).
 - **Writing a spec and using it unreviewed.** Every spec passes the spec critique gate first — when drafted at `Later → Next`, when promoted `Next → Now`, when SYNC creates or rewrites one, and when BOOTSTRAP finishes its batch: a fresh-context reviewer on the strongest model available (Claude Code: `Agent` with `model: opus`), whose findings you fold back into the spec. Running the four checks in your own head, in the same context that wrote the spec, is the failure the gate exists to prevent. Reviewer inputs, return shape, and fold-back → [`references/catalog-format.md`](references/catalog-format.md).
 - **Writing Validation criteria from the tests alone when a pre-implementation spec or plan exists.** Intent → tests, never the reverse — full direction rule → [`references/catalog-format.md`](references/catalog-format.md); test-only extraction is for BOOTSTRAP and plan-less legacy features.

@@ -22,7 +22,7 @@ This skill is **RIGID, not advisory**. Two rules have no exceptions:
 
 ```
 docs/
-├─ overview.md          (index — links project docs + every feature spec)
+├─ overview.md          (index — project docs + one keyword line per feature spec, for lookup)
 ├─ constitution.md      (principles: tech stack, code quality, testing, UX, performance)
 ├─ mission.md           (why: problem, users, value, success metrics)
 ├─ roadmap.md           (forward plan: Now / Next / Later — shipped work leaves the roadmap)
@@ -53,7 +53,7 @@ Ambiguous? Ask once: "Sync the catalog now, or keep going?"
 
 Do NOT skip for "simple" changes — bug fixes break invariants more often than features do.
 
-1. Read `docs/overview.md`. Identify related features.
+1. Read `docs/overview.md`. Match the request's own words — verbs, domain nouns, endpoint paths, symbol names — against the keyword line of each feature to find which specs it touches. A slug that looks unrelated can still own the request; the keywords are there because the request rarely uses the slug.
 2. Read `docs/constitution.md` (skim Tech Stack always; skim other sections relevant to the change — e.g., Performance if touching a hot path, Testing if changing tests, UX if touching the UI).
 3. Read `docs/roadmap.md`. Confirm the requested feature is in `Now` / `Next` / `Later`, or already shipped (a spec exists for it), or surface that it's not tracked yet.
 4. Read each related `docs/specs/spec-<feature>.md` (Plan + Requirement + Validation).

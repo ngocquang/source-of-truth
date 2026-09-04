@@ -23,7 +23,7 @@ Two consequences worth stating outright, because both are easy to get backwards:
 
 ## Index file: `docs/overview.md`
 
-The central index. Always overview/summary — never a dump of full feature details.
+The central index, and the only file READ mode scans to answer "which features does this request touch?". Its job is **lookup**, not explanation: a feature line exists so a reader can match the words in a request to a slug and open the right spec. Meaning lives in the spec; the index carries the terms that lead there.
 
 ```markdown
 # Spec catalog — <project name>
@@ -38,10 +38,19 @@ _Project docs live in this folder; per-feature specs in `specs/`. No date line �
 - [Debugging](debugging/) — bug post-mortems: root cause + how to recognise it (one file per entry)
 
 ## Feature specs
-- [jwt-authentication](specs/spec-jwt-authentication.md) — JWT auth with refresh token rotation
-- [email-search](specs/spec-email-search.md) — Search users by email, case-insensitive
+- [jwt-authentication](specs/spec-jwt-authentication.md) — login, logout, session, refresh token, bearer, 401
+- [email-search](specs/spec-email-search.md) — user lookup, case-insensitive, autocomplete, /api/users
 - ...
 ```
+
+### Feature lines are keywords, not descriptions
+
+Every feature line is `- [<slug>](specs/spec-<slug>.md) — <keywords>`: a bare comma-separated list. No sentence, no "This feature…", no value pitch — prose reads well once and matches nothing on the twentieth scan, which is the only way this file is ever read.
+
+- **Keywords earn their place by adding what the slug lacks.** `jwt-authentication` already carries "jwt" and "auth", so repeating them indexes nothing. The terms worth listing are the ones a request would use *instead* of the slug: `login`, `session`, `bearer`, `401`. If every keyword on a line already appears in the slug, the line is dead weight.
+- **Draw them from how a request would be phrased**: user-facing verbs (`login`, `export`, `retry`), domain nouns (`invoice`, `tenant`), synonyms and former names (`sign-in`, `SSO`), and identifiers a reader greps for (`/api/users`, `RefreshTokenService`, `ORDERS_TOPIC`).
+- **5–8 per feature.** Fewer and lookups miss; more and the index stops being scannable — and a feature needing fifteen terms is usually two features.
+- **Never the place for contract detail.** Rationale, invariants, and behavior belong in `spec-<slug>.md`. A reader who matched a keyword is one click away from all of it, so the index doesn't have to carry any of it.
 
 Links use **relative paths** (`constitution.md`, `specs/spec-jwt-authentication.md`) so the folder is portable if it moves. The `Decisions` and `Debugging` lines appear only once their folder has its first entry — see "Both folders: creation, links, and restraint" below.
 

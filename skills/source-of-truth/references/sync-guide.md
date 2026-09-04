@@ -85,6 +85,8 @@ Mandatory for new/removed/renamed features — silent drift between code and roa
 
 Add/remove/update the one-line entry for any feature that was added, removed, or renamed — and add the folder link line when `docs/decisions/` or `docs/debugging/` receives its first entry (5e). **Internal refactors don't add a feature-index entry.**
 
+A feature line is a keyword list, not a description (format → [`catalog-format.md`](catalog-format.md), `## Index file`). Beyond add/remove/rename, touch it in one more case: this change gave the feature a term someone would now search by, or retired one — a new endpoint path, a renamed user-facing action, a capability folded in. Add or drop those words and move on. A behavior change that introduces no new vocabulary leaves the line alone.
+
 Overview stays a pure index — never add or grow a "Last sync" / sync-history / date-stamp section in it. Freshness lives in each spec's `Last verified` line; history lives in git and the changelog. If a previous session left such a section in `overview.md`, delete it as part of this sync (index drift — no changelog entry needed).
 
 #### 5c. `docs/constitution.md`
@@ -161,7 +163,7 @@ To scan for these in bulk, read each `docs/specs/spec-*.md`, pull the paths from
 
 ## Common pitfalls
 
-- **Updating overview.md for every change.** It's an index — only touch it when features are added/removed/renamed, or when a record folder gets its first entry, not for every behavior change inside a feature. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
+- **Updating overview.md for every change.** It's an index — only touch it when features are added/removed/renamed, when a feature's searchable terms actually changed, or when a record folder gets its first entry, not for every behavior change inside a feature. Its feature lines are keywords; rewriting them into prose descriptions is the same drift in the other direction. Never stamp it with "Last sync" notes or sync logs — git and the changelog already record history; delete any such section you find.
 - **Auto-updating constitution.** Tech stack changes require user confirmation; principle changes require explicit user request. Silent drift defeats the gate. Surface, don't decide.
 - **Skipping the user diff confirmation.** Always show the diff before writing.
 - **Writing a spec and shipping it unreviewed.** New specs and rewritten `Requirement` / `Validation` sections go through the critique gate's independent reviewer first — "I just wrote it carefully" is not a substitute for a fresh context reading it.

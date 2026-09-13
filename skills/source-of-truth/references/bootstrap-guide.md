@@ -285,7 +285,7 @@ Tell the user:
 > Mission: <user-provided sections / TBD sections>.
 > Roadmap: <N> items in flight (Now/Next/Later); shipped features live in their specs + overview.
 > Areas marked PARTIAL: <list>.
-> Updated `CLAUDE.md` to reference the catalog (`AGENTS.md` symlinked to it, so Codex reads the same file).
+> Updated the agent memory file (`CLAUDE.md` / `AGENTS.md`, one real file plus a symlink) to reference the catalog.
 
 ## Re-bootstrap (catalog incomplete)
 

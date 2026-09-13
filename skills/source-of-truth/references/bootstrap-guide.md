@@ -2,7 +2,7 @@
 
 Read this file when running BOOTSTRAP mode (no `docs/overview.md` exists yet, but the project has code). Also runs in **Re-bootstrap** form when the catalog exists but `constitution.md` or `mission.md` is missing/empty (see end of this file).
 
-Bootstrap runs **once** per project. After this, SYNC mode handles all incremental updates. Its single most important step is updating `CLAUDE.md`, so that **future sessions automatically read the catalog** even when this skill doesn't trigger — don't skip it.
+Bootstrap runs **once** per project. After this, SYNC mode handles all incremental updates. Its single most important step is updating the project's agent memory file — `CLAUDE.md` and `AGENTS.md`, one real file plus a symlink — so that **future sessions automatically read the catalog** even when this skill doesn't trigger, on Claude Code and on Codex alike. Don't skip it.
 
 ## Three-phase flow
 
@@ -10,7 +10,7 @@ Bootstrap runs in three phases:
 
 - **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro. Pre-fill what we can prove from files.
 - **B — Interview user** (single batch): ask only the things we can't detect. Code Quality rules, Performance budgets, Mission users/value/metrics require user input.
-- **C — Confirm and write**: show the populated docs to the user, get OK, then write the 4 project docs (overview, constitution, mission, roadmap) + the changelog bootstrap entry + per-feature specs, and update CLAUDE.md.
+- **C — Confirm and write**: show the populated docs to the user, get OK, then write the 4 project docs (overview, constitution, mission, roadmap) + the changelog bootstrap entry + per-feature specs, and update the agent memory file (`CLAUDE.md` + `AGENTS.md`).
 
 `constitution.md` and `mission.md` MUST have real content before bootstrap completes. Use `_TBD: <prompt>_` markers if the user defers a section, but never blank fields and never fabricated content. Fabricated content propagates to every future session as if it were truth.
 
@@ -174,7 +174,7 @@ Write `docs/changelog/<today>-bootstrap.md` (this also creates the `docs/changel
 
 `docs/decisions/` and `docs/debugging/` are **not** created here. They come into existence when SYNC writes their first entry, and their `overview.md` links appear at the same moment. Do not create them empty, and do not mine git history for decision records — bootstrap infers nothing it cannot read off the code.
 
-### C6. Update CLAUDE.md (DO NOT SKIP)
+### C6. Update the agent memory file (DO NOT SKIP)
 
 This is the highest-leverage step. Append a section so every future session reads the catalog before coding, even when this skill doesn't trigger:
 
@@ -268,7 +268,13 @@ code while the catalog still describes the old behavior is exactly the drift
 this catalog exists to prevent.
 ```
 
-If the project has no `CLAUDE.md` yet, **create one** with this section. If it already exists, **append** to it (don't overwrite).
+Claude Code reads `CLAUDE.md`, Codex reads `AGENTS.md`. Keep **one** real file and make the other name a symlink to it, so the two can never drift apart:
+
+- One of them already exists as a regular file → append the section to that one, then link the missing name to it (`ln -s CLAUDE.md AGENTS.md`, or `ln -s AGENTS.md CLAUDE.md`). Appending through an existing symlink writes to the real file and leaves the link intact, so re-running is safe.
+- Neither exists → create `CLAUDE.md` with this section, then `ln -s CLAUDE.md AGENTS.md`.
+- Both exist as regular files → append to both and tell the user they are now two separate copies that will drift; offer to collapse one into a symlink.
+
+Run `ln -s` from the project root with a **relative** target, never an absolute path — an absolute link breaks for everyone who clones the repo. Never overwrite an existing memory file; always append. On a filesystem without symlinks (Windows without developer mode), write both files and say so — the user then owns keeping them in sync.
 
 ### C7. Show summary
 
@@ -279,7 +285,7 @@ Tell the user:
 > Mission: <user-provided sections / TBD sections>.
 > Roadmap: <N> items in flight (Now/Next/Later); shipped features live in their specs + overview.
 > Areas marked PARTIAL: <list>.
-> Updated CLAUDE.md to reference the catalog.
+> Updated `CLAUDE.md` to reference the catalog (`AGENTS.md` symlinked to it, so Codex reads the same file).
 
 ## Re-bootstrap (catalog incomplete)
 
@@ -298,6 +304,7 @@ Re-bootstrap blocks code changes until the catalog is complete. The "STOP, compl
 - **Inventing invariants from imagination.** If code/tests don't show it, don't claim it.
 - **Fabricating constitution or mission content — including "common sense" rules.** Phase B requires user input; `_TBD:` is acceptable, invented principles are not (they propagate to every future session as truth). "No `any` types" sounds reasonable, but if the user actually allows `any`, that rule blocks legitimate work. Ask.
 - **Skipping Phase C confirmation.** The user must see constitution + mission before they're written.
-- **Forgetting CLAUDE.md.** Without this step, future sessions won't know the catalog exists, and SYNC mode will never get triggered.
+- **Forgetting the memory file.** Without this step, future sessions won't know the catalog exists, and SYNC mode will never get triggered.
+- **Writing `CLAUDE.md` and `AGENTS.md` as two real files.** They drift, and the next session reads whichever its runtime picked. One real file, one symlink.
 - **Bootstrapping a project that already has the catalog.** Check first — if `docs/overview.md` exists AND constitution/mission have content, switch to SYNC mode instead.
 - **Creating `docs/decisions/` or `docs/debugging/` at bootstrap.** Both are created on first entry, by SYNC. An empty folder and a dead `overview.md` link teach the next session that the mechanism is decorative.

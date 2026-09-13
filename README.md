@@ -246,7 +246,7 @@ SYNC reconciles the catalog with what changed: it reads the diff (`git diff --na
 
 - **A — Auto-detect** (no user input): scan repo for tech stack, test framework, design system, README intro, and feature entry points.
 - **B — Interview** (single batch): ask only what can't be detected (code-quality rules, performance budgets, mission users/value/metrics).
-- **C — Confirm & write**: show populated docs, get OK, then write the 4 project docs plus the changelog bootstrap entry and per-feature specs, and update CLAUDE.md.
+- **C — Confirm & write**: show populated docs, get OK, then write the 4 project docs plus the changelog bootstrap entry and per-feature specs, and update the agent memory file (`CLAUDE.md`, with `AGENTS.md` symlinked to it for Codex).
 
 `constitution.md` and `mission.md` must have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for deferred sections, but blank fields and fabricated content are not.
 

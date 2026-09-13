@@ -106,7 +106,7 @@ Full procedure (categorization, plan-aware extraction, multi-feature batching, r
 
 ## BOOTSTRAP mode
 
-Runs once, in three phases: **A** auto-detect from the repo (tech stack, test framework, design system, README intro), **B** interview the user in a single batch for what can't be detected, **C** confirm, then write the 4 project docs + the changelog bootstrap entry + per-feature specs and update CLAUDE.md (the highest-leverage step — don't skip it).
+Runs once, in three phases: **A** auto-detect from the repo (tech stack, test framework, design system, README intro), **B** interview the user in a single batch for what can't be detected, **C** confirm, then write the 4 project docs + the changelog bootstrap entry + per-feature specs and update the agent memory file, `CLAUDE.md` with `AGENTS.md` symlinked to it so Codex reads the same file (the highest-leverage step — don't skip it).
 
 `constitution.md` and `mission.md` MUST have real content before bootstrap completes — `_TBD: <question>_` markers are acceptable for sections the user defers, but blank fields and fabricated content are not.
 

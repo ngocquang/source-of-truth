@@ -218,7 +218,7 @@ Earlier versions of this skill kept a single `docs/CHANGELOG.md` (optionally wit
    > This project still uses the single-file `docs/CHANGELOG.md`, which merge-conflicts across parallel sessions. Move it to `docs/changelog/archive-legacy.md` (frozen) and write new entries as per-file fragments?
 
 2. After the user confirms: `git mv docs/CHANGELOG.md docs/changelog/archive-legacy.md`. Do **not** rewrite its content — it is frozen history. Existing monthly archives (`docs/changelog/YYYY-MM.md`) stay where they are, also frozen.
-3. Update the project's `overview.md` link and the `## Spec Catalog` section of its `CLAUDE.md` to point at `docs/changelog/` instead of `docs/CHANGELOG.md`.
+3. Update the project's `overview.md` link and the `## Spec Catalog` section of its agent memory file (`CLAUDE.md` / `AGENTS.md`) to point at `docs/changelog/` instead of `docs/CHANGELOG.md`.
 4. All **new** entries go to `docs/changelog/YYYY-MM-DD-<slug>.md` — never append to the legacy files again.
 
 When searching history, one `grep -r "<slug>" docs/changelog/` covers fragments AND frozen legacy files. If the user declines the migration, keep appending to `docs/CHANGELOG.md` per its old one-date-heading-per-day rule — their call.

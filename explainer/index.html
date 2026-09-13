@@ -442,13 +442,13 @@
     <p class="scen-cap"><span class="t-text-swap" id="scenCap">No mode picker, no flags — the skill infers the mode from what's on disk and what you just said.</span></p>
     <div class="three" id="modeCards">
       <div class="mode boot" data-mode="boot"><span class="tag">Run once</span><h3>BOOTSTRAP</h3><div class="when">docs/overview.md not yet present</div>
-        <ol><li>Auto-detect stack, test runner, design system (no prompts)</li><li>One interview pass: quality rules, perf budget, mission</li><li>Confirm → write catalog + update <code>CLAUDE.md</code></li></ol></div>
+        <ol><li>Auto-detect stack, test runner, design system (no prompts)</li><li>One interview pass: quality rules, perf budget, mission</li><li>Confirm → write catalog + update <code>CLAUDE.md</code> (+ <code>AGENTS.md</code> symlink for Codex)</li></ol></div>
       <div class="mode read" data-mode="read"><span class="tag">Before editing code</span><h3>READ</h3><div class="when">write / modify / delete — bug fixes included</div>
         <ol><li>Read <code>overview → constitution → roadmap → spec</code> + check the record folders</li><li>Print the "Catalog check" for you to review</li><li>STOP on conflict; proceed only after you approve</li></ol></div>
       <div class="mode sync" data-mode="sync"><span class="tag">After shipping</span><h3>SYNC</h3><div class="when">"done" · "merge" · "shipped" · before commit</div>
         <ol><li>Read the <i>diff</i> (not the whole repo) → classify changes</li><li>Update specs, remove shipped entries from roadmap</li><li>Record removals / renames / contract changes as changelog entry files + decision/debugging records when triggered</li></ol></div>
     </div>
-    <div class="rebar"><b>RE-BOOTSTRAP:</b> catalog exists but <code>constitution.md</code> / <code>mission.md</code> missing → rebuild that file before any code edit. Updating <code>CLAUDE.md</code> during BOOTSTRAP is the highest-leverage step: every future session then reads the catalog automatically.</div>
+    <div class="rebar"><b>RE-BOOTSTRAP:</b> catalog exists but <code>constitution.md</code> / <code>mission.md</code> missing → rebuild that file before any code edit. Updating the agent memory file (<code>CLAUDE.md</code>, with <code>AGENTS.md</code> symlinked to it) during BOOTSTRAP is the highest-leverage step: every future session then reads the catalog automatically.</div>
   </div>
 </section>
 

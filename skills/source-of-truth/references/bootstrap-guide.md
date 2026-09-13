@@ -285,7 +285,7 @@ Tell the user:
 > Mission: <user-provided sections / TBD sections>.
 > Roadmap: <N> items in flight (Now/Next/Later); shipped features live in their specs + overview.
 > Areas marked PARTIAL: <list>.
-> Updated the agent memory file (`CLAUDE.md` / `AGENTS.md`, one real file plus a symlink) to reference the catalog.
+> Updated the agent memory file to reference the catalog: <`CLAUDE.md`, with `AGENTS.md` symlinked to it | `AGENTS.md`, with `CLAUDE.md` symlinked to it | both `CLAUDE.md` and `AGENTS.md` as separate copies that will drift>.
 
 ## Re-bootstrap (catalog incomplete)
 

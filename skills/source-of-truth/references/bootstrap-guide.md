@@ -152,9 +152,11 @@ The roadmap holds only **unshipped** work. Bootstrapped features already exist i
 `Now`, `Next`, `Later` start empty unless the user mentions in-flight or upcoming work during the interview. If they do, capture it:
 
 ```markdown
-## Now
-- [ ] **<feature>** — <one-line> — _started <date>_  (no spec yet — write before continuing development)
+## Now (≤3, each has a spec)
+- **<feature-slug>** — <one-line summary> — _started <YYYY-MM-DD>_
 ```
+
+An in-flight item captured here has no spec yet; write one before development continues. Keep the entry to the one-line shape above — the note about the missing spec goes in the conversation, not on the line.
 
 ### C4. Create the index
 

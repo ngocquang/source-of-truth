@@ -80,6 +80,7 @@ Mandatory for new/removed/renamed features — silent drift between code and roa
 - **Removed feature**: delete any row it still has in `Now` / `Next` / `Later`; the removal is recorded by spec `Status: removed` + changelog `### Removed` entry.
 - **Renamed feature**: update the entry's slug + spec link in place.
 - **In-flight work being checkpointed (not shipped yet)**: ask once — "Add this to `## Now` so the roadmap reflects active work?"
+- **Repair pass (every sync, whole file)**: delete any `Now` row already shipped to code (write its spec first if it has none — a shipped feature leaves the roadmap only once the spec records it), collapse any entry that grew past one line into its spec, and delete a `## Shipped` section, `_Last updated:_` line, table, or sub-heading a previous session left behind. 5a only removing *this* sync's feature is how a roadmap ends up 20 stale rows deep.
 
 #### 5b. `docs/overview.md`
 

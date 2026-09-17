@@ -32,7 +32,7 @@ _Project docs live in this folder; per-feature specs in `specs/`. No date line �
 ## Project docs
 - [Constitution](constitution.md) — principles, tech stack, quality bars
 - [Mission](mission.md) — problem, users, value, success metrics
-- [Roadmap](roadmap.md) — feature delivery plan & status
+- [Roadmap](roadmap.md) — Now / Next / Later forward plan (unshipped work only)
 - [Changelog](changelog/) — deletions, renames, contract changes (one file per entry)
 - [Decisions](decisions/) — cross-cutting decision records (one file per entry)
 - [Debugging](debugging/) — bug post-mortems: root cause + how to recognise it (one file per entry)
@@ -130,24 +130,21 @@ Later  →  Next  →  Now  →  ✓ shipped
 
 ```markdown
 # Roadmap
-_Forward plan only — shipped features leave the roadmap. One line per entry: summary + spec link; detail lives in the spec. No date line — git records when it last changed._
+_Unshipped work only — one line per entry, detail lives in the spec. Shipped entries are deleted, not moved. No checkboxes, no `## Shipped`, no date line, no tables or sub-headings. Empty section = heading with nothing under it._
 
-## Now
-_In active development. Each item has a spec. Aim for ≤3 in flight._
-- [ ] **<feature-slug>** — <one-line summary> — [spec](specs/spec-<feature-slug>.md) — _started <YYYY-MM-DD>_
+## Now (≤3, each has a spec)
+- **<feature-slug>** — <one-line summary> — [spec](specs/spec-<feature-slug>.md) — _started <YYYY-MM-DD>_
 
-## Next
-_Spec'd and queued. Pull into Now when capacity opens._
-- [ ] **<feature-slug>** — <one-line summary> — [spec](specs/spec-<feature-slug>.md)
+## Next (spec'd, queued)
+- **<feature-slug>** — <one-line summary> — [spec](specs/spec-<feature-slug>.md)
 
-## Later
-_Idea pool. No spec yet. Promote to Next by writing a spec._
-- [ ] **<feature-slug>** — <one-line summary>
+## Later (ideas, no spec)
+- **<feature-slug>** — <one-line summary>
 ```
 
-**One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Detail (acceptance criteria, sub-tasks, rationale) lives in the spec — carried on the roadmap it duplicates the spec, drifts, and bloats the file. An entry that seems to need more lines is the signal to write or expand its spec; `Later` items (no spec yet) keep to one line too.
+**One line per entry.** A roadmap entry is exactly `**slug** — one-line summary — [spec](...)` (plus the start date in `Now`). Detail (acceptance criteria, sub-tasks, rationale) lives in the spec — carried on the roadmap it duplicates the spec, drifts, and bloats the file. An entry that seems to need more lines is the signal to write or expand its spec; `Later` items (no spec yet) keep to one line too. The italic header line is part of the template, not decoration: it travels with every roadmap file so a session editing the file meets the constraint without reopening this reference — which is how roadmaps drift in the first place.
 
-**No `Shipped` group.** Once a feature ships it leaves the roadmap; shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and changelog/git — not a list that grows forever and becomes a merge-conflict hotspot. (A team wanting an at-a-glance recap may keep a capped `## Recently shipped` of the last ~10 — but overview already serves this.)
+**No `Shipped` group.** Once a feature ships it leaves the roadmap; shipped state is recorded by the spec (`Status: active`), the `overview.md` index, and changelog/git — not a list that grows forever and becomes a merge-conflict hotspot.
 
 ### Lifecycle rules
 

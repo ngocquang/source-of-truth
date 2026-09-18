@@ -76,10 +76,10 @@ Per the categorization in step 2:
 
 Mandatory for new/removed/renamed features — silent drift between code and roadmap defeats the gate. Full lifecycle rules → [`catalog-format.md`](catalog-format.md).
 
-- **Shipped feature**: **remove it from `## Now`** — there is no `Shipped` list; the spec (`Status: active`) + `overview.md` record it.
+- **Shipped feature**: **remove its row from the roadmap, wherever it sits** (`Now`, or `Next` for a fix that shipped from there) — there is no `Shipped` list; the spec (`Status: active`) + `overview.md` record it. A branch about to merge counts as shipped: this sync runs before the merge (→ Where SYNC runs), so delete the row now rather than leave it for a later repair pass.
 - **Removed feature**: delete any row it still has in `Now` / `Next` / `Later`; the removal is recorded by spec `Status: removed` + changelog `### Removed` entry.
 - **Renamed feature**: update the entry's slug + spec link in place.
-- **In-flight work being checkpointed (not shipped yet)**: ask once — "Add this to `## Now` so the roadmap reflects active work?"
+- **In-flight work being checkpointed (not shipped yet)**: only when the branch is *not* headed for the merge — a WIP commit, a pause. Ask once — "Add this to `## Now` so the roadmap reflects active work?" A sync run because the branch is about to integrate is a ship, not a checkpoint: the row comes out, never in.
 - **Repair pass (every sync, whole file)**: delete any `Now` row already shipped to code (write its spec first if it has none — a shipped feature leaves the roadmap only once the spec records it), collapse any entry that grew past one line into its spec, and delete a `## Shipped` section, `_Last updated:_` line, table, or sub-heading a previous session left behind. 5a only removing *this* sync's feature is how a roadmap ends up 20 stale rows deep.
 
 #### 5b. `docs/overview.md`

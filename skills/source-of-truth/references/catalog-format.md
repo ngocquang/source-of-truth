@@ -130,7 +130,7 @@ Later  →  Next  →  Now  →  ✓ shipped
 
 ```markdown
 # Roadmap
-_Unshipped work only — one line per entry, detail lives in the spec. Shipped entries are deleted, not moved. No checkboxes, no `## Shipped`, no date line, no tables or sub-headings. Empty section = heading with nothing under it._
+_Unshipped work only — one line per entry, detail lives in the spec. Shipped entries are deleted, not moved; merged means shipped. No checkboxes, no `## Shipped`, no date line, no tables or sub-headings. Empty section = heading with nothing under it._
 
 ## Now (≤3, each has a spec)
 - **<feature-slug>** — <one-line summary> — [spec](specs/spec-<feature-slug>.md) — _started <YYYY-MM-DD>_

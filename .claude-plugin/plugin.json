@@ -10,6 +10,8 @@
   "repository": "https://github.com/ngocquang/source-of-truth",
   "license": "MIT",
   "privacyPolicyUrl": "https://github.com/ngocquang/source-of-truth/blob/main/PRIVACY.md",
+  "documentationUrl": "https://github.com/ngocquang/source-of-truth#readme",
+  "termsOfServiceUrl": "https://github.com/ngocquang/source-of-truth/blob/main/LICENSE",
   "keywords": [
     "spec-driven-development",
     "documentation",

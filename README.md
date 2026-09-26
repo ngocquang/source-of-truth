@@ -15,9 +15,7 @@ Under the hood it's a self-maintaining **Spec-Driven Development (SDD)** catalog
 > The **catalog** is the source of truth for "what exists, why, and what rules apply".
 > The **code** is the source of truth for "how it works".
 
-<p align="center">
-  <img src="./assets/gate-chain.svg" alt="Gate chain: constitution → mission → roadmap → specs → code. Each layer gates the one below — read top-down for why a line of code exists, bottom-up for how far a change can reach." width="720">
-</p>
+![Gate chain: constitution → mission → roadmap → specs → code. Each layer gates the one below — read top-down for why a line of code exists, bottom-up for how far a change can reach.](./assets/gate-chain.svg)
 
 See the <a href="https://ngocquang.github.io/source-of-truth/explainer/index.html" target="_blank" rel="noopener noreferrer">live explainer</a> for the full visual walkthrough of the workflow.
 
@@ -201,6 +199,15 @@ You don't invoke the skill manually — it activates on context. The whole loop 
 
 The catalog stays true to the code with no separate "update the docs" step — READ and SYNC are the only two touchpoints you need to remember.
 
+### Example prompts
+
+| Prompt | What the skill does |
+|---|---|
+| `/source-of-truth` in a repo with code and no `docs/overview.md` | **BOOTSTRAP**: detects the stack, asks one batch of questions, and writes `docs/` after you confirm. |
+| *"Is there already something that exports invoices to CSV?"* | **READ**: matches your words against the catalog's keyword lines and names the owning spec, or says none exists. |
+| *"Add rate limiting to the login endpoint."* | **READ**: prints the Catalog check before any code, and stops to add a roadmap entry if the work isn't tracked yet. |
+| *"Done — commit this."* | **SYNC**: updates the affected specs and roadmap, shows you the catalog diff, then commits code and catalog together. |
+
 ---
 
 ## What's Inside
@@ -260,6 +267,12 @@ Source-of-Truth is **rigid, not advisory** — its value comes from being follow
 - **Every unit of work goes on the roadmap.** New feature, enhancement, refactor, *and bug fix* — each gets a `roadmap.md` entry before code is written. The rule blocks the agent's own "too small to track" rationalizing; an explicit user override (e.g. a live hotfix) is honored, with a recommended retroactive entry.
 - **Never fabricate.** If it isn't visible in code, tests, or stated by the user, don't assert it — tests are the best source of invariants; the user is the only source of mission and code-quality principles. A vague invariant is worse than none.
 - **The catalog owns *what & why*; the code owns *how*.** The two never compete for the same truth.
+
+---
+
+## Privacy & security
+
+source-of-truth is Markdown instructions your coding agent follows: no server, no network calls, no telemetry. Besides the code you ask for, it writes the `docs/` catalog, creates a git worktree per change, and — during bootstrap, after you confirm — updates `CLAUDE.md` / `AGENTS.md`. Details: [PRIVACY.md](./PRIVACY.md). To report a vulnerability, see [SECURITY.md](./SECURITY.md).
 
 ---
 

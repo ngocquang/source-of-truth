@@ -17,7 +17,7 @@ While following the skill, your agent reads files in your project: the `docs/` c
 Only files in your project:
 
 - the `docs/` catalog (overview, constitution, mission, roadmap, specs, changelog, decisions, debugging records)
-- during bootstrap, after you confirm: a catalog section in `CLAUDE.md`, with `AGENTS.md` symlinked to it
+- during bootstrap, after you confirm: a catalog section appended to `CLAUDE.md` / `AGENTS.md` — one real file with the other name symlinked to it, or two separate copies where symlinks aren't available
 
 It also has your agent create a git worktree for each change. Nothing is written outside your project.
 

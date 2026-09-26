@@ -232,12 +232,11 @@ Once the gates clear, roadmap work is built one way — feature, refactor, or bu
 fix alike:
 
 1. In an **isolated git worktree** for that roadmap item, never in the main
-   checkout (`git worktree add`, or the runtime's worktree skill). Not a git
+   checkout (`git worktree add`, or the agent's built-in worktree tool). Not a git
    repo, or the user asks for an in-place edit: say which applies, then proceed.
    "It's one small edit" is not one of those cases.
-2. Driven by the **runtime's planning / test-first / plan-execution skills when
-   it has them** — plan the work, implement test-first, run the written plan,
-   integrate. Without them, implement directly and say so.
+2. **Implemented directly**, without handing off to other skills or plugins —
+   unless the user asks for one; then follow it and say so.
 3. **Following the plan document** if one exists (the spec's `Source plan`, or a
    `docs/` / `plans/` / `specs/` document): its task order is the route, the spec's
    `Validation` criteria are what the tests assert. Surface deviations; don't

@@ -1,7 +1,7 @@
 ---
 name: source-of-truth
-description: "Use when a project keeps (or should keep) a docs/ spec catalog and the task touches it: before writing, modifying, or deleting production code (refactors and bug fixes included) or checking whether a capability already exists; after a feature ships or the user signals completion; when the user wants to change the project's roadmap, mission, or constitution, or to update/sync/bootstrap the spec docs; or when code exists but docs/overview.md doesn't."
-when_to_use: "User says 'ship it', 'done', 'commit', 'merge', 'sync', 'update the catalog', 'sync specs', 'sync docs', 'update roadmap', 'bootstrap docs'; a plan-execution run reports completion; user asks 'is there already a thing that does X?'; user wants to edit roadmap.md, mission.md, or constitution.md."
+description: "Use in a project that has a docs/overview.md spec catalog, or when the user asks to set one up: before writing, modifying, or deleting production code in that project (refactors and bug fixes included) or checking whether a capability already exists; after a feature ships there or the user signals completion; when the user wants to change the project's roadmap, mission, or constitution, or to update/sync the spec docs."
+when_to_use: "In a project with docs/overview.md: user says 'ship it', 'done', 'commit', 'merge', 'update the catalog', 'sync specs', 'sync docs', 'update roadmap'; a plan-execution run reports completion; user asks 'is there already a thing that does X?'; user wants to edit roadmap.md, mission.md, or constitution.md. In any project: user runs /source-of-truth, or asks to 'bootstrap docs' or set up the spec catalog."
 ---
 
 # Spec Catalog (Spec-Driven Development)

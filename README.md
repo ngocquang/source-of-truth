@@ -216,7 +216,7 @@ The skill operates in three modes, selected automatically by context:
 
 | Mode | When | What happens |
 |---|---|---|
-| **BOOTSTRAP** | `docs/overview.md` does NOT exist + project has code | Auto-detect stack → interview user for principles/mission → confirm & write the catalog. Runs once. |
+| **BOOTSTRAP** | `docs/overview.md` does NOT exist + project has code, and you run `/source-of-truth` or ask to set up the catalog | Auto-detect stack → interview user for principles/mission → confirm & write the catalog. Runs once. |
 | **READ** | Before writing / modifying / deleting code (incl. bug fixes, refactors, "does X already exist?") | Load catalog, output a **Catalog check** to the user, stop on conflicts, only then write code. |
 | **SYNC** | A feature shipped ("ship it", "done", "commit", "merge", "xong rồi") or "update/sync the catalog" | Reconcile catalog with the diff: update specs, remove shipped entries from the roadmap, record deletions/renames as changelog entry files, decisions/debugging as their own record folders. |
 

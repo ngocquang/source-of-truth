@@ -16,4 +16,4 @@ Every report is investigated. Confirmed issues are fixed in a new release.
 
 ## Scope
 
-The plugin is Markdown instructions plus small loader files for other agents (`.opencode/`, `.pi/`). Relevant reports include instructions that lead an agent to act beyond what the README describes: running unexpected commands, touching files outside the project, or sending data anywhere.
+The plugin is Markdown instructions plus manifests and a small loader file (`.pi/`) for other agents. Relevant reports include instructions that lead an agent to act beyond what the README describes: running unexpected commands, touching files outside the project, or sending data anywhere.

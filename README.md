@@ -2,13 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-0f6e5e.svg)](./LICENSE)
 ![Spec-Driven Development](https://img.shields.io/badge/method-Spec--Driven%20Development-0c3a33.svg)
-![Platforms](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20OpenCode%20·%20Pi-444.svg)
+![Platforms](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20·%20Copilot%20·%20Kimi%20·%20Pi-444.svg)
 
 ### Stop your AI from silently deleting features it doesn't know exist.
 
 source-of-truth gives your coding agent a persistent memory: it reads what already exists **before** writing code, and updates the record **after** a feature ships — so it stops rebuilding, deleting, and breaking things it never knew were there.
 
-**One skill, every coding agent** — Claude Code · Codex · Cursor · Gemini · Copilot · Kimi · OpenCode · Pi. → [Install](#installation)
+**One skill, every coding agent** — Claude Code · Codex · Cursor · Gemini · Copilot · Kimi · Pi. → [Install](#installation)
 
 Under the hood it's a self-maintaining **Spec-Driven Development (SDD)** catalog skill: a `docs/` folder that acts as the project's source of truth for *what exists, why it exists, and what rules apply*.
 
@@ -34,7 +34,7 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 ## Quickstart (Claude Code)
 
-> Using Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, or Pi instead? Skip to [Installation](#installation) for the per-platform steps — the skill itself is identical everywhere.
+> Using Codex, Cursor, Gemini, Copilot, Kimi, or Pi instead? Skip to [Installation](#installation) for the per-platform steps — the skill itself is identical everywhere.
 
 **1. Install the plugin, then reload so the skill activates:**
 
@@ -54,7 +54,7 @@ In short: the methodology produces the work; Source-of-Truth keeps the source of
 
 **3. Then just type `/source-of-truth`.** That's the whole trigger. It reads your PRD/SDD, bootstraps the `docs/` catalog, and from then on activates on its own — READ before each change, SYNC after each ship.
 
-Using another agent (Codex, Cursor, Gemini, Copilot, Kimi, OpenCode, Pi)? See [Installation](#installation) for per-platform steps.
+Using another agent (Codex, Cursor, Gemini, Copilot, Kimi, Pi)? See [Installation](#installation) for per-platform steps.
 
 ---
 
@@ -157,22 +157,6 @@ Install directly from this repository:
 
 ```text
 /plugins install https://github.com/ngocquang/source-of-truth
-```
-
-### OpenCode
-
-Tell OpenCode to follow the bundled install guide:
-
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/ngocquang/source-of-truth/main/.opencode/INSTALL.md
-```
-
-Or add it to your `opencode.json` directly:
-
-```json
-{
-  "plugin": ["source-of-truth@git+https://github.com/ngocquang/source-of-truth.git"]
-}
 ```
 
 ### Pi
